@@ -1,0 +1,28 @@
+{
+  "name": "du-an-ga-ran-chipchip-be",
+  "version": "1.0.0",
+  "description": "Website ban ga ran ChipChip dung Express.js, MongoDB va Pug SSR",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "pug",
+    "mvc"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.4",
+    "pug": "^3.0.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
