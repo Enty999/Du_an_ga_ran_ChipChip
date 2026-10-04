@@ -1,116 +1,116 @@
-# Du an ga ran ChipChip
+# Dự án gà rán ChipChip
 
-Website ban ga ran online duoc xay dung bang **Node.js + Express.js + MongoDB + Pug**.
+Website bán gà rán online được xây dựng bằng **Node.js + Express.js + MongoDB + Pug**.
 
-Du an nay render giao dien truc tiep tu server bang **Pug**, nen khong tach frontend rieng. Tat ca code nam chung trong mot project Express.
+Dự án này render giao diện trực tiếp từ server bằng **Pug**, nên không tách frontend riêng. Tất cả code nằm chung trong một project Express.
 
-## Cong nghe su dung
+## Công nghệ sử dụng
 
-- **Node.js**: moi truong chay JavaScript phia server
-- **Express.js**: framework tao server va xu ly route
-- **MongoDB**: co so du lieu NoSQL
-- **Mongoose**: thu vien lam viec voi MongoDB de hon
-- **Pug**: template engine de render HTML tu server
-- **Nodemon**: tu dong restart server khi code thay doi
+- **Node.js**: môi trường chạy JavaScript phía server
+- **Express.js**: framework tạo server và xử lý route
+- **MongoDB**: cơ sở dữ liệu NoSQL
+- **Mongoose**: thư viện làm việc với MongoDB dễ hơn
+- **Pug**: template engine để render HTML từ server
+- **Nodemon**: tự động restart server khi code thay đổi
 
-## Cach chay du an
+## Cách chạy dự án
 
-Clone project ve may:
+Clone project về máy:
 
 ```bash
 git clone <link-repository>
 cd Du_an_ga_ran_ChipChip
 ```
 
-Cai thu vien:
+Cài thư viện:
 
 ```bash
 npm install
 ```
 
-Tao file `.env` dua theo mau `.env.example`, vi du:
+Tạo file `.env` dựa theo mẫu `.env.example`, ví dụ:
 
 ```env
 PORT=3000
 MONGODB_URI=mongodb://127.0.0.1:27017/ga_ran_chipchip
 ```
 
-## Cau hinh MongoDB
+## Cấu hình MongoDB
 
-Code trong du an da co san phan ket noi MongoDB bang Mongoose:
+Code trong dự án đã có sẵn phần kết nối MongoDB bằng Mongoose:
 
 ```txt
 src/config/database.js
 ```
 
-Nhung de ket noi duoc thi van can co database MongoDB that. Co 2 cach dung:
+Nhưng để kết nối được thì vẫn cần có database MongoDB thật. Có 2 cách dùng:
 
-### Cach 1: Dung MongoDB local
+### Cách 1: Dùng MongoDB local
 
-Neu dung local, may can cai:
+Nếu dùng local, máy cần cài:
 
-- **MongoDB Community Server**: database server chay tren may
-- **MongoDB Compass**: giao dien de xem database, cai nay khong bat buoc nhung nen co
+- **MongoDB Community Server**: database server chạy trên máy
+- **MongoDB Compass**: giao diện để xem database, không bắt buộc nhưng nên có
 
-Khi MongoDB local dang chay, dung cau hinh:
+Khi MongoDB local đang chạy, dùng cấu hình:
 
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/ga_ran_chipchip
 ```
 
-Neu chua cai MongoDB local ma van dung link nay, server se bao loi ket noi, thuong gap:
+Nếu chưa cài MongoDB local mà vẫn dùng link này, server sẽ báo lỗi kết nối, thường gặp:
 
 ```txt
 ECONNREFUSED 127.0.0.1:27017
 ```
 
-Loi nay khong phai do code sai, ma do may chua co MongoDB server dang chay.
+Lỗi này không phải do code sai, mà do máy chưa có MongoDB server đang chạy.
 
-### Cach 2: Dung MongoDB Atlas
+### Cách 2: Dùng MongoDB Atlas
 
-MongoDB Atlas la database online. Cach nay khong can cai MongoDB tren may, chi can internet va connection string.
+MongoDB Atlas là database online. Cách này không cần cài MongoDB trên máy, chỉ cần internet và connection string.
 
-Trong `.env`, thay `MONGODB_URI` bang link Atlas:
+Trong `.env`, thay `MONGODB_URI` bằng link Atlas:
 
 ```env
 MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/ga_ran_chipchip
 ```
 
-Vi du minh hoa:
+Ví dụ minh họa:
 
 ```env
 MONGODB_URI=mongodb+srv://chipchip_user:matkhaucuaban@cluster0.xxxxx.mongodb.net/ga_ran_chipchip
 ```
 
-Khi dung Atlas can luu y:
+Khi dùng Atlas cần lưu ý:
 
-- Khong push file `.env` len GitHub
-- Chi push `.env.example` de lam mau
-- Username, password, cluster URL that chi de trong `.env` tren may moi nguoi
-- Trong Atlas can cho phep IP truy cap database
+- Không push file `.env` lên GitHub
+- Chỉ push `.env.example` để làm mẫu
+- Username, password, cluster URL thật chỉ để trong `.env` trên máy mỗi người
+- Trong Atlas cần cho phép IP truy cập database
 
-Tom lai:
+Tóm lại:
 
 ```txt
-Mongoose = thu vien Node.js dung de ket noi MongoDB
-MongoDB local hoac Atlas = database that
+Mongoose = thư viện Node.js dùng để kết nối MongoDB
+MongoDB local hoặc Atlas = database thật
 ```
 
-Neu khong co MongoDB local hoac Atlas, server se khong ket noi database duoc.
+Nếu không có MongoDB local hoặc Atlas, server sẽ không kết nối database được.
 
-Chay server o moi truong dev:
+Chạy server ở môi trường dev:
 
 ```bash
 npm run dev
 ```
 
-Chay server binh thuong:
+Chạy server bình thường:
 
 ```bash
 npm start
 ```
 
-## Cau truc thu muc
+## Cấu trúc thư mục
 
 ```txt
 Du_an_ga_ran_ChipChip/
@@ -142,24 +142,24 @@ Du_an_ga_ran_ChipChip/
 └── server.js
 ```
 
-## Y nghia tung thu muc
+## Ý nghĩa từng thư mục
 
 ### `src/config`
 
-Chua cac file cau hinh cua du an.
+Chứa các file cấu hình của dự án.
 
-Vi du:
+Ví dụ:
 
-- `database.js`: ket noi MongoDB
-- `env.js`: doc bien moi truong neu can
+- `database.js`: kết nối MongoDB
+- `env.js`: đọc biến môi trường nếu cần
 
 ### `src/models`
 
-Chua schema MongoDB bang Mongoose.
+Chứa schema MongoDB bằng Mongoose.
 
-Moi collection nen co mot file model rieng.
+Mỗi collection nên có một file model riêng.
 
-Vi du:
+Ví dụ:
 
 ```txt
 user.model.js
@@ -170,11 +170,11 @@ order.model.js
 
 ### `src/routes`
 
-Chua cac duong dan cua website.
+Chứa các đường dẫn của website.
 
-Route chi nen khai bao URL va goi controller, khong nen viet logic dai trong route.
+Route chỉ nên khai báo URL và gọi controller, không nên viết logic dài trong route.
 
-Vi du:
+Ví dụ:
 
 ```txt
 home.route.js
@@ -187,63 +187,63 @@ admin.route.js
 
 ### `src/controllers`
 
-Controller nhan request tu route, goi service neu can, sau do render view Pug.
+Controller nhận request từ route, gọi service nếu cần, sau đó render view Pug.
 
-Vi du:
+Ví dụ:
 
 ```txt
 product.controller.js
 ```
 
-Co the render trang danh sach mon an:
+Có thể render trang danh sách món ăn:
 
 ```js
 res.render("pages/products", {
-  title: "Thuc don",
+  title: "Thực đơn",
   products
 });
 ```
 
 ### `src/services`
 
-Chua logic xu ly nghiep vu.
+Chứa logic xử lý nghiệp vụ.
 
-Vi du:
+Ví dụ:
 
-- Lay danh sach san pham
-- Tinh tong tien gio hang
-- Tao don hang
-- Cap nhat trang thai don hang
+- Lấy danh sách sản phẩm
+- Tính tổng tiền giỏ hàng
+- Tạo đơn hàng
+- Cập nhật trạng thái đơn hàng
 
-Controller nen goi service de code gon hon.
+Controller nên gọi service để code gọn hơn.
 
 ### `src/middlewares`
 
-Chua cac middleware dung chung cho Express.
+Chứa các middleware dùng chung cho Express.
 
-Vi du:
+Ví dụ:
 
-- Kiem tra nguoi dung da dang nhap chua
-- Kiem tra quyen admin
-- Xu ly loi 404 hoac loi server
+- Kiểm tra người dùng đã đăng nhập chưa
+- Kiểm tra quyền admin
+- Xử lý lỗi 404 hoặc lỗi server
 
 ### `src/views`
 
-Chua toan bo file giao dien Pug.
+Chứa toàn bộ file giao diện Pug.
 
-Du an nay dung server-side rendering, nen HTML se duoc render tu cac file trong thu muc nay.
+Dự án này dùng server-side rendering, nên HTML sẽ được render từ các file trong thư mục này.
 
 ```txt
 views/layouts/
 ```
 
-Chua layout chung cua website, vi du `main.pug`.
+Chứa layout chung của website, ví dụ `main.pug`.
 
 ```txt
 views/partials/
 ```
 
-Chua cac phan giao dien dung lai nhieu noi, vi du:
+Chứa các phần giao diện dùng lại nhiều nơi, ví dụ:
 
 - `header.pug`
 - `navbar.pug`
@@ -253,35 +253,35 @@ Chua cac phan giao dien dung lai nhieu noi, vi du:
 views/pages/
 ```
 
-Chua cac trang cho khach hang, vi du:
+Chứa các trang cho khách hàng, ví dụ:
 
-- Trang chu
-- Thuc don
-- Chi tiet mon an
-- Gio hang
-- Thanh toan
-- Dang nhap
-- Dang ky
+- Trang chủ
+- Thực đơn
+- Chi tiết món ăn
+- Giỏ hàng
+- Thanh toán
+- Đăng nhập
+- Đăng ký
 
 ```txt
 views/admin/
 ```
 
-Chua cac trang quan tri, vi du:
+Chứa các trang quản trị, ví dụ:
 
 - Dashboard
-- Quan ly mon an
-- Quan ly danh muc
-- Quan ly don hang
-- Quan ly nguoi dung
+- Quản lý món ăn
+- Quản lý danh mục
+- Quản lý đơn hàng
+- Quản lý người dùng
 
-Neu giai doan dau chua lam admin thi co the de trong.
+Nếu giai đoạn đầu chưa làm admin thì có thể để trống.
 
 ### `src/public`
 
-Chua file tinh duoc trinh duyet tai truc tiep.
+Chứa file tĩnh được trình duyệt tải trực tiếp.
 
-Vi du:
+Ví dụ:
 
 - `css/style.css`
 - `js/main.js`
@@ -290,25 +290,25 @@ Vi du:
 
 ### `src/utils`
 
-Chua cac ham tien ich dung lai nhieu noi.
+Chứa các hàm tiện ích dùng lại nhiều nơi.
 
-Vi du:
+Ví dụ:
 
-- Format tien Viet Nam
-- Tao slug san pham
-- Format ngay thang
+- Format tiền Việt Nam
+- Tạo slug sản phẩm
+- Format ngày tháng
 
-## Design pattern su dung
+## Design pattern sử dụng
 
-Du an di theo mo hinh **MVC**.
+Dự án đi theo mô hình **MVC**.
 
-MVC gom 3 phan chinh:
+MVC gồm 3 phần chính:
 
-- **Model**: lam viec voi database
-- **View**: giao dien Pug hien thi cho nguoi dung
-- **Controller**: nhan request, dieu phoi xu ly va render view
+- **Model**: làm việc với database
+- **View**: giao diện Pug hiển thị cho người dùng
+- **Controller**: nhận request, điều phối xử lý và render view
 
-Luong chay co ban:
+Luồng chạy cơ bản:
 
 ```txt
 Browser
@@ -330,7 +330,7 @@ Pug View
 Browser
 ```
 
-Vi du voi trang thuc don:
+Ví dụ với trang thực đơn:
 
 ```txt
 GET /thuc-don
@@ -346,9 +346,9 @@ models/product.model.js
 views/pages/products.pug
 ```
 
-## Quy uoc dat ten
+## Quy ước đặt tên
 
-Folder theo design pattern MVC se dung tieng Anh de dung chuan chung:
+Folder theo design pattern MVC sẽ dùng tiếng Anh để đúng chuẩn chung:
 
 ```txt
 models/
@@ -361,9 +361,9 @@ config/
 public/
 ```
 
-File chuc nang ben trong co the dung tieng Viet khong dau hoac full English, mien la team thong nhat mot kieu va di theo kieu do.
+File chức năng bên trong có thể dùng tiếng Việt không dấu hoặc full English, miễn là team thống nhất một kiểu và đi theo kiểu đó.
 
-Vi du kieu tieng Viet khong dau:
+Ví dụ kiểu tiếng Việt không dấu:
 
 ```txt
 san-pham.model.js
@@ -376,7 +376,7 @@ gio-hang.controller.js
 nguoi-dung.service.js
 ```
 
-Vi du kieu full English:
+Ví dụ kiểu full English:
 
 ```txt
 product.model.js
@@ -389,7 +389,7 @@ cart.controller.js
 user.service.js
 ```
 
-Khong nen tron lung tung trong cung mot chuc nang. Vi du nen tranh:
+Không nên trộn lung tung trong cùng một chức năng. Ví dụ nên tránh:
 
 ```txt
 san-pham.model.js
@@ -397,7 +397,7 @@ product.controller.js
 product.service.js
 ```
 
-Route/URL hien thi cho nguoi dung nen dung tieng Viet khong dau:
+Route/URL hiển thị cho người dùng nên dùng tiếng Việt không dấu:
 
 ```txt
 /thuc-don
@@ -406,7 +406,7 @@ Route/URL hien thi cho nguoi dung nen dung tieng Viet khong dau:
 /dang-nhap
 ```
 
-Route admin co the dung tieng Anh cho ngan gon:
+Route admin có thể dùng tiếng Anh cho ngắn gọn:
 
 ```txt
 /admin/products
@@ -414,25 +414,25 @@ Route admin co the dung tieng Anh cho ngan gon:
 /admin/categories
 ```
 
-## Quy uoc code chung
+## Quy ước code chung
 
-- Route chi khai bao duong dan va goi controller
-- Controller khong nen viet qua nhieu logic tinh toan
-- Logic xu ly nen dua vao service
-- Service la noi xu ly nghiep vu chinh, vi du tinh tong tien, tao don hang, loc san pham
-- Service co the goi model de lay hoac luu du lieu trong MongoDB
-- Model chi tap trung vao schema va truy van database
-- View chi nen hien thi du lieu, khong nen xu ly logic phuc tap
-- File tinh nhu CSS, JS client, hinh anh de trong `public`
-- Bien moi truong de trong `.env`, khong push `.env` len GitHub
+- Route chỉ khai báo đường dẫn và gọi controller
+- Controller không nên viết quá nhiều logic tính toán
+- Logic xử lý nên đưa vào service
+- Service là nơi xử lý nghiệp vụ chính, ví dụ tính tổng tiền, tạo đơn hàng, lọc sản phẩm
+- Service có thể gọi model để lấy hoặc lưu dữ liệu trong MongoDB
+- Model chỉ tập trung vào schema và truy vấn database
+- View chỉ nên hiển thị dữ liệu, không nên xử lý logic phức tạp
+- File tĩnh như CSS, JS client, hình ảnh để trong `public`
+- Biến môi trường để trong `.env`, không push `.env` lên GitHub
 
-Luong code nen di theo thu tu:
+Luồng code nên đi theo thứ tự:
 
 ```txt
 Route -> Controller -> Service -> Model -> MongoDB
 ```
 
-Vi du chuc nang dat hang:
+Ví dụ chức năng đặt hàng:
 
 ```txt
 gio-hang.route.js
@@ -441,31 +441,31 @@ gio-hang.route.js
   -> san-pham.model.js / don-hang.model.js
 ```
 
-## Chuc nang du kien
+## Chức năng dự kiến
 
-Phia khach hang:
+Phía khách hàng:
 
-- Xem trang chu
-- Xem danh sach mon an
-- Xem chi tiet mon an
-- Them mon vao gio hang
-- Dat hang
-- Dang ky, dang nhap
-- Xem lich su don hang
+- Xem trang chủ
+- Xem danh sách món ăn
+- Xem chi tiết món ăn
+- Thêm món vào giỏ hàng
+- Đặt hàng
+- Đăng ký, đăng nhập
+- Xem lịch sử đơn hàng
 
-Phia admin:
+Phía admin:
 
-- Quan ly mon an
-- Quan ly danh muc
-- Quan ly don hang
-- Quan ly nguoi dung
-- Xem thong ke co ban
+- Quản lý món ăn
+- Quản lý danh mục
+- Quản lý đơn hàng
+- Quản lý người dùng
+- Xem thống kê cơ bản
 
-## Ghi chu cho thanh vien clone ve lam
+## Ghi chú cho thành viên clone về làm
 
-Moi nguoi nen code theo dung cau truc tren de du an khong bi roi.
+Mọi người nên code theo đúng cấu trúc trên để dự án không bị rối.
 
-Khi lam chuc nang moi, hay tao du file theo nhom MVC. Vi du lam chuc nang san pham:
+Khi làm chức năng mới, hãy tạo đủ file theo nhóm MVC. Ví dụ làm chức năng sản phẩm:
 
 ```txt
 src/models/san-pham.model.js
@@ -475,4 +475,4 @@ src/services/san-pham.service.js
 src/views/pages/products.pug
 ```
 
-Lam nhu vay thi nguoi khac nhin vao se biet file nao lam nhiem vu gi, de review va sua loi hon.
+Làm như vậy thì người khác nhìn vào sẽ biết file nào làm nhiệm vụ gì, dễ review và sửa lỗi hơn.
