@@ -1,0 +1,64 @@
+GHI CHU DU AN GA RAN CHIPCHIP
+
+Link GitHub:
+https://github.com/Enty999/Du_an_ga_ran_ChipChip
+
+Thu muc project tren may:
+E:\Desktop\trikun\chuyende_FRONTREND\LAPTOP_NEW\Du_an_ga_ran_ChipChip
+
+Cong nghe:
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Pug
+- Nodemon
+
+Cach chay project:
+1. Mo terminal trong thu muc Du_an_ga_ran_ChipChip
+2. Cai thu vien neu chua co:
+   npm install
+3. Tao file .env dua theo .env.example
+4. Chay server:
+   npm run dev
+
+Lenh Git hay dung:
+- Kiem tra thay doi:
+  git status
+
+- Lay code moi nhat ve:
+  git pull origin main
+
+- Them tat ca file thay doi:
+  git add .
+
+- Commit:
+  git commit -m "noi dung commit"
+
+- Push len GitHub:
+  git push origin main
+
+Luu y MongoDB:
+- Neu dung local thi can cai MongoDB Community Server.
+- Link local mau:
+  mongodb://127.0.0.1:27017/ga_ran_chipchip
+
+- Neu dung MongoDB Atlas thi lay connection string tren Atlas bo vao file .env.
+- Khong push file .env len GitHub.
+
+Quy uoc code:
+- Folder theo pattern MVC dung tieng Anh:
+  models, controllers, routes, services, views, middlewares, config, public
+
+- File chuc nang co the dung tieng Viet khong dau hoac full English.
+- Khong tron lung tung trong cung mot chuc nang.
+
+Luong MVC:
+Route -> Controller -> Service -> Model -> MongoDB -> Pug View
+
+File quan trong:
+- server.js: chay server va ket noi database
+- src/app.js: cau hinh Express, Pug, public, routes
+- src/config/database.js: ket noi MongoDB
+- .env.example: mau bien moi truong
+- README.md: tai lieu chinh cua project
