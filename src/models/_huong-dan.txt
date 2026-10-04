@@ -1,0 +1,8 @@
+Thu muc models:
+- Chua schema MongoDB bang Mongoose.
+- Moi collection nen co mot file model rieng.
+
+Vi du file sau nay:
+- san-pham.model.js
+- don-hang.model.js
+- nguoi-dung.model.js

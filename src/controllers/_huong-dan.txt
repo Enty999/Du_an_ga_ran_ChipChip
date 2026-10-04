@@ -1,0 +1,9 @@
+Thu muc controllers:
+- Nhan request tu routes.
+- Goi service neu can xu ly nghiep vu.
+- Render Pug hoac tra response.
+
+Vi du file sau nay:
+- san-pham.controller.js
+- don-hang.controller.js
+- gio-hang.controller.js

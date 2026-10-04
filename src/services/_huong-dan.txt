@@ -1,0 +1,9 @@
+Thu muc services:
+- Xu ly nghiep vu chinh.
+- Controller se goi service.
+- Service co the goi model de lay/luu du lieu.
+
+Vi du file sau nay:
+- san-pham.service.js
+- don-hang.service.js
+- gio-hang.service.js

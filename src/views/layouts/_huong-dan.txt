@@ -1,0 +1,1 @@
+Layout Pug dung chung, vi du main.pug.

@@ -1,0 +1,7 @@
+Thu muc public:
+- Chua file tinh cho trinh duyet tai truc tiep.
+
+Goi y chia nho:
+- css
+- js
+- images

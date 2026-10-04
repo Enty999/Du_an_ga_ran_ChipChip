@@ -1,0 +1,8 @@
+Thu muc views:
+- Chua giao dien Pug render tu server.
+
+Goi y chia nho:
+- layouts: layout chung
+- partials: header, footer, navbar
+- pages: trang khach hang
+- admin: trang quan tri

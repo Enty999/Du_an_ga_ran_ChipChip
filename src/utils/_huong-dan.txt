@@ -1,0 +1,7 @@
+Thu muc utils:
+- Chua cac ham tien ich dung lai nhieu noi.
+
+Vi du file sau nay:
+- dinh-dang-tien.js
+- tao-slug.js
+- dinh-dang-ngay.js

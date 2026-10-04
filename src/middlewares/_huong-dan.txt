@@ -1,0 +1,7 @@
+Thu muc middlewares:
+- Chua middleware dung chung cho Express.
+
+Vi du file sau nay:
+- kiem-tra-dang-nhap.middleware.js
+- kiem-tra-admin.middleware.js
+- xu-ly-loi.middleware.js

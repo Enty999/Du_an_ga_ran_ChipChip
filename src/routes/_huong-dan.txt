@@ -1,0 +1,8 @@
+Thu muc routes:
+- Khai bao duong dan URL.
+- Route chi goi controller, khong viet logic dai o day.
+
+Vi du file sau nay:
+- trang-chu.route.js
+- san-pham.route.js
+- gio-hang.route.js
