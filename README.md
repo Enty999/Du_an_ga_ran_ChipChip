@@ -28,6 +28,23 @@ Cài thư viện:
 npm install
 ```
 
+Lệnh `npm install` sẽ đọc file `package.json` và tự cài các thư viện cần thiết:
+
+```txt
+express
+mongoose
+pug
+dotenv
+nodemon
+```
+
+Nếu tạo project từ đầu và muốn cài thủ công thì dùng:
+
+```bash
+npm install express mongoose pug dotenv
+npm install --save-dev nodemon
+```
+
 Tạo file `.env` dựa theo mẫu `.env.example`, ví dụ:
 
 ```env
