@@ -179,10 +179,10 @@ Mỗi collection nên có một file model riêng.
 Ví dụ:
 
 ```txt
-user.model.js
-product.model.js
-category.model.js
-order.model.js
+nguoi-dung.model.js
+san-pham.model.js
+danh-muc.model.js
+don-hang.model.js
 ```
 
 ### `src/routes`
@@ -194,11 +194,11 @@ Route chỉ nên khai báo URL và gọi controller, không nên viết logic d�
 Ví dụ:
 
 ```txt
-home.route.js
-product.route.js
-cart.route.js
-order.route.js
-auth.route.js
+trang-chu.route.js
+san-pham.route.js
+gio-hang.route.js
+don-hang.route.js
+dang-nhap.route.js
 admin.route.js
 ```
 
@@ -209,7 +209,7 @@ Controller nhận request từ route, gọi service nếu cần, sau đó render
 Ví dụ:
 
 ```txt
-product.controller.js
+san-pham.controller.js
 ```
 
 Có thể render trang danh sách món ăn:
@@ -352,13 +352,13 @@ Ví dụ với trang thực đơn:
 ```txt
 GET /thuc-don
   ↓
-routes/product.route.js
+routes/san-pham.route.js
   ↓
-controllers/product.controller.js
+controllers/san-pham.controller.js
   ↓
-services/product.service.js
+services/san-pham.service.js
   ↓
-models/product.model.js
+models/san-pham.model.js
   ↓
 views/pages/products.pug
 ```
@@ -378,9 +378,9 @@ config/
 public/
 ```
 
-File chức năng bên trong có thể dùng tiếng Việt không dấu hoặc full English, miễn là team thống nhất một kiểu và đi theo kiểu đó.
+File chức năng bên trong ưu tiên dùng tiếng Việt không dấu để cả nhóm dễ hiểu.
 
-Ví dụ kiểu tiếng Việt không dấu:
+Ví dụ:
 
 ```txt
 san-pham.model.js
@@ -393,20 +393,7 @@ gio-hang.controller.js
 nguoi-dung.service.js
 ```
 
-Ví dụ kiểu full English:
-
-```txt
-product.model.js
-product.route.js
-product.controller.js
-product.service.js
-
-order.model.js
-cart.controller.js
-user.service.js
-```
-
-Không nên trộn lung tung trong cùng một chức năng. Ví dụ nên tránh:
+Nếu sau này team muốn đổi sang full English thì phải đổi đồng bộ cả chức năng, không nên trộn lung tung. Ví dụ nên tránh:
 
 ```txt
 san-pham.model.js
@@ -493,3 +480,4 @@ src/views/pages/products.pug
 ```
 
 Làm như vậy thì người khác nhìn vào sẽ biết file nào làm nhiệm vụ gì, dễ review và sửa lỗi hơn.
+
