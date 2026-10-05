@@ -9,13 +9,62 @@ extends ../../layouts/main
 block content
   .container.py-5
     .row.justify-content-center
-      .col-12.col-md-6.col-lg-5
-        h2.text-center.mb-4 Đăng nhập
-        p.text-center.text-muted (Tú Anh viết code giao diện form đăng nhập vào đây nhé)
-        
-        //- Gợi ý: Tú Anh có thể dùng class Bootstrap 5 (form-control, btn btn-primary...) 
+      .col-12.col-md-8.col-lg-5
+        //- Gợi ý: Tú Anh có thể dùng class Bootstrap 5 (form-control, btn btn-primary...)
         //- hoặc tự viết class CSS riêng tuỳ ý!
+        .card.shadow-sm.border-0.rounded-4
+          .card-body.p-4.p-md-5
+            .text-center.mb-4
+              h2.fw-bold.mb-1 Đăng nhập
+              p.text-muted.small Chào mừng bạn quay lại với Gà Rán ChipChip
+
+            //- Thông báo lỗi/thành công từ server (nếu có truyền vào)
+            if error
+              .alert.alert-danger.py-2.small(role="alert")
+                = error
+            if success
+              .alert.alert-success.py-2.small(role="alert")
+                = success
+
+            //- Form đăng nhập
+            form(action="/auth/dang-nhap", method="POST")
+              .mb-3
+                label.form-label.fw-semibold(for="email") Email / Tên đăng nhập
+                input#email.form-control(
+                  type="text",
+                  name="email",
+                  placeholder="Nhập email hoặc tên đăng nhập",
+                  required,
+                  autocomplete="username"
+                )
+
+              .mb-3
+                label.form-label.fw-semibold(for="password") Mật khẩu
+                input#password.form-control(
+                  type="password",
+                  name="password",
+                  placeholder="Nhập mật khẩu",
+                  required,
+                  autocomplete="current-password"
+                )
+
+              .d-flex.justify-content-between.align-items-center.mb-4
+                .form-check
+                  input#remember.form-check-input(type="checkbox", name="remember")
+                  label.form-check-label.small.text-secondary(for="remember") Ghi nhớ đăng nhập
+                a.text-decoration-none.small(href="#", style="color: #d97706;") Quên mật khẩu?
+
+              button.btn.w-100.py-2.fw-bold.text-white(
+                type="submit",
+                style="background-color: #d97706; border-color: #d97706;"
+              ) Đăng nhập
+
+            .text-center.mt-4
+              p.small.text-secondary.mb-0 Chưa có tài khoản? 
+                a.fw-semibold.text-decoration-none(href="/auth/dang-ky", style="color: #d97706;") Đăng ký ngay
 
 //- (Tùy chọn) Nếu Tú Anh cần viết JS riêng (validate form...), bỏ comment dòng dưới:
 //- block scripts
 //-   script(src="/js/dang-nhap.js")
+
+
