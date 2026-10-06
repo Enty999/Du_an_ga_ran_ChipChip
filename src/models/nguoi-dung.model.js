@@ -32,16 +32,14 @@ const soDoNguoiDung = new mongoose.Schema(
 );
 
 // Middleware Mongoose (pre-hook): Chạy tự động trước mỗi lần lưu (save) tài liệu vào cơ sở dữ liệu
-soDoNguoiDung.pre("save", async function (next) {
+soDoNguoiDung.pre("save", async function () {
   // Nếu trường mật khẩu không bị thay đổi (ví dụ: chỉ sửa họ tên hoặc email), bỏ qua việc mã hóa lại
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) return;
 
   // Tạo chuỗi muối (salt) ngẫu nhiên với độ phức tạp là 10 rounds
   const salt = await bcrypt.genSalt(10);
   // Thực hiện băm (mã hóa) mật khẩu với chuỗi muối vừa tạo
   this.password = await bcrypt.hash(this.password, salt);
-  // Tiếp tục chuyển sang bước lưu tiếp theo
-  next();
 });
 
 // Phương thức đối tượng (instance method): Dùng để so sánh mật khẩu người dùng nhập vào với mật khẩu đã mã hóa trong database
@@ -51,4 +49,4 @@ soDoNguoiDung.methods.kiemTraMatKhau = async function(matKhauNhap){
 }
 
 // Khởi tạo và xuất (export) Model "NguoiDung" để có thể sử dụng ở các controller/service khác
-module.exports = mongoose.model("NguoiDung", soDoNguoiDung);
+module.exports = mongoose.model("NguoiDung", soDoNguoiDung);

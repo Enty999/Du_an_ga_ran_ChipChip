@@ -54,3 +54,41 @@ body {
   font-size: 0.875rem;
   color: #64748b;
 }
+
+/* Màu chủ đạo thương hiệu 🍗 Gà Rán ChipChip */
+:root {
+  --chip-primary: #d97706;
+  --chip-primary-hover: #b45309;
+}
+
+.text-chipchip {
+  color: #d97706 !important;
+}
+
+.bg-chipchip {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+.btn-chipchip {
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-chipchip:hover,
+.btn-chipchip:focus {
+  background-color: #b45309 !important;
+  border-color: #b45309 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.35);
+  transform: translateY(-1px);
+}
+
+.form-control:focus {
+  border-color: #d97706;
+  box-shadow: 0 0 0 0.25rem rgba(217, 119, 6, 0.2);
+}
+
