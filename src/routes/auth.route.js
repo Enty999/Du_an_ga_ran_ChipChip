@@ -12,4 +12,9 @@ router.get("/dang-ky", authController.renderDangKy);
 // Xử lý đăng ký
 router.post("/dang-ky", authController.xuLiDangKy);
 
+// Đường dẫn trang Xác nhận OTP
+router.get("/xac-nhan-otp", authController.renderXacNhanOTP);
+// Xử lý xác nhận OTP
+router.post("/xac-nhan-otp", authController.xuLiXacNhanOTP);
+
 module.exports = router;

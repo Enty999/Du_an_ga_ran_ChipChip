@@ -2,12 +2,24 @@
 
 // Import model Người Dùng để thao tác với bảng/collection người dùng trong cơ sở dữ liệu
 const NguoiDung = require("../models/nguoi-dung.model");
+
 // Import thư viện jsonwebtoken dùng để tạo và xác thực JWT token
 const jwt = require("jsonwebtoken");
+
+// Import model MaOTP để thao tác với bảng/collection mã OTP trong cơ sở dữ liệu
+const MaOTP = require("../models/OTP.model");
+
+// Import service Email để gửi mã OTP
+const dichVuEmail = require("../services/email.service");
 
 // Hàm trợ giúp: Tạo mã xác thực JWT từ ID người dùng với thời hạn sống là 1 ngày (1d)
 const taoMaXacThuc = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET||"chipchip_secret_key_2026", { expiresIn: "1d" });
+};
+
+// Hàm trợ giúp: Tạo mã OTP ngẫu nhiên gồm 6 số ngẫu nhiên
+const taoMaOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 // [POST] /api/auth/dang-ky
@@ -19,7 +31,7 @@ const xuLiDangKy = async (req, res) => {
     const errors = [];
     
     //Ràng buộc họ tên và email ko để trống
-    if(!hoTen || !hoTen.trim()){
+    if(!hoTen || !hoTen?.trim()){
       errors.push("Họ tên không được để trống!")
     }
     //Biểu thức bắt buộc kết thúc bằng @gmail.com (chữ hoa/thường đều được)
@@ -58,19 +70,27 @@ const xuLiDangKy = async (req, res) => {
       });
     }
 
-    // Khởi tạo đối tượng người dùng mới từ dữ liệu gửi lên
-    const nguoiDungMoi = await 
-      NguoiDung.create({ 
-        hoTen: hoTen.trim() , 
-        email: email.trim().toLowerCase() , 
-        password 
-    });
+    // Mã OTP mới
+    const maOTPMoi = taoMaOTP();
 
-    // Tạo mã token JWT dựa trên _id của người dùng mới tạo
-    const maXacThuc = taoMaXacThuc(nguoiDungMoi._id);
+    // Xóa OTP cũ nếu đã gửi trước đó
+    await MaOTP.deleteMany({ email });
 
-    // chuyển sang trang đăng nhập thành công
-    res.redirect("/auth/dang-nhap");
+    // Lưu thông tin người dùng tạm thời cùng mã OTP vào cơ sở dữ liệu
+    await MaOTP.create({
+        email: email.trim().toLowerCase(),
+        maOTP: maOTPMoi,
+        hoTen: hoTen.trim(),
+        password
+    })
+
+    // Gửi email chữa mã OTP đến người dùng
+    await dichVuEmail.guiEmailXacThucOTP(email, maOTPMoi);
+
+    // Chuyển sang trang nhập mã OTP
+    res.redirect(`/auth/xac-nhan-otp?email=${encodeURIComponent(email)}`);
+
+   
   } catch (error) {
     // Nếu có lỗi hệ thống phát sinh, hiển thị ra giao diện 
     res.render("pages/auth/dang-ky", {
@@ -118,6 +138,59 @@ const xuLiDangNhap = async (req, res) =>{
   }
 }
 
+// Xử lý logic xác nhận OTP qua API
+const xuLiXacNhanOTP = async (req, res) => {
+  try {
+    // Lấy email và mã OTP từ request body
+    const { email, maOTP } = req.body;
+    // Tìm mã OTP trong database
+    const maOTPStored = await MaOTP.findOne({ email, maOTP });
+    // Nếu không tìm thấy mã OTP
+    if (!maOTPStored) {
+      return res.render("pages/auth/xac-nhan-otp", {
+        title: "Xác nhận OTP",
+        error: "Mã OTP không tồn tại hoặc đã hết hạn",
+        email: email,
+      });
+    }
+    if (maOTPStored.maOTP !== maOTP) {
+      return res.render("pages/auth/xac-nhan-otp", {
+        title: "Xác nhận OTP",
+        error: "Mã OTP không chính xác",
+        email: email,
+      });
+    }
+    // Mã OTP chính xác -> Tạo tài khoản chính thức vào bảng Người Dùng
+    await NguoiDung.create({
+      hoTen: maOTPStored.hoTen,
+      email: maOTPStored.email,
+      password: maOTPStored.password,
+    });
+    // Xóa bản ghi OTP sau khi sử dụng thành công
+    await MaOTP.deleteMany({ email });
+    // Chuyển hướng sang trang đăng nhập thành công
+    res.redirect("/auth/dang-nhap");
+  } catch (error) {
+    res.render("pages/auth/xac-nhan-otp", {
+      title: "Xác thực mã OTP",
+      email: req.body.email,
+      error: error.message,
+    });
+  }
+};
+
+// [GET] /auth/xac-nhan-otp
+const renderXacNhanOTP = (req, res) => {
+  const { email } = req.query;
+  if(!email){
+    return res.redirect("/auth/dang-ky");
+  }
+  res.render("pages/auth/xac-nhan-otp", {
+    title: "Xác nhận OTP",
+    email: email
+  });
+};
+
 // [GET] /auth/dang-nhap
 const renderDangNhap = (req, res) => {
   res.render("pages/auth/dang-nhap", { title: "Đăng nhập" });
@@ -132,7 +205,9 @@ const renderDangKy = (req, res) => {
 module.exports = {
   renderDangNhap,
   renderDangKy,
+  renderXacNhanOTP,
   xuLiDangNhap,
   xuLiDangKy,
+  xuLiXacNhanOTP,
 };
 

@@ -1,0 +1,46 @@
+extends ../../layouts/main
+
+block content
+  .container.py-5.my-4
+    .row.justify-content-center
+      .col-12.col-md-6.col-lg-5
+        .card.border-0.shadow-sm.rounded-4.overflow-hidden
+          .card-header.bg-white.border-bottom.p-4.text-center
+            h5.mb-1.fw-bold.text-dark
+              i.fas.fa-shield-alt.me-2.text-chipchip
+              | Xác thực mã OTP
+            p.text-muted.small.mb-0 Mã xác thực gồm 6 chữ số đã được gửi tới email của bạn.
+
+          .card-body.p-4
+            if error
+              .alert.alert-danger.d-flex.align-items-center.rounded-3.mb-4
+                i.fas.fa-exclamation-triangle.me-2
+                span.small #{error}
+
+            form(method="POST", action="/auth/xac-nhan-otp")
+              //- Input ẩn để gửi email kèm theo khi submit form
+              input(type="hidden", name="email", value=email)
+
+              .mb-3
+                label.form-label.fw-semibold(for="emailNhanMa") Email nhận mã
+                input#emailNhanMa.form-control.bg-light(type="text", value=email, readonly)
+
+              .mb-4
+                label.form-label.fw-semibold(for="maOTP") Nhập mã xác thực (6 số)
+                input#maOTP.form-control.form-control-lg.text-center.fw-bold(
+                  type="text",
+                  name="maOTP",
+                  placeholder="------",
+                  maxlength="6",
+                  required,
+                  style="letter-spacing: 8px; font-size: 24px;"
+                )
+
+              button.btn.btn-chipchip.w-100.py-2.fw-bold.rounded-3(type="submit")
+                i.fas.fa-check-circle.me-2
+                | Xác nhận kích hoạt tài khoản
+
+            .text-center.mt-4
+              p.text-muted.small.mb-0
+                | Chưa nhận được mã hoặc mã hết hạn? 
+                a.text-chipchip.fw-bold.text-decoration-none(href="/auth/dang-ky") Quay lại đăng ký
