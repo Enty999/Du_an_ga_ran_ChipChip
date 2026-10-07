@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/auth", authRoute);
 
 app.get("/", (req, res) => {
-  res.send("Website ga ran ChipChip dang san sang. Vao /auth/dang-nhap hoac /auth/dang-ky de xem giao dien.");
+  res.render("pages/trang-chu/trang-chu", { title: "Trang chủ - Gà Rán ChipChip" });
 });
 
 module.exports = app;

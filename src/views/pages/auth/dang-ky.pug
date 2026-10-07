@@ -7,14 +7,64 @@ extends ../../layouts/main
 //-   link(rel="stylesheet", href="/css/dang-ky.css")
 
 block content
-  .container.py-5
+  .container.py-5.my-4
     .row.justify-content-center
-      .col-12.col-md-7.col-lg-6
-        h2.text-center.mb-4 Đăng ký tài khoản
-        p.text-center.text-muted (Tân viết code giao diện form đăng ký vào đây nhé)
-        
-        //- Gợi ý: Tân có thể dùng class Bootstrap 5 (form-control, btn btn-primary...)
-        //- hoặc tự viết class CSS riêng tuỳ ý!
+      .col-12.col-md-8.col-lg-7
+        .card.border-0.shadow-sm.rounded-4.overflow-hidden
+          .card-header.bg-white.border-bottom.p-4.d-flex.justify-content-between.align-items-center
+            h5.mb-0.fw-bold.text-dark
+              i.fas.fa-user-plus.me-2.text-chipchip
+              | Đăng ký thành viên mới
+            span.badge.bg-chipchip.px-3.py-2.rounded-pill ChipChip VIP
+
+          .card-body.p-4
+            form(method="POST", action="/auth/dang-ky")
+              if errors && errors.length
+                .alert.alert-danger.d-flex.flex-column.gap-1.rounded-3.mb-4
+                  each i in errors
+                    p.mb-0.small
+                      i.fas.fa-exclamation-triangle.me-1
+                      |  #{i}
+
+              .row.g-3
+                //- Họ và tên (chiếm 6 cột trên màn hình md trở lên)
+                .col-12
+                  label.form-label.fw-semibold(for="name")
+                    i.fas.fa-id-card.me-1.text-chipchip
+                    | Họ và tên
+                  input#name.form-control(type="text", name="hoTen", placeholder="Nhập họ và tên đầy đủ", required)
+
+                //- Email (chiếm 12 cột - full hàng)
+                .col-12
+                  label.form-label.fw-semibold(for="email")
+                    i.fas.fa-envelope.me-1.text-chipchip
+                    | Địa chỉ Email
+                  input#email.form-control(type="email", name="email", placeholder="example@domain.com", required)
+
+                //- Mật khẩu
+                .col-md-6
+                  label.form-label.fw-semibold(for="pass")
+                    i.fas.fa-lock.me-1.text-chipchip
+                    | Mật khẩu
+                  input#pass.form-control(type="password", name="password", placeholder="Tối thiểu 6 ký tự", required)
+
+                //- Xác nhận mật khẩu
+                .col-md-6
+                  label.form-label.fw-semibold(for="confirmPass")
+                    i.fas.fa-check-double.me-1.text-chipchip
+                    | Xác nhận mật khẩu
+                  input#confirmPass.form-control(type="password", name="confirmPassword", placeholder="Nhập lại mật khẩu", required)
+
+                //- Nút Đăng ký
+                .col-12.mt-4
+                  button.btn.btn-chipchip.w-100.py-2.fw-bold.rounded-3(type="submit")
+                    i.fas.fa-user-plus.me-2
+                    | Tạo tài khoản ngay
+
+            .text-center.mt-4
+              p.text-muted.mb-0
+                | Đã có tài khoản? 
+                a.text-chipchip.fw-bold.text-decoration-none(href="/auth/dang-nhap") Đăng nhập tại đây
 
 //- (Tùy chọn) Nếu Tân cần viết JS riêng (validate form...), bỏ comment dòng dưới:
 //- block scripts
