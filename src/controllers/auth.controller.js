@@ -153,13 +153,6 @@ const xuLiXacNhanOTP = async (req, res) => {
         email: email,
       });
     }
-    if (maOTPStored.maOTP !== maOTP) {
-      return res.render("pages/auth/xac-nhan-otp", {
-        title: "Xác nhận OTP",
-        error: "Mã OTP không chính xác",
-        email: email,
-      });
-    }
     // Mã OTP chính xác -> Tạo tài khoản chính thức vào bảng Người Dùng
     await NguoiDung.create({
       hoTen: maOTPStored.hoTen,

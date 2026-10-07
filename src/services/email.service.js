@@ -18,11 +18,11 @@ const guiEmailXacThucOTP = async (emailNguoiNhan, maOTP) => {
     subject: "Xác thực tài khoản - GaRanChipChip",
     html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-        <h2 style="color: #d32f2f; text-align: center;">GÀ RÁN CHIPCHIP</h2>
+        <h2 style="color: #d97706; text-align: center;">GÀ RÁN CHIPCHIP</h2>
         <p>Xin chào bạn,</p>
         <p>Bạn đang đăng ký tài khoản tại hệ thống Gà Rán ChipChip. Mã xác thực (OTP) của bạn là:</p>
         <div style="text-align: center; margin: 25px 0;">
-          <span style="display: inline-block; font-size: 28px; font-weight: bold; color: #d32f2f; background: #fff3e0; padding: 10px 25px; border-radius: 6px; letter-spacing: 5px;">
+          <span style="display: inline-block; font-size: 28px; font-weight: bold; color: #d97706; background: #fff3e0; padding: 10px 25px; border-radius: 6px; letter-spacing: 5px;">
             ${maOTP}
           </span>
         </div>
