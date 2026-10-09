@@ -1,3 +1,88 @@
+//- Footer dùng chung toàn website (chuẩn thiết kế ChipChip)
 footer.site-footer
-  .footer-container
-    p © 2026 Dự Án Gà Rán ChipChip. Nhóm Lập trình web phía máy chủ.
+  .site-footer__container
+    .site-footer__grid
+      //- Cột 1: Thông tin thương hiệu & mạng xã hội
+      .site-footer__col
+        .site-footer__brand
+          .site-footer__logo-icon
+            span.material-symbols-outlined lunch_dining
+          .site-footer__logo-text
+            span.site-footer__logo-title Gà Rán ChipChip
+            span.site-footer__logo-subtitle Ẩm thực giòn tan
+
+        p.site-footer__desc
+          | Gà giòn đậm vị - Niềm vui gắn kết. Tinh hoa gà rán với công thức ướp bí truyền kết hợp sốt thủ công đậm đà cho mọi cuộc hội ngộ.
+
+        .site-footer__socials
+          a.site-footer__social-btn(href="#", aria-label="Chia sẻ")
+            span.material-symbols-outlined share
+          a.site-footer__social-btn(href="#", aria-label="Thích")
+            span.material-symbols-outlined thumb_up
+          a.site-footer__social-btn(href="#", aria-label="Hình ảnh")
+            span.material-symbols-outlined photo_camera
+          a.site-footer__social-btn(href="#", aria-label="Video")
+            span.material-symbols-outlined play_circle
+
+      //- Cột 2: Hệ thống cửa hàng
+      .site-footer__col
+        .site-footer__heading
+          span.site-footer__chapter-tag 01
+          h4.site-footer__title Hệ thống cửa hàng
+
+        ul.site-footer__list
+          li.site-footer__list-item
+            span.material-symbols-outlined location_on
+            span Cơ sở 1: 128 Nguyễn Trãi, Q. Thanh Xuân, Hà Nội
+          li.site-footer__list-item
+            span.material-symbols-outlined location_on
+            span Cơ sở 2: 45 Hai Bà Trưng, Q. Hoàn Kiếm, Hà Nội
+          li.site-footer__list-item
+            span.material-symbols-outlined location_on
+            span Cơ sở 3: 88 Sư Vạn Hạnh, Quận 10, TP. Hồ Chí Minh
+
+      //- Cột 3: Phục vụ & Liên hệ
+      .site-footer__col
+        .site-footer__heading
+          span.site-footer__chapter-tag 02
+          h4.site-footer__title Phục vụ &amp; Liên hệ
+
+        .site-footer__info-group
+          .site-footer__info-item
+            span.material-symbols-outlined.site-footer__info-icon--primary schedule
+            .site-footer__info-text
+              p.site-footer__info-label Giờ mở cửa:
+              p.site-footer__info-value 09:00 - 22:30 (Thứ 2 - Chủ Nhật)
+
+          .site-footer__info-item
+            span.material-symbols-outlined.site-footer__info-icon--secondary call
+            .site-footer__info-text
+              p.site-footer__info-label Hotline giao hàng:
+              p.site-footer__hotline 1900 6868
+
+          .site-footer__info-item
+            span.material-symbols-outlined.site-footer__info-icon--primary mail
+            .site-footer__info-text
+              p.site-footer__info-value contact@chipchipfriedchicken.vn
+
+      //- Cột 4: Cam kết chất lượng
+      .site-footer__col
+        .site-footer__heading
+          span.site-footer__chapter-tag 03
+          h4.site-footer__title Cam kết chất lượng
+
+        p.site-footer__desc
+          | 100% thịt gà tươi trong ngày kiểm dịch an toàn thực phẩm. Dầu chiên đạt chuẩn nhiệt độ cao giòn rụm không gắt dầu.
+
+        .site-footer__cert-card
+          .site-footer__cert-title
+            span.material-symbols-outlined verified
+            span Chứng nhận HACCP &amp; ISO
+          p.site-footer__cert-desc Tiêu chuẩn vệ sinh an toàn thực phẩm quốc gia.
+
+    //- Dòng bản quyền & liên kết chân trang
+    .site-footer__bottom
+      p.site-footer__copyright Copyright © 2026 Dự Án Gà Rán ChipChip. Tất cả quyền được bảo lưu.
+      .site-footer__legal-links
+        a.site-footer__legal-link(href="#") Điều khoản sử dụng
+        a.site-footer__legal-link(href="#") Chính sách bảo mật

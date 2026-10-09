@@ -1,0 +1,128 @@
+/* Design tokens lấy từ tailwind.config của bản Stitch (design/stitch/home/code.html) */
+/* Mọi màu, khoảng cách, font trong giao diện mới chỉ dùng qua các biến này */
+:root {
+  /* Màu sắc */
+  --color-amber-crisp: #e67e22;
+  --color-background: #fff8f6;
+  --color-border-hairline: #efe8df;
+  --color-chapter-stamp: #e8ddd5;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-inverse-on-surface: #fceeea;
+  --color-inverse-primary: #ffb688;
+  --color-inverse-surface: #362f2d;
+  --color-on-background: #211a18;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #fffbff;
+  --color-on-primary-fixed: #311300;
+  --color-on-primary-fixed-variant: #733600;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #650001;
+  --color-on-secondary-fixed: #410000;
+  --color-on-secondary-fixed-variant: #8e130c;
+  --color-on-surface: #211a18;
+  --color-on-surface-variant: #574336;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #fffbff;
+  --color-on-tertiary-fixed: #301400;
+  --color-on-tertiary-fixed-variant: #713700;
+  --color-outline: #8a7264;
+  --color-outline-variant: #dec1b1;
+  --color-primary: #934700;
+  --color-primary-container: #b95a00;
+  --color-primary-fixed: #ffdbc7;
+  --color-primary-fixed-dim: #ffb688;
+  --color-secondary: #b02d21;
+  --color-secondary-container: #fc6451;
+  --color-secondary-fixed: #ffdad5;
+  --color-secondary-fixed-dim: #ffb4a9;
+  --color-spice-crimson: #b22222;
+  --color-surface: #fff8f6;
+  --color-surface-bright: #fff8f6;
+  --color-surface-card: #ffffff;
+  --color-surface-container: #f9ebe7;
+  --color-surface-container-high: #f3e5e2;
+  --color-surface-container-highest: #ede0dc;
+  --color-surface-container-low: #fff1ed;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-cream: #fbf9f5;
+  --color-surface-dim: #e4d7d4;
+  --color-surface-subtle: #f4efea;
+  --color-surface-tint: #974800;
+  --color-surface-variant: #ede0dc;
+  --color-tertiary: #904800;
+  --color-tertiary-container: #b55d00;
+  --color-tertiary-fixed: #ffdcc5;
+  --color-tertiary-fixed-dim: #ffb783;
+  --color-text-muted: #7a6f6c;
+  --color-text-primary: #2c2523;
+
+  /* Bo góc */
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Khoảng cách */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --margin: 3rem;
+  --margin-mobile: 1rem;
+  --gutter: 1.25rem;
+  --gutter-mobile: 0.75rem;
+  --container-max: 80rem; /* tương đương max-w-7xl */
+  --header-height: 5rem; /* h-20 của header */
+
+  /* Font chữ */
+  --font-body: 'Be Vietnam Pro', sans-serif;
+
+  /* Cỡ chữ: --text-<tên>-size / -line / -tracking / -weight */
+  --text-display-hero-size: 52px;
+  --text-display-hero-line: 62px;
+  --text-display-hero-tracking: -0.02em;
+  --text-display-hero-weight: 700;
+  --text-display-hero-mobile-size: 34px;
+  --text-display-hero-mobile-line: 42px;
+  --text-display-hero-mobile-tracking: -0.015em;
+  --text-display-hero-mobile-weight: 700;
+  --text-headline-section-size: 32px;
+  --text-headline-section-line: 40px;
+  --text-headline-section-tracking: -0.01em;
+  --text-headline-section-weight: 700;
+  --text-headline-section-mobile-size: 26px;
+  --text-headline-section-mobile-line: 34px;
+  --text-headline-section-mobile-tracking: -0.01em;
+  --text-headline-section-mobile-weight: 700;
+  --text-chapter-number-size: 28px;
+  --text-chapter-number-line: 32px;
+  --text-chapter-number-tracking: 0.05em;
+  --text-chapter-number-weight: 300;
+  --text-title-card-size: 18px;
+  --text-title-card-line: 24px;
+  --text-title-card-tracking: normal;
+  --text-title-card-weight: 600;
+  --text-body-lg-size: 16px;
+  --text-body-lg-line: 26px;
+  --text-body-lg-tracking: normal;
+  --text-body-lg-weight: 400;
+  --text-body-md-size: 14px;
+  --text-body-md-line: 22px;
+  --text-body-md-tracking: normal;
+  --text-body-md-weight: 400;
+  --text-label-tag-size: 12px;
+  --text-label-tag-line: 16px;
+  --text-label-tag-tracking: 0.04em;
+  --text-label-tag-weight: 600;
+  --text-caption-stamp-size: 11px;
+  --text-caption-stamp-line: 14px;
+  --text-caption-stamp-tracking: 0.08em;
+  --text-caption-stamp-weight: 500;
+}

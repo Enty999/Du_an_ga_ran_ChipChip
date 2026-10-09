@@ -1,0 +1,19 @@
+extends ../../layouts/main
+
+//- CSS riêng của từng section trang Giới thiệu
+block styles
+  link(rel="stylesheet", href="/css/gioi-thieu/hero.css")
+  link(rel="stylesheet", href="/css/gioi-thieu/nguyen-tac.css")
+  link(rel="stylesheet", href="/css/gioi-thieu/hanh-trinh.css")
+  link(rel="stylesheet", href="/css/gioi-thieu/doi-ngu.css")
+  link(rel="stylesheet", href="/css/gioi-thieu/khong-gian.css")
+  link(rel="stylesheet", href="/css/gioi-thieu/cta.css")
+
+//- Mỗi section là một partial riêng (thiết kế gốc: design/stitch/about/code.html)
+block content
+  include _hero
+  include _nguyen-tac
+  include _hanh-trinh
+  include _doi-ngu
+  include _khong-gian
+  include _cta

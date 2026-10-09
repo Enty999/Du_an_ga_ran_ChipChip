@@ -1,4 +1,24 @@
 extends ../../layouts/main
 
+//- CSS riêng của từng section trang chủ
+block styles
+  link(rel="stylesheet", href="/css/trang-chu/hero.css")
+  link(rel="stylesheet", href="/css/trang-chu/thuc-don.css")
+  link(rel="stylesheet", href="/css/trang-chu/review.css")
+  link(rel="stylesheet", href="/css/trang-chu/gioi-thieu.css")
+  link(rel="stylesheet", href="/css/trang-chu/thu-vien.css")
+  link(rel="stylesheet", href="/css/trang-chu/faq.css")
+  link(rel="stylesheet", href="/css/trang-chu/lien-he.css")
+
+//- Mỗi section là một partial riêng (thiết kế gốc: design/stitch/home/code.html)
 block content
-    h1 Chào mừng đến với ChipChip
+  include _hero
+  include _thuc-don
+  include _review
+  include _gioi-thieu
+  include _thu-vien
+  include _faq
+  include _lien-he
+
+block scripts
+  script(src="/js/trang-chu.js")

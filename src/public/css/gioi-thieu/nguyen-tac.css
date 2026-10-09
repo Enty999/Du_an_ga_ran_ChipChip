@@ -1,0 +1,209 @@
+/* ==========================================================================
+   ABOUT PRINCIPLES CSS - Gà Rán ChipChip (Section 01)
+   Prefix: .about-principles__
+   ========================================================================== */
+
+.about-principles {
+  width: 100%;
+  background-color: var(--color-surface-card);
+  padding: 5rem 0;
+  box-shadow: 0 4px 24px rgba(44, 37, 35, 0.02);
+  border-top: 1px solid var(--color-border-hairline);
+  border-bottom: 1px solid var(--color-border-hairline);
+}
+
+.about-principles__container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+@media (min-width: 1024px) {
+  .about-principles__container {
+    padding: 0 var(--margin);
+  }
+}
+
+/* Header Section */
+.about-principles__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .about-principles__header {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.about-principles__header-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 48rem;
+}
+
+.about-principles__chapter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.about-principles__chapter-num {
+  font-family: var(--font-body);
+  font-size: var(--text-chapter-number-size);
+  line-height: var(--text-chapter-number-line);
+  font-weight: 700;
+  letter-spacing: var(--text-chapter-number-tracking);
+  color: var(--color-primary);
+}
+
+.about-principles__chapter-line {
+  width: 2rem;
+  height: 2px;
+  background-color: var(--color-outline-variant);
+  display: inline-block;
+}
+
+.about-principles__chapter-tag {
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.about-principles__title {
+  font-family: var(--font-body);
+  font-size: var(--text-headline-section-mobile-size);
+  line-height: var(--text-headline-section-mobile-line);
+  letter-spacing: var(--text-headline-section-mobile-tracking);
+  font-weight: var(--text-headline-section-mobile-weight);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .about-principles__title {
+    font-size: var(--text-headline-section-size);
+    line-height: var(--text-headline-section-line);
+    letter-spacing: var(--text-headline-section-tracking);
+    font-weight: var(--text-headline-section-weight);
+  }
+}
+
+.about-principles__desc {
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+  color: var(--color-text-muted);
+  max-width: 28rem;
+  margin: 0;
+}
+
+/* 4 Pillars Grid */
+.about-principles__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .about-principles__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-principles__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.about-principles__card {
+  padding: var(--space-xl);
+  border-radius: var(--radius-2xl);
+  background-color: var(--color-surface-cream);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: 0 4px 16px -2px rgba(44, 37, 35, 0.04);
+  border: 1px solid rgba(239, 232, 223, 0.6);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-principles__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px -4px rgba(217, 107, 0, 0.12);
+}
+
+.about-principles__icon-box {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.about-principles__icon-box--primary {
+  background-color: var(--color-primary-fixed);
+  color: var(--color-primary);
+}
+
+.about-principles__icon-box--secondary {
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-secondary);
+}
+
+.about-principles__icon-box .material-symbols-outlined {
+  font-size: 28px;
+}
+
+.about-principles__card-tag {
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  color: var(--color-amber-crisp);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.about-principles__card-title {
+  font-family: var(--font-body);
+  font-size: var(--text-title-card-size);
+  line-height: var(--text-title-card-line);
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin: 0;
+}
+
+.about-principles__card-text {
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.about-principles__card-footer {
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-secondary);
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  font-weight: 600;
+}
+
+.about-principles__card-footer .material-symbols-outlined {
+  font-size: 18px;
+}

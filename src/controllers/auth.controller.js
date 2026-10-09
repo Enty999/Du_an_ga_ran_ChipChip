@@ -130,6 +130,15 @@ const xuLiDangNhap = async (req, res) =>{
     // Mật khẩu hợp lệ, tạo token xác thực JWT cho phiên đăng nhập
     const maXacThuc = taoMaXacThuc(timNguoiDung._id);
 
+    // TODO (BE) - Bước 1: Token đang được tạo nhưng chưa lưu đi đâu, nên header không biết ai đã đăng nhập.
+    // Lưu token vào cookie trước khi redirect, ví dụ:
+    //   res.cookie("maXacThuc", maXacThuc, {
+    //     httpOnly: true,                                  // JS phía trình duyệt không đọc được
+    //     sameSite: "lax",
+    //     secure: process.env.NODE_ENV === "production",   // chỉ gửi qua HTTPS khi chạy thật
+    //     maxAge: 24 * 60 * 60 * 1000,                     // 1 ngày, khớp expiresIn của JWT
+    //   });
+
     // Phản hồi thành công mã 200 kèm token và thông tin người dùng
     res.redirect("/");
   } catch (error) {
@@ -193,6 +202,14 @@ const renderDangNhap = (req, res) => {
 const renderDangKy = (req, res) => {
   res.render("pages/auth/dang-ky", { title: "Đăng ký" });
 };
+
+// TODO (BE) - Bước 3: [POST] /auth/dang-xuat
+// Nút "Đăng xuất" trong header (partials/header.pug) đã gửi form POST tới đây. Gợi ý:
+//   const xuLiDangXuat = (req, res) => {
+//     res.clearCookie("maXacThuc");   // tên cookie phải trùng với lúc đăng nhập
+//     res.redirect("/");
+//   };
+// Nhớ thêm xuLiDangXuat vào module.exports bên dưới.
 
 // Xuất các hàm điều hướng giao diện (view controller) để gắn vào route
 module.exports = {

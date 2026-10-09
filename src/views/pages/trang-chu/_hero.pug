@@ -1,0 +1,183 @@
+//- Section 00: Hero Banner (ID #trang-chu)
+section.hero#trang-chu
+  //- Nền hạt texture ấm áp
+  .hero__texture
+
+  .hero__container
+    //- Thanh thông tin phụ trên cùng (Mini Meta Header Bar)
+    .hero__meta
+      .hero__meta-status
+        span.hero__pulse-dot
+        span BẾP NÓNG LIÊN TỤC • 09:00 - 22:30
+
+      .hero__meta-branches
+        span CS 1: 128 NGUYỄN TRÃI, THANH XUÂN
+        span •
+        span CS 2: 45 HAI BÀ TRƯNG, HOÀN KIẾM
+
+      .hero__meta-rating
+        span.material-symbols-outlined star
+        span 4.9 / 5 TỪ 1,200+ THỰC KHÁCH
+
+    //- Bố cục Hero chính (Editorial Hero Grid)
+    .hero__grid
+      //- Cột nội dung bên trái
+      .hero__content
+        .hero__badge
+          span.material-symbols-outlined local_fire_department
+          span.hero__badge-text TIỆM GÀ RÁN THỦ CÔNG
+
+        h1.hero__title
+          | Gà giòn rụm vị đậm đà. 
+          br.hero__br
+          span.hero__highlight Giòn tan
+          |  từng khoảnh khắc.
+
+        p.hero__desc
+          | Ghé ChipChip, thưởng thức từng miếng gà ủ sốt cay ngọt vàng óng, da giòn rôm rốp và thịt mềm mọng nước. Tinh hoa gà thủ công tạo nên niềm vui trọn vẹn bên bạn bè và gia đình.
+
+        .hero__actions
+          a.hero__btn-primary(href="#thuc-don")
+            span Xem thực đơn
+            span.material-symbols-outlined arrow_forward
+
+          a.hero__btn-secondary(href="#dat-hang")
+            span.material-symbols-outlined delivery_dining
+            span Đặt giao tận nơi
+
+        .hero__features
+          .hero__feature-item
+            span.material-symbols-outlined verified
+            span 100% Gà tươi sạch
+          .hero__feature-item
+            span.material-symbols-outlined timer
+            span Chiên mới theo đơn
+          .hero__feature-item
+            span.material-symbols-outlined soup_kitchen
+            span 12 loại sốt độc quyền
+
+      //- Cột hình ảnh nổi bật bên phải (Asymmetric Photo Stack)
+      .hero__visual
+        .hero__visual-stack
+          //- Card ảnh chính
+          .hero__main-card
+            img.hero__main-img(
+              src="/images/trang-chu/hero-01.jpg",
+              alt="Đùi gà sốt cay Seoul óng ánh hạt mè và hành lá"
+            )
+            .hero__main-overlay
+            .hero__main-info
+              .hero__main-info-text
+                span.hero__main-tag Món Chữ Ký
+                p.hero__main-title Đùi Gà Sốt Cay Seoul
+              span.hero__main-price 45.000đ
+
+          //- Thẻ dấu ấn nhỏ nổi bên dưới (Stamp Card)
+          .hero__stamp-card
+            .hero__stamp-head
+              span.material-symbols-outlined local_fire_department
+              span.hero__stamp-title GIÒN TAN 3 GIỜ
+            p.hero__stamp-desc Công thức ướp thảo mộc 18h giữ độ mọng tuyệt đối.
+
+          //- Huy hiệu HOT góc trên
+          .hero__badge-hot
+            span.hero__badge-hot-sub HOT
+            span.hero__badge-hot-main VỊ MỚI
+
+    //- Thanh gọi món nhanh (Quick Bites Slider)
+    .hero__quick-bites
+      .hero__quick-head
+        .hero__quick-label
+          span.material-symbols-outlined bolt
+          span MÓN ĐƯỢC GỌI NHIỀU NHẤT TRONG GIỜ QUA
+        .hero__quick-hint
+          span Vuốt để xem thêm
+          span.material-symbols-outlined trending_flat
+
+      .hero__quick-grid
+        //- Món nhanh 1
+        .hero__quick-item
+          .hero__quick-item-body
+            .hero__quick-thumb
+              img(
+                src="/images/trang-chu/hero-02.jpg",
+                alt="Gà Sốt Cay Hàn phủ sốt cay óng ả và mè trắng"
+              )
+            .hero__quick-info
+              p.hero__quick-name Gà Sốt Cay Hàn
+              p.hero__quick-price 45.000đ
+          button.hero__quick-btn(type="button")
+            span.material-symbols-outlined add
+            span Thêm món
+
+        //- Món nhanh 2
+        .hero__quick-item
+          .hero__quick-item-body
+            .hero__quick-thumb
+              img(
+                src="/images/trang-chu/hero-03.jpg",
+                alt="Gà Tuyết Phô Mai phủ bột phô mai béo ngậy"
+              )
+            .hero__quick-info
+              p.hero__quick-name Gà Tuyết Phô Mai
+              p.hero__quick-price 49.000đ
+          button.hero__quick-btn(type="button")
+            span.material-symbols-outlined add
+            span Thêm món
+
+        //- Món nhanh 3
+        .hero__quick-item
+          .hero__quick-item-body
+            .hero__quick-thumb
+              img(
+                src="/images/trang-chu/hero-04.jpg",
+                alt="Burger Gà Giòn Mayo với phô mai tan chảy"
+              )
+            .hero__quick-info
+              p.hero__quick-name Burger Gà Giòn Mayo
+              p.hero__quick-price 39.000đ
+          button.hero__quick-btn(type="button")
+            span.material-symbols-outlined add
+            span Thêm món
+
+        //- Món nhanh 4
+        .hero__quick-item
+          .hero__quick-item-body
+            .hero__quick-thumb
+              img(
+                src="/images/trang-chu/hero-05.jpg",
+                alt="Cơm Gà Giòn Teriyaki cùng rong biển sợi"
+              )
+            .hero__quick-info
+              p.hero__quick-name Cơm Gà Giòn Teriyaki
+              p.hero__quick-price 42.000đ
+          button.hero__quick-btn(type="button")
+            span.material-symbols-outlined add
+            span Thêm món
+
+//- Dải chữ chạy liên tục (Repeating Marquee Ticker)
+.hero__marquee(aria-hidden="true")
+  .hero__marquee-track
+    span GÀ RÁN CHIPCHIP
+    span.hero__marquee-star ★
+    span GIÒN RỤM TỪNG MIẾNG
+    span.hero__marquee-star ★
+    span SỐT CAY NGỌT BÍ TRUYỀN
+    span.hero__marquee-star ★
+    span GÀ TƯƠI NỘI ĐỊA HẰNG NGÀY
+    span.hero__marquee-star ★
+    span GIAO NÓNG TẬN BÀN ĂN
+    span.hero__marquee-star ★
+    span 100% CHIÊN DẦU THỰC VẬT MỚI
+    span.hero__marquee-star ★
+    span GÀ RÁN CHIPCHIP
+    span.hero__marquee-star ★
+    span GIÒN RỤM TỪNG MIẾNG
+    span.hero__marquee-star ★
+    span SỐT CAY NGỌT BÍ TRUYỀN
+    span.hero__marquee-star ★
+    span GÀ TƯƠI NỘI ĐỊA HẰNG NGÀY
+    span.hero__marquee-star ★
+    span GIAO NÓNG TẬN BÀN ĂN
+    span.hero__marquee-star ★
+    span 100% CHIÊN DẦU THỰC VẬT MỚI

@@ -1,0 +1,40 @@
+/* Khu vực cảm nhận của khách hàng */
+.review {
+  padding: var(--space-2xl) 0;
+  background: var(--color-surface-subtle);
+}
+
+.review__container {
+  width: min(100% - 3rem, var(--container-max) - 6rem);
+  margin: 0 auto;
+}
+
+.review__heading { margin-bottom: var(--space-xl); }
+.review__eyebrow { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-xs); }
+.review__number { color: var(--color-amber-crisp); font-size: var(--text-chapter-number-size); line-height: var(--text-chapter-number-line); letter-spacing: var(--text-chapter-number-tracking); font-weight: var(--text-chapter-number-weight); }
+.review__stamp { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border-radius: var(--radius-full); background: var(--color-secondary-fixed); color: var(--color-secondary); font-size: var(--text-caption-stamp-size); font-weight: var(--text-label-tag-weight); }
+.review__label { color: var(--color-text-muted); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); letter-spacing: var(--text-caption-stamp-tracking); font-weight: var(--text-label-tag-weight); }
+.review__title { margin: 0; color: var(--color-text-primary); font-size: var(--text-headline-section-size); line-height: var(--text-headline-section-line); letter-spacing: var(--text-headline-section-tracking); font-weight: var(--text-headline-section-weight); }
+.review__intro { margin: var(--space-xs) 0 0; color: var(--color-text-muted); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); }
+.review__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-lg); align-items: stretch; }
+.review__card, .review__map-card { display: flex; flex-direction: column; justify-content: space-between; padding: var(--space-lg); border-radius: var(--radius-2xl); box-shadow: 0 0.25rem 0.75rem rgba(44, 37, 35, 0.08); }
+.review__card { background: var(--color-surface-card); }
+.review__stars { display: flex; gap: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-amber-crisp); }
+.review__stars .material-symbols-outlined { font-size: var(--text-title-card-size); font-variation-settings: 'FILL' 1; }
+.review__quote { margin: 0; color: var(--color-text-primary); font-size: var(--text-body-lg-size); line-height: var(--text-body-lg-line); font-style: italic; }
+.review__author { display: flex; align-items: center; justify-content: space-between; padding-top: var(--space-md); margin-top: var(--space-md); }
+.review__name { margin: 0; color: var(--color-text-primary); font-size: var(--text-title-card-size); line-height: var(--text-title-card-line); font-weight: var(--text-title-card-weight); }
+.review__meta { margin: 0; color: var(--color-text-muted); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); }
+.review__verified { color: var(--color-amber-crisp); font-size: var(--space-lg); }
+.review__map-card { background: var(--color-secondary); color: var(--color-on-secondary); box-shadow: 0 0.5rem 1.5rem rgba(44, 37, 35, 0.15); transition: background-color 200ms ease; }
+.review__map-card:hover { background: var(--color-primary); }
+.review__stars--light { color: var(--color-secondary-fixed); }
+.review__map-title { margin: 0; color: var(--color-on-secondary); font-size: var(--text-headline-section-size); line-height: var(--text-headline-section-line); letter-spacing: var(--text-headline-section-tracking); font-weight: var(--text-headline-section-weight); }
+.review__map-copy { margin: var(--space-sm) 0 0; color: var(--color-secondary-fixed); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); }
+.review__map-link { display: inline-flex; align-items: center; gap: var(--space-xs); padding-top: var(--space-lg); color: var(--color-on-secondary); font-size: var(--text-title-card-size); line-height: var(--text-title-card-line); font-weight: var(--text-title-card-weight); text-decoration: none; transition: transform 200ms ease; }
+.review__map-link:hover { color: var(--color-on-secondary); transform: translateX(var(--space-xs)); }
+
+@media (max-width: 767px) { .review__grid { grid-template-columns: 1fr; } .review__title, .review__map-title { font-size: var(--text-headline-section-mobile-size); line-height: var(--text-headline-section-mobile-line); letter-spacing: var(--text-headline-section-mobile-tracking); } }
+
+/* Khung nội dung giống Stitch: max-w-7xl + px-6, từ 1024px trở lên là px-12 */
+@media (min-width: 1024px) { .review__container { width: min(100% - 6rem, var(--container-max) - 6rem); } }

@@ -1,0 +1,38 @@
+/* Thông tin liên hệ và hệ thống chi nhánh */
+.contact { padding: var(--space-2xl) 0; background: var(--color-surface-subtle); }
+.contact__container { width: min(100% - 3rem, var(--container-max) - 6rem); margin: 0 auto; }
+.contact__feature { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); overflow: hidden; border-radius: var(--radius-3xl); background: var(--color-secondary); color: var(--color-on-secondary); box-shadow: 0 0.75rem 1.5rem rgba(44, 37, 35, 0.15); }
+.contact__image { position: relative; grid-column: span 5; min-height: 16.25rem; background: var(--color-surface-variant); }
+.contact__image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.contact__image-label { position: absolute; top: var(--space-md); left: var(--space-md); padding: var(--space-xs) var(--space-md); border-radius: var(--radius-full); background: var(--color-surface-card); color: var(--color-text-primary); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); font-weight: var(--text-label-tag-weight); }
+.contact__content { grid-column: span 7; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-xl); padding: var(--space-2xl); }
+.contact__eyebrow { display: flex; align-items: center; gap: var(--space-xs); color: var(--color-secondary-fixed); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); letter-spacing: var(--text-caption-stamp-tracking); }
+.contact__title { margin: var(--space-sm) 0 0; color: var(--color-on-secondary); font-size: var(--text-headline-section-size); line-height: var(--text-headline-section-line); letter-spacing: var(--text-headline-section-tracking); font-weight: var(--text-headline-section-weight); }
+.contact__intro { margin: var(--space-sm) 0 0; color: var(--color-secondary-fixed); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); }
+.contact__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md); }
+.contact__hours { display: inline-flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-lg); border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.15); color: var(--color-on-secondary); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); font-weight: var(--text-label-tag-weight); backdrop-filter: blur(0.75rem); }
+.contact__hours .material-symbols-outlined { color: var(--color-amber-crisp); }
+.contact__hotline { display: inline-flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-xl); border-radius: var(--radius-full); background: var(--color-surface-card); color: var(--color-secondary); box-shadow: 0 0.25rem 0.75rem rgba(44, 37, 35, 0.15); font-size: var(--text-title-card-size); line-height: var(--text-title-card-line); font-weight: var(--text-title-card-weight); text-decoration: none; }
+.contact__hotline:hover { background: var(--color-surface-cream); color: var(--color-secondary); }
+.contact__hotline .material-symbols-outlined { font-size: var(--text-title-card-size); }
+.contact__branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); margin-top: var(--space-lg); }
+.contact__branch { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-md); padding: var(--space-lg); border-radius: var(--radius-2xl); background: var(--color-surface-card); box-shadow: 0 0.25rem 0.75rem rgba(44, 37, 35, 0.08); }
+.contact__branch-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); margin-bottom: var(--space-xs); }
+.contact__branch-name { display: flex; align-items: baseline; gap: var(--space-xs); }
+.contact__branch-number { color: var(--color-amber-crisp); font-size: var(--text-chapter-number-size); line-height: var(--text-chapter-number-line); letter-spacing: var(--text-chapter-number-tracking); font-weight: var(--text-chapter-number-weight); }
+.contact__branch-name h3 { margin: 0; color: var(--color-text-primary); font-size: var(--text-title-card-size); line-height: var(--text-title-card-line); font-weight: var(--text-title-card-weight); }
+.contact__city { color: var(--color-text-muted); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); letter-spacing: var(--text-caption-stamp-tracking); font-weight: var(--text-label-tag-weight); white-space: nowrap; }
+.contact__detail { display: flex; align-items: flex-start; gap: var(--space-xs); margin: var(--space-xs) 0 0; color: var(--color-text-muted); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); }
+.contact__detail .material-symbols-outlined { flex: 0 0 auto; margin-top: var(--space-xs); color: var(--color-primary); font-size: var(--text-title-card-size); }
+.contact__detail + .contact__detail .material-symbols-outlined { color: var(--color-amber-crisp); }
+.contact__branch-footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border-hairline); }
+.contact__service { color: var(--color-secondary); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); font-weight: var(--text-label-tag-weight); }
+.contact__directions { display: inline-flex; align-items: center; gap: var(--space-xs); color: var(--color-primary); font-size: var(--text-label-tag-size); line-height: var(--text-label-tag-line); letter-spacing: var(--text-label-tag-tracking); font-weight: var(--text-label-tag-weight); text-align: right; text-decoration: none; }
+.contact__directions:hover { color: var(--color-secondary); }
+.contact__directions .material-symbols-outlined { font-size: var(--text-body-lg-size); }
+@media (max-width: 1023px) { .contact__image, .contact__content { grid-column: span 12; } .contact__content { padding: var(--space-xl); } }
+@media (max-width: 767px) { .contact__branches { grid-template-columns: 1fr; } .contact__title { font-size: var(--text-headline-section-mobile-size); line-height: var(--text-headline-section-mobile-line); letter-spacing: var(--text-headline-section-mobile-tracking); } }
+@media (max-width: 639px) { .contact__branch-footer { align-items: flex-start; flex-direction: column; } }
+
+/* Khung nội dung giống Stitch: max-w-7xl + px-6, từ 1024px trở lên là px-12 */
+@media (min-width: 1024px) { .contact__container { width: min(100% - 6rem, var(--container-max) - 6rem); } }

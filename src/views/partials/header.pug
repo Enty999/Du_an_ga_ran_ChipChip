@@ -1,8 +1,137 @@
+//- Header dùng chung toàn website (chuẩn thiết kế ChipChip)
+//- Người dùng đang đăng nhập: BE truyền object nguoiDung ({ hoTen, email }) qua res.locals hoặc locals khi render.
+//- Chưa có nguoiDung thì header hiện nút đăng nhập như bình thường.
+//- TODO (BE): Hiện chưa trang nào truyền nguoiDung nên header luôn ở trạng thái "chưa đăng nhập".
+//-   Cần nối 4 bước, tìm "TODO (BE)" để thấy vị trí:
+//-   1. src/controllers/auth.controller.js (xuLiDangNhap): lưu JWT vào cookie "maXacThuc"
+//-   2. src/app.js: gắn cookie-parser + middleware gán res.locals.nguoiDung cho mọi trang
+//-   3. src/routes/auth.route.js + auth.controller.js: route POST /auth/dang-xuat (xoá cookie)
+//-   4. src/app.js: route /tai-khoan và /tai-khoan/don-hang
+- const nguoiDungHienTai = locals.nguoiDung
+- const tenHienThi = nguoiDungHienTai ? ((nguoiDungHienTai.hoTen || '').trim() || 'Bạn') : ''
+- const chuCaiDau = tenHienThi ? tenHienThi.charAt(0).toUpperCase() : ''
+
 header.site-header
-  .header-container
-    .logo
-      a(href="/") 🍗 Gà Rán ChipChip
-    nav.nav-links
-      a(href="/") Trang chủ
-      a(href="/auth/dang-nhap") Đăng nhập
-      a(href="/auth/dang-ky") Đăng ký
+  .site-header__container
+    .site-header__brand-wrapper
+      a.site-header__logo(href="/")
+        .site-header__logo-icon
+          span.material-symbols-outlined lunch_dining
+        .site-header__logo-text
+          span.site-header__logo-title ChipChip
+          span.site-header__logo-subtitle Gà Rán Giòn Rụm
+
+      nav.site-header__nav#site-nav-desktop(aria-label="Menu chính")
+        a.site-header__link(href="/") Trang chủ
+        a.site-header__link(href="/#thuc-don") Thực đơn
+        a.site-header__link(href="/#khuyen-mai") Khuyến mãi
+        a.site-header__link(href="/gioi-thieu") Về ChipChip
+        a.site-header__link(href="/#lien-he") Liên hệ
+
+    .site-header__actions
+      a.site-header__btn-order(href="/#thuc-don")
+        span.material-symbols-outlined shopping_bag
+        span Đặt món ngay
+
+      a.site-header__badge-vip(href="#")
+        span.material-symbols-outlined workspace_premium
+        span ChipChip VIP
+
+      if nguoiDungHienTai
+        //- Đã đăng nhập: nút tên người dùng, bấm vào xổ ra bảng menu tài khoản
+        .site-header__user#site-header-user
+          button.site-header__user-btn#site-header-user-btn(
+            type="button",
+            aria-haspopup="true",
+            aria-expanded="false",
+            aria-controls="site-header-user-menu"
+          )
+            span.site-header__user-avatar(aria-hidden="true")= chuCaiDau
+            span.site-header__user-name= tenHienThi
+            span.material-symbols-outlined.site-header__user-caret(aria-hidden="true") expand_more
+
+          .site-header__user-menu#site-header-user-menu(hidden)
+            .site-header__user-info
+              span.site-header__user-avatar.site-header__user-avatar--lg(aria-hidden="true")= chuCaiDau
+              //- Phần này sẽ là nơi tài khoản hiển thị thông tin khi user đăng nhập thành công BE sẽ thực hiện truyền dữ liệu ở đây
+              //- TODO (BE) Hiện tại chưa có thông tin nên sẽ hiện tên người dùng
+              .site-header__user-info-text
+                span.site-header__user-info-name= tenHienThi
+                if nguoiDungHienTai.email
+                  span.site-header__user-info-email= nguoiDungHienTai.email
+
+            nav.site-header__user-links(aria-label="Tài khoản")
+              //- TODO (BE) - Bước 4: trang /tai-khoan chưa có route
+              a.site-header__user-link(href="/tai-khoan")
+                span.material-symbols-outlined person
+                span Thông tin cá nhân
+              //- TODO (BE) - Bước 4: trang /tai-khoan/don-hang chưa có route
+              a.site-header__user-link(href="/tai-khoan/don-hang")
+                span.material-symbols-outlined receipt_long
+                span Đơn hàng của tôi
+
+            //- Đăng xuất gửi POST tới /auth/dang-xuat
+            //- TODO (BE) - Bước 3: route này chưa có, bấm sẽ ra 404 cho tới khi BE thêm vào
+            form.site-header__user-logout(action="/auth/dang-xuat", method="POST")
+              button.site-header__user-link.site-header__user-link--danger(type="submit")
+                span.material-symbols-outlined logout
+                span Đăng xuất
+      else
+        a.site-header__btn-account(href="/auth/dang-nhap", aria-label="Đăng nhập")
+          span.material-symbols-outlined person
+
+      button.site-header__toggle#site-header-toggle(
+        type="button",
+        aria-label="Mở menu",
+        aria-expanded="false",
+        aria-controls="site-header-drawer"
+      )
+        span.material-symbols-outlined.site-header__toggle-icon menu
+
+  //- Drawer menu cho màn hình nhỏ (< 1280px)
+  .site-header__backdrop#site-header-backdrop(aria-hidden="true")
+  .site-header__drawer#site-header-drawer(aria-hidden="true")
+    .site-header__drawer-head
+      .site-header__logo-text
+        span.site-header__logo-title ChipChip
+        span.site-header__logo-subtitle Gà Rán Giòn Rụm
+      button.site-header__drawer-close#site-header-drawer-close(type="button", aria-label="Đóng menu")
+        span.material-symbols-outlined close
+
+    nav.site-header__drawer-nav(aria-label="Menu di động")
+      a.site-header__drawer-link(href="/") Trang chủ
+      a.site-header__drawer-link(href="/#thuc-don") Thực đơn
+      a.site-header__drawer-link(href="/#khuyen-mai") Khuyến mãi
+      a.site-header__drawer-link(href="/gioi-thieu") Về ChipChip
+      a.site-header__drawer-link(href="/#lien-he") Liên hệ
+
+    .site-header__drawer-actions
+      a.site-header__btn-order.site-header__btn-order--full(href="/#thuc-don")
+        span.material-symbols-outlined shopping_bag
+        span Đặt món ngay
+      a.site-header__badge-vip.site-header__badge-vip--full(href="#")
+        span.material-symbols-outlined workspace_premium
+        span ChipChip VIP
+      if nguoiDungHienTai
+        //- Đã đăng nhập: thông tin người dùng + các mục tài khoản trong drawer
+        .site-header__drawer-user
+          .site-header__user-info
+            span.site-header__user-avatar.site-header__user-avatar--lg(aria-hidden="true")= chuCaiDau
+            .site-header__user-info-text
+              span.site-header__user-info-name= tenHienThi
+              if nguoiDungHienTai.email
+                span.site-header__user-info-email= nguoiDungHienTai.email
+          a.site-header__user-link(href="/tai-khoan")
+            span.material-symbols-outlined person
+            span Thông tin cá nhân
+          a.site-header__user-link(href="/tai-khoan/don-hang")
+            span.material-symbols-outlined receipt_long
+            span Đơn hàng của tôi
+          form.site-header__user-logout(action="/auth/dang-xuat", method="POST")
+            button.site-header__user-link.site-header__user-link--danger(type="submit")
+              span.material-symbols-outlined logout
+              span Đăng xuất
+      else
+        a.site-header__drawer-account(href="/auth/dang-nhap")
+          span.material-symbols-outlined person
+          span Tài khoản / Đăng nhập

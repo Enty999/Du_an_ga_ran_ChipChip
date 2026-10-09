@@ -17,4 +17,7 @@ router.get("/xac-nhan-otp", authController.renderXacNhanOTP);
 // Xử lý xác nhận OTP
 router.post("/xac-nhan-otp", authController.xuLiXacNhanOTP);
 
+// TODO (BE) - Bước 3: Đăng xuất (header gửi form POST tới /auth/dang-xuat)
+// router.post("/dang-xuat", authController.xuLiDangXuat);
+
 module.exports = router;
