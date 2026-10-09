@@ -1,0 +1,287 @@
+/* ==========================================================================
+   ABOUT TIMELINE CSS - Gà Rán ChipChip (Section 02)
+   Prefix: .about-timeline__
+   ========================================================================== */
+
+.about-timeline {
+  width: 100%;
+  background-color: var(--color-surface-cream);
+  padding: 5rem 0;
+}
+
+.about-timeline__container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+@media (min-width: 1024px) {
+  .about-timeline__container {
+    padding: 0 var(--margin);
+  }
+}
+
+/* Header Section */
+.about-timeline__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.about-timeline__chapter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.about-timeline__chapter-num {
+  font-family: var(--font-body);
+  font-size: var(--text-chapter-number-size);
+  line-height: var(--text-chapter-number-line);
+  font-weight: 700;
+  letter-spacing: var(--text-chapter-number-tracking);
+  color: var(--color-primary);
+}
+
+.about-timeline__chapter-line {
+  width: 2rem;
+  height: 2px;
+  background-color: var(--color-outline-variant);
+  display: inline-block;
+}
+
+.about-timeline__chapter-tag {
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.about-timeline__title {
+  font-family: var(--font-body);
+  font-size: var(--text-headline-section-mobile-size);
+  line-height: var(--text-headline-section-mobile-line);
+  letter-spacing: var(--text-headline-section-mobile-tracking);
+  font-weight: var(--text-headline-section-mobile-weight);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .about-timeline__title {
+    font-size: var(--text-headline-section-size);
+    line-height: var(--text-headline-section-line);
+    letter-spacing: var(--text-headline-section-tracking);
+    font-weight: var(--text-headline-section-weight);
+  }
+}
+
+.about-timeline__desc {
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-muted);
+  max-width: 42rem;
+  margin: 0;
+}
+
+/* 4 Milestones Bento Grid */
+.about-timeline__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .about-timeline__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-timeline__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.about-timeline__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  border-radius: var(--radius-2xl);
+  background-color: var(--color-surface-card);
+  box-shadow: 0 4px 16px -2px rgba(44, 37, 35, 0.04);
+  border: 1px solid rgba(239, 232, 223, 0.6);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-timeline__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px -4px rgba(217, 107, 0, 0.12);
+}
+
+.about-timeline__card--featured {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: transparent;
+  box-shadow: 0 12px 28px -4px rgba(147, 71, 0, 0.3);
+}
+
+.about-timeline__card--featured:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px -4px rgba(147, 71, 0, 0.4);
+}
+
+.about-timeline__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-sm);
+}
+
+.about-timeline__year {
+  font-family: var(--font-body);
+  font-size: var(--text-chapter-number-size);
+  line-height: var(--text-chapter-number-line);
+  font-weight: 700;
+}
+
+.about-timeline__year--primary {
+  color: var(--color-primary);
+}
+
+.about-timeline__year--secondary {
+  color: var(--color-secondary);
+}
+
+.about-timeline__year--tertiary {
+  color: var(--color-tertiary);
+}
+
+.about-timeline__year--featured {
+  color: var(--color-primary-fixed);
+}
+
+.about-timeline__badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  font-weight: 700;
+}
+
+.about-timeline__badge--primary {
+  background-color: var(--color-primary-fixed);
+  color: var(--color-primary);
+}
+
+.about-timeline__badge--secondary {
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-secondary);
+}
+
+.about-timeline__badge--tertiary {
+  background-color: var(--color-tertiary-fixed);
+  color: var(--color-tertiary);
+}
+
+.about-timeline__badge--featured {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary);
+}
+
+.about-timeline__progress {
+  height: 4px;
+  width: 100%;
+  background-color: var(--color-surface-subtle);
+  margin-bottom: var(--space-md);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.about-timeline__progress--featured {
+  background-color: var(--color-primary-container);
+}
+
+.about-timeline__progress-bar {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--radius-full);
+}
+
+.about-timeline__progress-bar--primary {
+  background-color: var(--color-primary);
+}
+
+.about-timeline__progress-bar--secondary {
+  background-color: var(--color-secondary);
+}
+
+.about-timeline__progress-bar--tertiary {
+  background-color: var(--color-tertiary);
+}
+
+.about-timeline__progress-bar--featured {
+  background-color: var(--color-primary-fixed);
+}
+
+.about-timeline__card-title {
+  font-family: var(--font-body);
+  font-size: var(--text-title-card-size);
+  line-height: var(--text-title-card-line);
+  color: var(--color-text-primary);
+  font-weight: 700;
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.about-timeline__card-title--featured {
+  color: var(--color-on-primary);
+}
+
+.about-timeline__card-text {
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+  color: var(--color-text-muted);
+  margin: 0;
+  flex: 1;
+}
+
+.about-timeline__card-text--featured {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.about-timeline__card-meta {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  font-weight: 500;
+  border-top: 1px dashed var(--color-border-hairline);
+}
+
+.about-timeline__card-meta--featured {
+  color: var(--color-primary-fixed);
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+.about-timeline__meta-icon {
+  font-size: 16px;
+}
+
+.about-timeline__meta-icon--amber {
+  color: var(--color-amber-crisp);
+}
+
+.about-timeline__meta-icon--secondary {
+  color: var(--color-secondary);
+}

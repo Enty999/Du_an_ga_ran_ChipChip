@@ -9,12 +9,19 @@ html(lang="vi")
     link(rel="preconnect", href="https://fonts.googleapis.com")
     link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
     link(href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap", rel="stylesheet")
+    //- Font Be Vietnam Pro và bộ icon Material Symbols theo thiết kế Stitch
+    link(href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap", rel="stylesheet")
+    link(href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200", rel="stylesheet")
     
     //- 1. Bootstrap 5 CSS CDN
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css", rel="stylesheet")
     
     //- 2. CSS dùng chung toàn dự án
     link(rel="stylesheet", href="/css/style.css")
+
+    //- Design tokens (biến màu, font, khoảng cách) và CSS header/footer
+    link(rel="stylesheet", href="/css/tokens.css")
+    link(rel="stylesheet", href="/css/layout.css")
 
     //- Nhúng Font Awesome qua block styles để hiển thị các icon (fas)
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css")
@@ -34,6 +41,9 @@ html(lang="vi")
 
     //- 4. Bootstrap 5 JS Bundle CDN
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
+
+    //- JS cho header/footer (menu mobile...)
+    script(src="/js/layout.js")
     
     //- 5. Khối để từng trang nhúng JS riêng (nếu có)
     block scripts

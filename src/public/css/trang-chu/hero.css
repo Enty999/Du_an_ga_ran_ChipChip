@@ -1,0 +1,664 @@
+/* ==========================================================================
+   HERO SECTION CSS - Gà Rán ChipChip
+   BEM prefix: .hero__
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+  overflow: hidden;
+  padding-bottom: var(--space-2xl);
+}
+
+/* Texture nền mờ ấm áp */
+.hero__texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image: radial-gradient(#ffffff 1px, transparent 1px);
+  background-size: 16px 16px;
+  pointer-events: none;
+}
+
+.hero__container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) 0 var(--space-lg);
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 1024px) {
+  .hero__container {
+    padding: var(--space-2xl) var(--margin) 0 var(--margin);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mini Meta Header Bar
+   -------------------------------------------------------------------------- */
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--text-caption-stamp-tracking);
+  color: var(--color-secondary-fixed);
+}
+
+.hero__meta-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.hero__pulse-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-amber-crisp);
+  animation: hero-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes hero-ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.hero__meta-branches {
+  display: none;
+  align-items: center;
+  gap: var(--space-lg);
+  color: var(--color-secondary-fixed);
+}
+
+@media (min-width: 768px) {
+  .hero__meta-branches {
+    display: flex;
+  }
+}
+
+.hero__meta-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: 700;
+  color: var(--color-on-secondary);
+}
+
+.hero__meta-rating .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--color-amber-crisp);
+}
+
+/* --------------------------------------------------------------------------
+   Editorial Hero Grid
+   -------------------------------------------------------------------------- */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .hero__grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+/* Cột nội dung trái */
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+@media (min-width: 1024px) {
+  .hero__content {
+    grid-column: span 6;
+  }
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px var(--space-md);
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  width: fit-content;
+}
+
+.hero__badge .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--color-amber-crisp);
+}
+
+.hero__badge-text {
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  font-weight: 700;
+  letter-spacing: var(--text-label-tag-tracking);
+  text-transform: uppercase;
+  color: var(--color-secondary-fixed);
+}
+
+.hero__title {
+  font-family: var(--font-body);
+  font-size: var(--text-display-hero-mobile-size);
+  line-height: var(--text-display-hero-mobile-line);
+  letter-spacing: var(--text-display-hero-mobile-tracking);
+  font-weight: var(--text-display-hero-mobile-weight);
+  color: var(--color-on-secondary);
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .hero__title {
+    font-size: var(--text-display-hero-size);
+    line-height: var(--text-display-hero-line);
+    letter-spacing: var(--text-display-hero-tracking);
+    font-weight: var(--text-display-hero-weight);
+  }
+}
+
+.hero__br {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hero__br {
+    display: inline;
+  }
+}
+
+.hero__highlight {
+  color: var(--color-amber-crisp);
+}
+
+.hero__desc {
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-secondary-fixed);
+  max-width: 36rem;
+  margin: 0;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  padding-top: var(--space-sm);
+}
+
+.hero__btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-card);
+  color: var(--color-secondary);
+  font-size: var(--text-title-card-size);
+  line-height: var(--text-title-card-line);
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero__btn-primary:hover {
+  background-color: var(--color-surface-cream);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+.hero__btn-primary .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.hero__btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  background-color: rgba(252, 100, 81, 0.4);
+  color: var(--color-on-secondary);
+  font-size: var(--text-title-card-size);
+  line-height: var(--text-title-card-line);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero__btn-secondary:hover {
+  background-color: rgba(252, 100, 81, 0.6);
+  color: var(--color-on-secondary);
+  transform: translateY(-2px);
+}
+
+.hero__btn-secondary .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.hero__features {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg);
+  padding-top: var(--space-md);
+  color: var(--color-secondary-fixed);
+  font-size: var(--text-body-md-size);
+  line-height: var(--text-body-md-line);
+}
+
+.hero__feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.hero__feature-item .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--color-amber-crisp);
+}
+
+/* Cột hình ảnh phải (Kai-Kai Asymmetric Stack) */
+.hero__visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .hero__visual {
+    grid-column: span 6;
+    justify-content: flex-end;
+  }
+}
+
+.hero__visual-stack {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+}
+
+@media (min-width: 1024px) {
+  .hero__visual-stack {
+    max-width: 32rem;
+  }
+}
+
+.hero__main-card {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-3xl);
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  position: relative;
+  background-color: var(--color-surface-variant);
+}
+
+.hero__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.hero__main-card:hover .hero__main-img {
+  transform: scale(1.05);
+}
+
+.hero__main-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(44, 37, 35, 0.75) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero__main-info {
+  position: absolute;
+  bottom: 1rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 2;
+}
+
+.hero__main-tag {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius);
+  background-color: var(--color-amber-crisp);
+  color: var(--color-on-primary);
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hero__main-title {
+  font-family: var(--font-body);
+  font-size: var(--text-title-card-size);
+  line-height: var(--text-title-card-line);
+  font-weight: 700;
+  color: var(--color-on-primary);
+  margin: 0.25rem 0 0 0;
+}
+
+.hero__main-price {
+  color: var(--color-secondary-fixed);
+  font-weight: 700;
+  font-size: var(--text-title-card-size);
+  line-height: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+/* Stamp Card */
+.hero__stamp-card {
+  position: absolute;
+  bottom: -2rem;
+  left: -1.5rem;
+  background-color: var(--color-surface-card);
+  color: var(--color-text-primary);
+  padding: var(--space-md);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+  max-width: 210px;
+  display: none;
+  flex-direction: column;
+  gap: var(--space-xs);
+  z-index: 5;
+}
+
+@media (min-width: 640px) {
+  .hero__stamp-card {
+    display: flex;
+    left: -2rem;
+  }
+}
+
+.hero__stamp-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-amber-crisp);
+}
+
+.hero__stamp-head .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.hero__stamp-title {
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
+.hero__stamp-desc {
+  font-size: var(--text-body-md-size);
+  line-height: 1.35;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Hot Badge */
+.hero__badge-hot {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-amber-crisp);
+  color: var(--color-on-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  animation: hero-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  z-index: 5;
+}
+
+@keyframes hero-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.hero__badge-hot-sub {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.hero__badge-hot-main {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Quick Bites Ticker Slider Bar
+   -------------------------------------------------------------------------- */
+.hero__quick-bites {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+}
+
+.hero__quick-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.hero__quick-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-secondary-fixed);
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hero__quick-label .material-symbols-outlined {
+  color: var(--color-amber-crisp);
+  font-size: 18px;
+}
+
+.hero__quick-hint {
+  display: none;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-secondary-fixed);
+  font-size: var(--text-caption-stamp-size);
+}
+
+@media (min-width: 640px) {
+  .hero__quick-hint {
+    display: flex;
+  }
+}
+
+.hero__quick-hint .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.hero__quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .hero__quick-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.hero__quick-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero__quick-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hero__quick-item-body {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.hero__quick-thumb {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: var(--color-surface-variant);
+}
+
+.hero__quick-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__quick-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.hero__quick-name {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-on-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.hero__quick-price {
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  color: var(--color-amber-crisp);
+  font-weight: 700;
+  margin: 2px 0 0 0;
+}
+
+.hero__quick-btn {
+  margin-top: var(--space-sm);
+  width: 100%;
+  padding: 0.375rem 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-card);
+  color: var(--color-secondary);
+  border: none;
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.hero__quick-btn:hover {
+  background-color: var(--color-secondary-fixed);
+  color: var(--color-secondary);
+}
+
+.hero__quick-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Repeating Marquee Ticker
+   -------------------------------------------------------------------------- */
+.hero__marquee {
+  width: 100%;
+  background-color: var(--color-surface-subtle);
+  padding: var(--space-sm) 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+.hero__marquee-track {
+  display: flex;
+  white-space: nowrap;
+  gap: var(--space-xl);
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--text-label-tag-tracking);
+  color: var(--color-text-muted);
+  justify-content: center;
+  align-items: center;
+  animation: hero-marquee 25s linear infinite;
+  width: max-content;
+}
+
+@keyframes hero-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.hero__marquee-star {
+  color: var(--color-amber-crisp);
+  font-size: 14px;
+}

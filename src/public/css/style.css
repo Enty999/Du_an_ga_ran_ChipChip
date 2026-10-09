@@ -1,8 +1,8 @@
 /* CSS chung cho toàn dự án */
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #f8fafc;
-  color: #1e293b;
+  font-family: var(--font-body);
+  background-color: var(--color-surface-cream);
+  color: var(--color-on-surface);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -11,48 +11,6 @@ body {
 .main-content {
   flex: 1;
   width: 100%;
-}
-
-/* Header & Footer cơ bản */
-.site-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.header-container {
-  max-width: 1140px;
-  margin: 0 auto;
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo a {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #d97706;
-  text-decoration: none;
-}
-
-.nav-links a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: #475569;
-  font-weight: 600;
-}
-
-.nav-links a:hover {
-  color: #d97706;
-}
-
-.site-footer {
-  border-top: 1px solid #e2e8f0;
-  background: #ffffff;
-  text-align: center;
-  padding: 20px;
-  font-size: 0.875rem;
-  color: #64748b;
 }
 
 /* Màu chủ đạo thương hiệu 🍗 Gà Rán ChipChip */

@@ -1,0 +1,75 @@
+//- Breadcrumb điều hướng
+section.about-breadcrumb
+  .about-breadcrumb__container
+    nav.about-breadcrumb__nav(aria-label="Breadcrumb")
+      a.about-breadcrumb__link(href="/")
+        span.material-symbols-outlined.about-breadcrumb__icon home
+        span Trang chủ
+      span.about-breadcrumb__separator /
+      a.about-breadcrumb__link.about-breadcrumb__link--active(href="/gioi-thieu") Về ChipChip
+      span.about-breadcrumb__separator /
+      span.about-breadcrumb__current(aria-current="page") Câu chuyện thương hiệu
+
+//- Hero Section: Editorial Diptych Layout (ID #cau-chuyen)
+section.about-hero#cau-chuyen
+  .about-hero__container
+    .about-hero__grid
+      //- Cột nội dung bên trái (Left Narrative Column)
+      .about-hero__content
+        .about-hero__badge
+          span.about-hero__pulse-dot
+          span.about-hero__badge-text CÂU CHUYỆN THƯƠNG HIỆU · HANDCRAFTED FRIED CHICKEN SINCE 2021
+
+        h1.about-hero__title
+          | Gà Rán ChipChip – 
+          br.about-hero__br
+          span.about-hero__highlight Từ gian bếp nhỏ
+          |  ấm cúng đến hành trình lưu giữ độ giòn tan &amp; sự sẻ chia chân thành.
+
+        p.about-hero__desc
+          | Chúng tôi tin rằng, một miếng gà rán ngon không chỉ nằm ở lớp vỏ bột vàng ươm hay vị sốt sánh mịn, mà còn là khoảnh khắc cả gia đình hay nhóm bạn cùng quây quần, cười nói rôm rả và tận hưởng nhịp đập ấm cúng trong từng miếng cắn giòn tan.
+
+        .about-hero__stats
+          //- Stat card 1: Số bữa ăn
+          .about-hero__stat-card
+            .about-hero__stat-icon.about-hero__stat-icon--primary
+              span.material-symbols-outlined workspace_premium
+            .about-hero__stat-text
+              span.about-hero__stat-num 500.000+
+              span.about-hero__stat-label Bữa ăn trao trọn vị giòn
+
+          //- Stat card 2: Tiêu chuẩn an toàn
+          .about-hero__stat-card
+            .about-hero__stat-icon.about-hero__stat-icon--secondary
+              span.material-symbols-outlined verified
+            .about-hero__stat-text
+              span.about-hero__stat-num HACCP &amp; ISO
+              span.about-hero__stat-label Chuẩn an toàn thực phẩm
+
+      //- Cột hình ảnh bên phải (Right Column: Diptych Photo Pair)
+      .about-hero__visual
+        .about-hero__visual-grid
+          //- Ảnh 1: Bếp trưởng & Sốt thủ công
+          .about-hero__card
+            .about-hero__img-wrap
+              img.about-hero__img(
+                src="/images/gioi-thieu/hero-01.jpg",
+                alt="Bếp trưởng đang quét sốt ớt tỏi óng ánh lên cánh gà rán giòn rụm"
+              )
+              .about-hero__img-tag BẾP TRƯỞNG &amp; SỐT THỦ CÔNG
+            p.about-hero__img-caption
+              | Từng chiếc cánh gà được quét sốt thủ công khi vừa vớt khỏi chảo dầu.
+
+          //- Ảnh 2: Không gian tiệm gỗ
+          .about-hero__card.about-hero__card--offset
+            .about-hero__img-wrap
+              img.about-hero__img(
+                src="/images/gioi-thieu/hero-02.jpg",
+                alt="Không gian ấm cúng của quán ăn phong cách bistro với bàn gỗ tự nhiên và thực khách vui vẻ"
+              )
+              .about-hero__img-tag KHÔNG GIAN TIỆM GỖ
+            p.about-hero__img-caption
+              | Nơi mọi cuộc gặp gỡ được sưởi ấm bởi ánh đèn vàng và tiếng cười.
+
+        //- Vầng sáng trang trí nền
+        .about-hero__glow(aria-hidden="true")

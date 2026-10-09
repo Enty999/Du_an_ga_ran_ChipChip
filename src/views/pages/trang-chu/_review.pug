@@ -1,0 +1,42 @@
+section.review(id="danh-gia" aria-labelledby="review-title")
+  .review__container
+    .review__heading
+      .review__eyebrow
+        span.review__number 02
+        span.review__stamp(aria-hidden="true") 评
+        span.review__label LỜI KHÁCH ĐỂ LẠI
+      h2.review__title(id="review-title") Review khách hàng
+      p.review__intro Trải nghiệm thật từ thực khách tại quán và qua các ứng dụng giao hàng.
+    .review__grid
+      article.review__card
+        div
+          .review__stars(aria-label="5 trên 5 sao")
+            - for (let star = 0; star < 5; star++)
+              span.material-symbols-outlined(aria-hidden="true") star
+          p.review__quote “Hôm nay thèm gà cay quá nên order thử combo ChipChip trên app giao tới Thanh Xuân. Hộp giấy đục lỗ thông hơi rất kỹ nên khi nhận da gà vẫn còn giòn rụm chứ không hề bị ỉu. Sốt cay đậm đà, thịt bên trong mọng nước thơm nức mũi!”
+        .review__author
+          div
+            p.review__name Thành Lộc
+            p.review__meta Khách đặt ShopeeFood • 2 ngày trước
+          span.material-symbols-outlined.review__verified(aria-hidden="true") verified_user
+      article.review__card
+        div
+          .review__stars(aria-label="5 trên 5 sao")
+            - for (let star = 0; star < 5; star++)
+              span.material-symbols-outlined(aria-hidden="true") star
+          p.review__quote “Không gian tiệm ở Hai Bà Trưng ấm áp kiểu hiện đại, bài trí sạch bóng mát mẻ. Món đùi gà giòn tan không bị đọng dầu mỡ, bột phô mai tuyết ăn dính cực kì. Các bạn nhân viên tư vấn nhiệt tình, phục vụ nhanh chóng.”
+        .review__author
+          div
+            p.review__name Minh Ánh & Tuấn Kiên
+            p.review__meta Thực khách ăn tại quán • Tuần trước
+          span.material-symbols-outlined.review__verified(aria-hidden="true") verified_user
+      article.review__map-card
+        div
+          .review__stars.review__stars--light(aria-label="5 trên 5 sao")
+            - for (let star = 0; star < 5; star++)
+              span.material-symbols-outlined(aria-hidden="true") star
+          h3.review__map-title Xem đánh giá trên Google Maps
+          p.review__map-copy Hơn 1.200 đánh giá 5 sao từ cộng đồng ẩm thực Hà Nội & TP. Hồ Chí Minh.
+        a.review__map-link(href="https://maps.google.com" target="_blank" rel="noopener")
+          span Mở bản đồ & bình luận
+          span.material-symbols-outlined(aria-hidden="true") north_east

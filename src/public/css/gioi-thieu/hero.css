@@ -1,0 +1,367 @@
+/* ==========================================================================
+   ABOUT HERO & BREADCRUMB CSS - Gà Rán ChipChip
+   Prefix: .about-breadcrumb__, .about-hero__
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Breadcrumb Section
+   -------------------------------------------------------------------------- */
+.about-breadcrumb {
+  width: 100%;
+  background-color: var(--color-surface-cream);
+}
+
+.about-breadcrumb__container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-md) var(--space-lg);
+}
+
+@media (min-width: 1024px) {
+  .about-breadcrumb__container {
+    padding: var(--space-xl) var(--margin) var(--space-md) var(--margin);
+  }
+}
+
+.about-breadcrumb__nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--text-caption-stamp-tracking);
+  color: var(--color-text-muted);
+}
+
+.about-breadcrumb__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.about-breadcrumb__link:hover {
+  color: var(--color-primary);
+}
+
+.about-breadcrumb__icon {
+  font-size: 15px;
+}
+
+.about-breadcrumb__separator {
+  color: var(--color-outline-variant);
+  font-weight: 300;
+  user-select: none;
+}
+
+.about-breadcrumb__link--active {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.about-breadcrumb__current {
+  color: var(--color-amber-crisp);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Section: Editorial Diptych Layout
+   -------------------------------------------------------------------------- */
+.about-hero {
+  width: 100%;
+  background-color: var(--color-surface-cream);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero__container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl) var(--space-lg);
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .about-hero__container {
+    padding: var(--space-xl) var(--margin) var(--space-2xl) var(--margin);
+  }
+}
+
+.about-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .about-hero__grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+/* Cột nội dung bên trái */
+.about-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 1024px) {
+  .about-hero__content {
+    grid-column: span 6;
+  }
+}
+
+.about-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.375rem 1rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-container);
+  width: fit-content;
+}
+
+.about-hero__pulse-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary);
+  animation: about-hero-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  flex-shrink: 0;
+}
+
+@keyframes about-hero-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.about-hero__badge-text {
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  color: var(--color-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.about-hero__title {
+  font-family: var(--font-body);
+  font-size: var(--text-display-hero-mobile-size);
+  line-height: var(--text-display-hero-mobile-line);
+  letter-spacing: var(--text-display-hero-mobile-tracking);
+  font-weight: var(--text-display-hero-mobile-weight);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .about-hero__title {
+    font-size: var(--text-display-hero-size);
+    line-height: 1.15;
+    letter-spacing: var(--text-display-hero-tracking);
+    font-weight: var(--text-display-hero-weight);
+  }
+}
+
+.about-hero__br {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .about-hero__br {
+    display: inline;
+  }
+}
+
+.about-hero__highlight {
+  color: var(--color-primary);
+  font-style: italic;
+  font-family: "Playfair Display", "Merriweather", Georgia, serif;
+  font-weight: 600;
+}
+
+.about-hero__desc {
+  font-size: var(--text-body-lg-size);
+  line-height: var(--text-body-lg-line);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Thẻ thống kê */
+.about-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  padding-top: var(--space-xs);
+}
+
+.about-hero__stat-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.5rem 0.5rem 1rem;
+  background-color: var(--color-surface-card);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 4px 16px -2px rgba(44, 37, 35, 0.04);
+  border: 1px solid rgba(239, 232, 223, 0.6);
+}
+
+.about-hero__stat-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.about-hero__stat-icon--primary {
+  background-color: var(--color-primary-fixed);
+  color: var(--color-primary);
+}
+
+.about-hero__stat-icon--secondary {
+  background-color: var(--color-surface-container);
+  color: var(--color-secondary);
+}
+
+.about-hero__stat-icon .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.about-hero__stat-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-hero__stat-num {
+  font-family: var(--font-body);
+  font-size: var(--text-title-card-size);
+  line-height: var(--text-title-card-line);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.about-hero__stat-label {
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  color: var(--color-text-muted);
+}
+
+/* Cột hình ảnh bên phải (Diptych Photo Pair) */
+.about-hero__visual {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .about-hero__visual {
+    grid-column: span 6;
+  }
+}
+
+.about-hero__visual-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 640px) {
+  .about-hero__visual-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.about-hero__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .about-hero__card--offset {
+    margin-top: 2.5rem;
+  }
+}
+
+.about-hero__img-wrap {
+  width: 100%;
+  height: 20rem;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  position: relative;
+  background-color: var(--color-surface-container);
+  box-shadow: 0 10px 24px -4px rgba(217, 107, 0, 0.12);
+}
+
+@media (min-width: 640px) {
+  .about-hero__img-wrap {
+    height: 24rem;
+  }
+}
+
+.about-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-hero__card:hover .about-hero__img {
+  transform: scale(1.05);
+}
+
+.about-hero__img-tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(251, 249, 245, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.about-hero__img-caption {
+  font-size: var(--text-caption-stamp-size);
+  line-height: var(--text-caption-stamp-line);
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: 0 0.5rem;
+  margin: 0;
+}
+
+.about-hero__glow {
+  position: absolute;
+  right: -2rem;
+  bottom: -2rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 219, 199, 0.4);
+  filter: blur(48px);
+  -webkit-filter: blur(48px);
+  z-index: 1;
+  pointer-events: none;
+}

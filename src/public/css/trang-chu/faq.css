@@ -1,0 +1,24 @@
+/* Danh sách câu hỏi thường gặp */
+.faq { padding: var(--space-2xl) 0; background: var(--color-surface); }
+.faq__container { width: min(100% - 3rem, 56rem - 6rem); margin: 0 auto; }
+.faq__heading { margin-bottom: var(--space-xl); text-align: center; }
+.faq__eyebrow { display: inline-flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-xs); }
+.faq__number { color: var(--color-amber-crisp); font-size: var(--text-chapter-number-size); line-height: var(--text-chapter-number-line); letter-spacing: var(--text-chapter-number-tracking); font-weight: var(--text-chapter-number-weight); }
+.faq__stamp { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border-radius: var(--radius-full); background: var(--color-secondary-fixed); color: var(--color-secondary); font-size: var(--text-caption-stamp-size); font-weight: var(--text-label-tag-weight); }
+.faq__label { color: var(--color-text-muted); font-size: var(--text-caption-stamp-size); line-height: var(--text-caption-stamp-line); letter-spacing: var(--text-caption-stamp-tracking); font-weight: var(--text-label-tag-weight); }
+.faq__title { margin: 0; color: var(--color-text-primary); font-size: var(--text-headline-section-size); line-height: var(--text-headline-section-line); letter-spacing: var(--text-headline-section-tracking); font-weight: var(--text-headline-section-weight); }
+.faq__intro { margin: var(--space-xs) 0 0; color: var(--color-text-muted); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); }
+.faq__list { display: grid; gap: var(--space-md); }
+.faq__item { padding: var(--space-md); border-radius: var(--radius-2xl); background: var(--color-surface-card); box-shadow: 0 0.25rem 0.75rem rgba(44, 37, 35, 0.08); transition: box-shadow 200ms ease; }
+.faq__item:has(.faq__button[aria-expanded='true']) { box-shadow: 0 0.5rem 1rem rgba(44, 37, 35, 0.11); }
+.faq__question { margin: 0; }
+.faq__button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: var(--space-md); padding: 0; border: 0; background: transparent; color: var(--color-text-primary); font: inherit; font-size: var(--text-title-card-size); line-height: var(--text-title-card-line); font-weight: var(--text-title-card-weight); text-align: left; cursor: pointer; }
+.faq__icon { flex: 0 0 auto; color: var(--color-text-muted); transition: transform 300ms ease; }
+.faq__button[aria-expanded='true'] .faq__icon { transform: rotate(180deg); }
+.faq__answer { padding-top: var(--space-sm); margin-top: var(--space-sm); border-top: 1px solid var(--color-border-hairline); color: var(--color-text-muted); font-size: var(--text-body-md-size); line-height: var(--text-body-md-line); }
+.faq__answer strong { color: var(--color-text-primary); font-weight: var(--text-title-card-weight); }
+.faq__hotline { color: var(--color-secondary); }
+@media (max-width: 639px) { .faq__title { font-size: var(--text-headline-section-mobile-size); line-height: var(--text-headline-section-mobile-line); letter-spacing: var(--text-headline-section-mobile-tracking); } }
+
+/* Khung nội dung giống Stitch: max-w-4xl + px-6, từ 1024px trở lên là px-12 */
+@media (min-width: 1024px) { .faq__container { width: min(100% - 6rem, 56rem - 6rem); } }
