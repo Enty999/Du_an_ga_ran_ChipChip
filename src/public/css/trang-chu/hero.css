@@ -6,7 +6,8 @@
 .hero {
   position: relative;
   width: 100%;
-  background-color: var(--color-secondary);
+  background: radial-gradient(circle at 75% 45%, rgba(249, 115, 22, 0.28) 0%, transparent 55%),
+              linear-gradient(135deg, #78130d 0%, #991b1b 42%, #ba2818 75%, #c2410c 100%);
   color: var(--color-on-secondary);
   overflow: hidden;
   padding-bottom: var(--space-2xl);
@@ -242,18 +243,22 @@
   gap: var(--space-xs);
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-full);
-  background-color: rgba(252, 100, 81, 0.4);
-  color: var(--color-on-secondary);
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
   font-size: var(--text-title-card-size);
   line-height: var(--text-title-card-line);
   font-weight: 600;
   text-decoration: none;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .hero__btn-secondary:hover {
-  background-color: rgba(252, 100, 81, 0.6);
-  color: var(--color-on-secondary);
+  background-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -384,7 +389,7 @@
 /* Stamp Card */
 .hero__stamp-card {
   position: absolute;
-  bottom: -2rem;
+  top: 2rem;
   left: -1.5rem;
   background-color: var(--color-surface-card);
   color: var(--color-text-primary);
@@ -490,7 +495,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  color: var(--color-secondary-fixed);
+  color: #ffffff;
   font-size: var(--text-label-tag-size);
   line-height: var(--text-label-tag-line);
   font-weight: 700;
@@ -507,8 +512,16 @@
   display: none;
   align-items: center;
   gap: var(--space-xs);
-  color: var(--color-secondary-fixed);
+  color: rgba(255, 255, 255, 0.85);
   font-size: var(--text-caption-stamp-size);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.hero__quick-hint:hover {
+  color: #ffffff;
+  transform: translateX(4px);
 }
 
 @media (min-width: 640px) {
@@ -534,7 +547,8 @@
 }
 
 .hero__quick-item {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-2xl);
@@ -542,11 +556,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .hero__quick-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
 
 .hero__quick-item-body {
@@ -589,7 +607,7 @@
 .hero__quick-price {
   font-size: var(--text-label-tag-size);
   line-height: var(--text-label-tag-line);
-  color: var(--color-amber-crisp);
+  color: #fbbf24;
   font-weight: 700;
   margin: 2px 0 0 0;
 }
@@ -610,12 +628,13 @@
   justify-content: center;
   gap: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .hero__quick-btn:hover {
-  background-color: var(--color-secondary-fixed);
-  color: var(--color-secondary);
+  background-color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .hero__quick-btn .material-symbols-outlined {
