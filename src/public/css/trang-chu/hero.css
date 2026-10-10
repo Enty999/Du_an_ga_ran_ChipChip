@@ -7,7 +7,7 @@
   position: relative;
   width: 100%;
   background: radial-gradient(circle at 75% 45%, rgba(249, 115, 22, 0.28) 0%, transparent 55%),
-              linear-gradient(135deg, #78130d 0%, #991b1b 42%, #ba2818 75%, #c2410c 100%);
+    linear-gradient(135deg, #78130d 0%, #991b1b 42%, #ba2818 75%, #c2410c 100%);
   color: var(--color-on-secondary);
   overflow: hidden;
   padding-bottom: var(--space-2xl);
@@ -72,7 +72,9 @@
 }
 
 @keyframes hero-ping {
-  75%, 100% {
+
+  75%,
+  100% {
     transform: scale(2);
     opacity: 0;
   }
@@ -456,9 +458,12 @@
 }
 
 @keyframes hero-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.06);
   }
@@ -495,7 +500,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  color: #ffffff;
+  color: var(--color-secondary-fixed);
   font-size: var(--text-label-tag-size);
   line-height: var(--text-label-tag-line);
   font-weight: 700;
@@ -512,7 +517,7 @@
   display: none;
   align-items: center;
   gap: var(--space-xs);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-secondary-fixed);
   font-size: var(--text-caption-stamp-size);
   text-decoration: none;
   cursor: pointer;
@@ -672,6 +677,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }

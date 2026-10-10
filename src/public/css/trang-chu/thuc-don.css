@@ -12,7 +12,8 @@
 .menu__container {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 var(--space-lg); /* px-6 của Stitch */
+  padding: 0 var(--space-lg);
+  /* px-6 của Stitch */
 }
 
 @media (min-width: 1024px) {
@@ -29,20 +30,24 @@
   flex-direction: column;
   margin-bottom: var(--space-xl);
   gap: var(--space-md);
+  width: 100%;
+  max-width: 100%;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .menu__header {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
-    gap: var(--space-sm);
+    gap: var(--space-lg);
   }
 }
 
 .menu__heading-block {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
+  max-width: 100%;
 }
 
 .menu__chapter {
@@ -104,10 +109,10 @@
 
 .menu__intro {
   font-size: 13px;
-  line-height: 1.4;
+  line-height: 1.5;
   color: var(--color-text-muted);
   margin: 0.25rem 0 0 0;
-  white-space: nowrap;
+  max-width: 32rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -122,8 +127,14 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   max-width: 100%;
-  flex-shrink: 0;
-  padding-bottom: 2px;
+  min-width: 0;
+  padding-bottom: 4px;
+}
+
+@media (min-width: 1024px) {
+  .menu__filters {
+    margin-left: auto;
+  }
 }
 
 .menu__filters::-webkit-scrollbar {
@@ -135,8 +146,8 @@
   flex-shrink: 0;
   padding: 4px 12px;
   border-radius: var(--radius-full);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--text-label-tag-size);
+  line-height: var(--text-label-tag-line);
   font-weight: 600;
   border: none;
   cursor: pointer;
