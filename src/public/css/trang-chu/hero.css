@@ -71,7 +71,9 @@
 }
 
 @keyframes hero-ping {
-  75%, 100% {
+
+  75%,
+  100% {
     transform: scale(2);
     opacity: 0;
   }
@@ -384,7 +386,7 @@
 /* Stamp Card */
 .hero__stamp-card {
   position: absolute;
-  bottom: -2rem;
+  top: 2rem;
   left: -1.5rem;
   background-color: var(--color-surface-card);
   color: var(--color-text-primary);
@@ -451,9 +453,12 @@
 }
 
 @keyframes hero-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.06);
   }
@@ -610,12 +615,14 @@
   justify-content: center;
   gap: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .hero__quick-btn:hover {
   background-color: var(--color-secondary-fixed);
   color: var(--color-secondary);
+  transform: translateY(-1px);
 }
 
 .hero__quick-btn .material-symbols-outlined {
@@ -653,6 +660,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
