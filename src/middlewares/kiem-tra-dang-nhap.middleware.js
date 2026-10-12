@@ -15,8 +15,8 @@ const ganThongTinNguoiDung = async (req, res, next) => {
     // Giải mã token lấy ID người dùng
     const giaiMa = jwt.verify(token, process.env.JWT_SECRET || "chipchip_secret_key_2026");
     
-    // Tìm người dùng trong DB (chỉ lấy họ tên, email)
-    const nguoiDung = await NguoiDung.findById(giaiMa.id).select("hoTen email");
+    // Tìm người dùng trong DB (lấy tất cả trừ mật khẩu)
+    const nguoiDung = await NguoiDung.findById(giaiMa.id).select("-password");
 
     // Gán vào res.locals để header.pug có thể đọc được
     res.locals.nguoiDung = nguoiDung || null;
