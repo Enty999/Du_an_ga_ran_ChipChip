@@ -28,36 +28,6 @@ const xuLiDangKy = async (req, res) => {
   try {
     //Lấy thông tin từ form gửi lên
     const { hoTen, email, password,confirmPassword } = req.body;
-    const errors = [];
-    
-    //Ràng buộc họ tên và email ko để trống
-    if(!hoTen || !hoTen?.trim()){
-      errors.push("Họ tên không được để trống!")
-    }
-    //Biểu thức bắt buộc kết thúc bằng @gmail.com (chữ hoa/thường đều được)
-    const dinhDangEmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
-    if(!email|| !dinhDangEmail.test(email)){
-      errors.push("Email không hợp lệ bắt buộc phải có đuôi @gmail.com!")
-    }
-
-    //Ràng buộc độ dài mật khẩu (tối thiệu 6 ký tự)
-    if(!password || password.length < 6){
-      errors.push("Mật khẩu phải chứa ít nhất 6 ký tự!")
-    }
-
-    //Kiểm tra mật khẩu có khớp ko
-    if(password !== confirmPassword){
-      errors.push("Mật khẩu xác nhận không khớp!")
-    }
-
-    //Nếu có lỗi thì render lại trang đăng ký
-    if(errors.length > 0){
-      return res.render("pages/auth/dang-ky",{
-        title: "Đăng ký",
-        errors: errors,
-        values: req.body   // Lưu lại dữ liệu nhập vào form để khi load lại form không bị mất
-      });
-    }
 
     // Kiểm tra xem email này đã tồn tại trong cơ sở dữ liệu hay chưa
     const nguoiDungHienCo = await NguoiDung.findOne({ email });
@@ -130,17 +100,16 @@ const xuLiDangNhap = async (req, res) =>{
     // Mật khẩu hợp lệ, tạo token xác thực JWT cho phiên đăng nhập
     const maXacThuc = taoMaXacThuc(timNguoiDung._id);
 
-    // TODO (BE) - Bước 1: Token đang được tạo nhưng chưa lưu đi đâu, nên header không biết ai đã đăng nhập.
-    // Lưu token vào cookie trước khi redirect, ví dụ:
-    //   res.cookie("maXacThuc", maXacThuc, {
-    //     httpOnly: true,                                  // JS phía trình duyệt không đọc được
-    //     sameSite: "lax",
-    //     secure: process.env.NODE_ENV === "production",   // chỉ gửi qua HTTPS khi chạy thật
-    //     maxAge: 24 * 60 * 60 * 1000,                     // 1 ngày, khớp expiresIn của JWT
-    //   });
+    // Lưu token vào cookie trước khi redirect
+    res.cookie("maXacThuc", maXacThuc, {
+      httpOnly: true,                                  // JS phía trình duyệt không đọc được
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",   // chỉ gửi qua HTTPS khi chạy thật
+      maxAge: 24 * 60 * 60 * 1000,                     // 1 ngày, khớp expiresIn của JWT
+    });
 
-    // Phản hồi thành công mã 200 kèm token và thông tin người dùng
-    res.redirect("/");
+    // Phản hồi thành công và chuyển hướng về trang chủ
+    res.redirect("/?dangNhap=thanhcong");
   } catch (error) {
     // Bắt lỗi hệ thống/server và trả về mã lỗi 500
     res.status(500).json({ message: error.message });
@@ -203,13 +172,11 @@ const renderDangKy = (req, res) => {
   res.render("pages/auth/dang-ky", { title: "Đăng ký" });
 };
 
-// TODO (BE) - Bước 3: [POST] /auth/dang-xuat
-// Nút "Đăng xuất" trong header (partials/header.pug) đã gửi form POST tới đây. Gợi ý:
-//   const xuLiDangXuat = (req, res) => {
-//     res.clearCookie("maXacThuc");   // tên cookie phải trùng với lúc đăng nhập
-//     res.redirect("/");
-//   };
-// Nhớ thêm xuLiDangXuat vào module.exports bên dưới.
+// [POST] /auth/dang-xuat
+const xuLiDangXuat = (req, res) => {
+    res.clearCookie("maXacThuc");   // Xóa cookie phiên đăng nhập
+    res.redirect("/");              // Chuyển hướng về trang chủ
+  };
 
 // Xuất các hàm điều hướng giao diện (view controller) để gắn vào route
 module.exports = {
@@ -219,5 +186,6 @@ module.exports = {
   xuLiDangNhap,
   xuLiDangKy,
   xuLiXacNhanOTP,
+  xuLiDangXuat,
 };
 
