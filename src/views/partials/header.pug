@@ -61,11 +61,13 @@ header.site-header
                   span.site-header__user-info-email= nguoiDungHienTai.email
 
             nav.site-header__user-links(aria-label="Tài khoản")
-              //- TODO (BE) - Bước 4: trang /tai-khoan chưa có route
+              if nguoiDungHienTai.vaiTro === 'admin' || nguoiDungHienTai.vaiTro === 'nhan-vien'
+                a.site-header__user-link(href="/admin", style="color: #ea580c; font-weight: 700;")
+                  span.material-symbols-outlined dashboard_customize
+                  span Trang Quản trị Admin
               a.site-header__user-link(href="/tai-khoan")
                 span.material-symbols-outlined person
                 span Thông tin cá nhân
-              //- TODO (BE) - Bước 4: trang /tai-khoan/don-hang chưa có route
               a.site-header__user-link(href="/tai-khoan/don-hang")
                 span.material-symbols-outlined receipt_long
                 span Đơn hàng của tôi
@@ -121,6 +123,10 @@ header.site-header
               span.site-header__user-info-name= tenHienThi
               if nguoiDungHienTai.email
                 span.site-header__user-info-email= nguoiDungHienTai.email
+          if nguoiDungHienTai.vaiTro === 'admin' || nguoiDungHienTai.vaiTro === 'nhan-vien'
+            a.site-header__user-link(href="/admin", style="color: #ea580c; font-weight: 700;")
+              span.material-symbols-outlined dashboard_customize
+              span Trang Quản trị Admin
           a.site-header__user-link(href="/tai-khoan")
             span.material-symbols-outlined person
             span Thông tin cá nhân

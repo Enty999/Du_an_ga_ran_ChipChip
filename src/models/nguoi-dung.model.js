@@ -39,7 +39,23 @@ const soDoNguoiDung = new mongoose.Schema(
       trim: true,
       default: "",
     },
-    
+    // Phân quyền người dùng: "khach-hang", "nhan-vien", "admin"
+    vaiTro: {
+      type: String,
+      enum: ["khach-hang", "nhan-vien", "admin"],
+      default: "khach-hang",
+    },
+    // Trạng thái tài khoản: "hoat-dong" hoặc "khoa"
+    trangThai: {
+      type: String,
+      enum: ["hoat-dong", "khoa"],
+      default: "hoat-dong",
+    },
+    // Ảnh đại diện
+    anhDaiDien: {
+      type: String,
+      default: "",
+    },
   },
   { 
     // Tự động thêm hai trường createdAt (thời gian tạo) và updatedAt (thời gian cập nhật gần nhất)

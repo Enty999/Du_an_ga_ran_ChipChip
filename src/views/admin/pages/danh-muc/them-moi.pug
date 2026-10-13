@@ -1,0 +1,82 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-tags(style="color: #C98F91;")
+        | Thêm loại hàng / Danh mục mới
+      .stats-badge-group
+        span.stat-pill.stat-pill-total
+          i.fa-solid.fa-plus
+          | Tạo mới danh mục
+
+    div(style="display: flex; gap: 8px;")
+      a.btn-filter-reset(href="/admin/danh-muc")
+        i.fa-solid.fa-arrow-left
+        span Quay lại danh sách
+
+  //- ========================================================
+  //- 2. FORM THÊM MỚI (CHUẨN FORM BATHBOOM)
+  //- ========================================================
+  .row.justify-content-center
+    .col-12.col-lg-8
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-folder-plus(style="color: #C98F91; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16.5px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Thông tin loại sản phẩm
+        .p-4
+          form(action="/admin/danh-muc/them-moi", method="POST")
+            .row.g-3
+              .col-12.col-md-7
+                label.form-label-custom
+                  | Tên danh mục món 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="tenDanhMuc",
+                  placeholder="Ví dụ: Gà Sốt Đậm Vị, Burger & Món Phụ...",
+                  required
+                )
+
+              .col-12.col-md-5
+                label.form-label-custom Thứ tự hiển thị
+                input.form-control-custom(
+                  type="number",
+                  name="thuTu",
+                  value="1",
+                  min="0"
+                )
+                small.text-muted(style="font-size: 11px;") Số nhỏ hơn sẽ hiển thị trước.
+
+              .col-12.col-md-6
+                label.form-label-custom Trạng thái hiển thị
+                select.form-control-custom(name="trangThai")
+                  option(value="hien-thi", selected) 🟢 Hiển thị trên website
+                  option(value="an") 🔴 Tạm ẩn khỏi website
+
+              .col-12.col-md-6
+                label.form-label-custom Biểu tượng
+                input.form-control-custom(
+                  type="text",
+                  name="bieuTuong",
+                  placeholder="restaurant_menu, fastfood...",
+                  value="restaurant_menu"
+                )
+
+              .col-12
+                label.form-label-custom Mô tả chi tiết danh mục
+                textarea.form-control-custom(
+                  name="moTa",
+                  rows="3",
+                  placeholder="Mô tả nhóm món này dành cho khách..."
+                )
+
+            .form-actions-custom(style="margin-top: 18px; padding-top: 14px;")
+              button.btn-submit-custom(type="submit")
+                i.fa-solid.fa-plus
+                span Tạo danh mục

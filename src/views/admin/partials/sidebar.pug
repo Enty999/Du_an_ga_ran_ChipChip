@@ -1,0 +1,51 @@
+aside.admin-sidebar#admin-sidebar
+  .admin-sidebar-brand
+    .brand-title
+      span.brand-icon 🍗
+      span ChipChip
+    .brand-subtitle QUẢN TRỊ HỆ THỐNG
+
+  ul.admin-menu
+    li.admin-menu-item(class=activeMenu === 'tong-quan' ? 'active' : '')
+      a(href="/admin", title="Báo cáo & Thống kê")
+        i.fa-solid.fa-chart-pie
+        span Báo cáo &amp; Thống kê
+    li.admin-menu-item(class=activeMenu === 'san-pham' ? 'active' : '')
+      a(href="/admin/san-pham", title="Quản lý sản phẩm")
+        i.fa-solid.fa-box-open
+        span Quản lý sản phẩm
+    li.admin-menu-item(class=activeMenu === 'danh-muc' ? 'active' : '')
+      a(href="/admin/danh-muc", title="Quản lý danh mục")
+        i.fa-solid.fa-tags
+        span Quản lý danh mục
+    li.admin-menu-item(class=activeMenu === 'don-hang' ? 'active' : '')
+      a(href="/admin/don-hang", title="Quản lý đơn hàng")
+        i.fa-solid.fa-file-invoice-dollar
+        span Quản lý đơn hàng
+    li.admin-menu-item(class=activeMenu === 'khuyen-mai' ? 'active' : '')
+      a(href="/admin/khuyen-mai", title="Quản lý khuyến mãi")
+        i.fa-solid.fa-ticket
+        span Mã khuyến mãi
+    li.admin-menu-item(class=activeMenu === 'nguoi-dung' ? 'active' : '')
+      a(href="/admin/nguoi-dung", title="Quản lý người dùng")
+        i.fa-solid.fa-users
+        span Quản lý người dùng
+
+    li.admin-menu-separator(style="margin-top: 20px; border-top: 1px dashed rgba(255,255,255,0.25); padding-top: 15px;")
+      a.admin-menu-link--store(href="/", target="_blank", title="Xem trang bán hàng")
+        i.fa-solid.fa-arrow-up-right-from-square
+        span Xem trang bán hàng
+    li
+      form.m-0(action="/auth/dang-xuat", method="POST")
+        button.admin-menu-logout-btn(type="submit", title="Đăng xuất khỏi hệ thống")
+          i.fa-solid.fa-arrow-right-from-bracket
+          span Đăng xuất
+
+  .admin-sidebar-footer
+    .sidebar-user-card
+      .sidebar-user-avatar= locals.nguoiDung ? locals.nguoiDung.hoTen.charAt(0).toUpperCase() : 'A'
+      .sidebar-user-info
+        .sidebar-user-name= locals.nguoiDung ? locals.nguoiDung.hoTen : 'Quản trị viên'
+        .sidebar-user-role= locals.nguoiDung ? (locals.nguoiDung.vaiTro === 'admin' ? 'Quản trị viên' : 'Nhân viên') : 'Admin'
+
+.admin-sidebar-overlay#admin-sidebar-backdrop

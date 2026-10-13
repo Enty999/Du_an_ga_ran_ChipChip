@@ -1,0 +1,18 @@
+extends ../../layouts/main
+
+block content
+  .container.py-5.text-center.my-5
+    .row.justify-content-center
+      .col-12.col-md-8.col-lg-6
+        .card.border-0.shadow-sm.rounded-4.p-5
+          .mb-4
+            span.material-symbols-outlined.text-danger(style="font-size: 80px;") block
+          h2.fw-bold.text-dark.mb-2 403 - Truy cập bị từ chối
+          p.text-muted.mb-4= message || "Bạn không có quyền truy cập vào trang này."
+          .d-flex.justify-content-center.gap-3
+            a.btn.btn-outline-secondary.rounded-pill.px-4.py-2(href="/")
+              i.fas.fa-home.me-2
+              | Quay về Trang chủ
+            a.btn.text-white.rounded-pill.px-4.py-2(href="/auth/dang-nhap", style="background-color: #ea580c;")
+              i.fas.fa-sign-in-alt.me-2
+              | Đăng nhập tài khoản khác

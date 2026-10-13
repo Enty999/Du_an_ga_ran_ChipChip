@@ -1,0 +1,542 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-utensils(style="color: #C98F91; font-size: 20px;")
+        | Quản lý sản phẩm &amp; Gà rán
+      .stats-badge-group
+        span.stat-pill.stat-pill-total(title="Tổng số sản phẩm trong thực đơn")
+          i.fa-solid.fa-boxes-stacked
+          | #{tongSo} món
+        span.stat-pill.stat-pill-active(title="Đang hiển thị bán cho khách")
+          i.fa-solid.fa-circle-check
+          | Đang kinh doanh
+        if boLoc.trangThai && boLoc.trangThai !== 'tat-ca'
+          span.stat-pill.stat-pill-out(title="Bộ lọc đang chọn")
+            i.fa-solid.fa-filter
+            | #{boLoc.trangThai}
+
+    div(style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;")
+      button.btn-open-modal(type="button", onclick="openAdminModal('modalThemSanPham')")
+        i.fa-solid.fa-plus
+        span Thêm món ăn mới
+
+  //- ========================================================
+  //- ========================================================
+  //- 2. BỘ LỌC TỰ ĐỘNG REALTIME (CHUẨN BATHBOOM - KHÔNG DÙNG NÚT LỌC)
+  //- ========================================================
+  .filter-card-compact
+    .realtime-filter-wrap
+      //- Tìm kiếm realtime
+      .realtime-search-box
+        i.fa-solid.fa-magnifying-glass.realtime-search-icon
+        input#realtime-search-sp.realtime-search-input(
+          type="text",
+          placeholder="Gõ từ khóa để lọc món ăn theo tên, khẩu phần, mã..."
+        )
+        button#realtime-clear-sp.realtime-search-clear(type="button", title="Xóa từ khóa") &times;
+
+      //- Lọc theo danh mục realtime
+      div(style="min-width: 180px;")
+        select#realtime-category-sp.realtime-select(data-filter-key="danhmuc", style="width: 100%;")
+          option(value="tat-ca") -- Tất cả danh mục --
+          each dm in danhMucList
+            option(value=dm._id.toString())= dm.tenDanhMuc
+
+      //- Lọc theo trạng thái realtime
+      div(style="min-width: 165px;")
+        select#realtime-status-sp.realtime-select(data-filter-key="trangthai", style="width: 100%;")
+          option(value="tat-ca") -- Trạng thái bán --
+          option(value="dang-ban") 🟢 Đang bán
+          option(value="het-hang") 🟠 Hết hàng
+          option(value="ngung-ban") 🔴 Ngừng bán
+
+      //- Huy hiệu đếm realtime
+      span#realtime-count-sp.realtime-count-badge
+        i.fa-solid.fa-filter(style="font-size: 10px; color: #8E9F8E;")
+        | Đang hiển thị
+
+  //- ========================================================
+  //- 3. BẢNG DỮ LIỆU SẢN PHẨM (VIỀN CỰC ĐẬM CHUẨN BATHBOOM)
+  //- ========================================================
+  .bb-card
+    .table-responsive
+      table.table-custom
+        thead
+          tr
+            th(style="width: 55px; text-align: center;") STT
+            th(style="width: 55px; text-align: center;") Ảnh
+            th(style="text-align: left; min-width: 180px;") Tên món ăn
+            th(style="width: 130px; text-align: center;") Danh mục
+            th(style="width: 110px; text-align: right;") Giá gốc
+            th(style="width: 110px; text-align: right;") Giảm giá
+            th(style="width: 90px; text-align: center;") Tồn kho
+            th(style="width: 100px; text-align: center;") Nhãn
+            th(style="width: 135px; text-align: center;") Bật / Tắt bán
+            th(style="width: 110px; text-align: center;") Thao tác
+        tbody
+          if sanPham && sanPham.length > 0
+            each mon, index in sanPham
+              - const isNgungBan = mon.trangThai === 'ngung-ban';
+              - const maDmStr = mon.maDanhMuc ? (mon.maDanhMuc._id ? mon.maDanhMuc._id.toString() : mon.maDanhMuc.toString()) : '';
+              tr(class=isNgungBan ? 'row-disabled is-disabled' : '', data-danhmuc=maDmStr, data-trangthai=mon.trangThai)
+                //- 1. STT
+                td(style="text-align: center; font-weight: 700; color: #888;")
+                  | ##{index + 1}
+
+                //- 2. Hình ảnh
+                td(style="text-align: center;")
+                  img(
+                    src=mon.hinhAnh,
+                    alt=mon.tenSanPham,
+                    onerror="this.src='/images/trang-chu/thuc-don-01.jpg'",
+                    style="width: 38px; height: 38px; object-fit: cover; border-radius: 7px; border: 1px solid #ECE2D8; display: inline-block; vertical-align: middle;"
+                  )
+
+                //- 3. Tên món ăn
+                td(style="text-align: left;")
+                  .fw-bold(style="color: #4A3E3D; line-height: 1.35;")= mon.tenSanPham
+                  if mon.tenTiengAnh
+                    .small.text-muted(style="font-style: italic; font-size: 11.5px;")= mon.tenTiengAnh
+                  if mon.khauPhan
+                    span.badge(style="background: #FAF5F0; color: #7B6E6D; border: 1px solid #ECE2D8; font-size: 10.5px; margin-top: 3px;")= mon.khauPhan
+
+                //- 4. Danh mục
+                td(style="text-align: center;")
+                  span(style="background: #F4EFEB; color: #666; padding: 2.5px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 500; display: inline-block;")
+                    = mon.maDanhMuc ? mon.maDanhMuc.tenDanhMuc : 'Chưa xếp'
+
+                //- 5. Giá gốc
+                td(style="text-align: right; font-weight: 700; color: #2B2523;")
+                  = dinhDangTien(mon.giaGoc)
+
+                //- 6. Giảm giá
+                td(style="text-align: right;")
+                  if mon.giaKhuyenMai && mon.giaKhuyenMai > 0
+                    span(style="color: #D32F2F; font-weight: 700;")= dinhDangTien(mon.giaKhuyenMai)
+                  else
+                    span(style="color: #bbb;") -
+
+                //- 7. Tồn kho
+                td(style="text-align: center;")
+                  if mon.soLuongTon <= 0
+                    span(style="background: #FFEBEE; color: #C62828; padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 700;") Hết
+                  else if mon.soLuongTon <= 5
+                    span(style="background: #FFF3E0; color: #E65100; padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 700;") Còn #{mon.soLuongTon}
+                  else
+                    span(style="background: #E8F5E9; color: #2E7D32; padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 600;")= mon.soLuongTon
+
+                //- 8. Nhãn
+                td(style="text-align: center;")
+                  if mon.huyHieu
+                    span(style="background: #FFF3E0; color: #E65100; border: 1px solid #FFE0B2; padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px;")
+                      i.fa-solid.fa-fire(style="font-size: 10px;")
+                      | #{mon.huyHieu}
+                  else if mon.noiBat
+                    span(style="background: #FCE4EC; color: #C2185B; border: 1px solid #F8BBD0; padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 600; display: inline-block;") Nổi bật
+                  else
+                    span(style="color: #bbb;") -
+
+                //- 9. Trạng thái: CÔNG TẮC BẬT / TẮT BÁN (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                td(style="text-align: center;")
+                  label.bb-switch(title="Gạt công tắc để Bật/Tắt bán món ăn này")
+                    input(
+                      type="checkbox",
+                      checked=mon.trangThai === 'dang-ban',
+                      onchange=`toggleTrangThaiApi(this, '/admin/api/san-pham/${mon._id}/trang-thai', 'Đang bán', 'Ngừng bán', 'dang-ban', 'ngung-ban')`
+                    )
+                    span.bb-switch-slider
+                    span.bb-switch-label= mon.trangThai === 'dang-ban' ? 'Đang bán' : (mon.trangThai === 'het-hang' ? 'Hết hàng' : 'Ngừng bán')
+
+                //- 10. Thao tác CRUD (Nút mini chuẩn BATHBOOM RESTFUL)
+                td(style="text-align: center;")
+                  .table-actions
+                    //- Nút Sửa Mini (Mở Popup Modal ngay trên 1 màn hình)
+                    button.btn-mini-action.btn-mini-edit(
+                      type="button",
+                      title="Chỉnh sửa thông tin món ăn",
+                      data-id=mon._id,
+                      data-tensanpham=mon.tenSanPham,
+                      data-tentienganh=mon.tenTiengAnh || '',
+                      data-slug=mon.slug,
+                      data-danhmuc=mon.maDanhMuc ? (mon.maDanhMuc._id ? mon.maDanhMuc._id.toString() : mon.maDanhMuc.toString()) : '',
+                      data-khauphan=mon.khauPhan || '1 phần',
+                      data-giagoc=mon.giaGoc,
+                      data-giakhuyenmai=mon.giaKhuyenMai || '',
+                      data-soluongton=mon.soLuongTon,
+                      data-hinhanh=mon.hinhAnh,
+                      data-huyhieu=mon.huyHieu || '',
+                      data-noibat=mon.noiBat ? '1' : '0',
+                      data-trangthai=mon.trangThai,
+                      data-mota=mon.moTa || '',
+                      onclick="moModalSuaSanPham(this)"
+                    )
+                      i.fa-solid.fa-pen-to-square
+
+                    //- Nút Xóa Mini (RESTful DELETE không tải lại trang)
+                    form.form-xac-nhan-xoa.m-0(
+                      action=`/admin/api/san-pham/${mon._id}`,
+                      method="POST",
+                      data-ten-muc=mon.tenSanPham
+                    )
+                      button.btn-mini-action.btn-mini-delete(type="submit", title="Xóa sản phẩm")
+                        i.fa-solid.fa-trash-can
+          else
+            tr
+              td(colspan="10", style="text-align: center; padding: 45px 20px; color: #888;")
+                i.fa-solid.fa-box-open(style="font-size: 32px; color: #DCD4CC; margin-bottom: 8px; display: block;")
+                strong Không tìm thấy sản phẩm nào phù hợp.
+                p.small.text-muted Thử tìm từ khóa khác hoặc nhấn "Thêm món ăn mới".
+
+    //- Phân trang (Pager chuẩn BATHBOOM)
+    if tongSoTrang > 1
+      .bb-pager
+        if trangHienTai > 1
+          a(href=`/admin/san-pham?trang=${trangHienTai - 1}&tuKhoa=${boLoc.tuKhoa}&maDanhMuc=${boLoc.maDanhMuc}&trangThai=${boLoc.trangThai}`, title="Trang trước") &laquo;
+        - for (let p = 1; p <= tongSoTrang; p++)
+          if p === trangHienTai
+            span.is-current= p
+          else
+            a(href=`/admin/san-pham?trang=${p}&tuKhoa=${boLoc.tuKhoa}&maDanhMuc=${boLoc.maDanhMuc}&trangThai=${boLoc.trangThai}`)= p
+        if trangHienTai < tongSoTrang
+          a(href=`/admin/san-pham?trang=${trangHienTai + 1}&tuKhoa=${boLoc.tuKhoa}&maDanhMuc=${boLoc.maDanhMuc}&trangThai=${boLoc.trangThai}`, title="Trang sau") &raquo;
+
+  //- ========================================================
+  //- 4. POPUP MODAL THÊM SẢN PHẨM MỚI (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalThemSanPham(onclick="handleBackdropClick(event, 'modalThemSanPham')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-utensils
+          div
+            h2.modal-header-title Thêm món ăn mới vào thực đơn
+            p.modal-header-sub Thiết lập món gà giòn, giá bán và hình ảnh trực quan
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalThemSanPham')", title="Đóng cửa sổ") &times;
+
+      form(action="/admin/api/san-pham", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'POST', modalId: 'modalThemSanPham' })")
+        .modal-body
+          .form-grid-modal
+            //- Tên món ăn
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-burger
+                | Tên món ăn 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="text", name="tenSanPham", placeholder="Ví dụ: Gà Giòn Sốt Cay Hàn Quốc", required)
+
+            //- Tên tiếng Anh
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-language
+                | Tên tiếng Anh (phụ)
+              input.form-control-custom(type="text", name="tenTiengAnh", placeholder="Ví dụ: Spicy Crispy Chicken")
+
+            //- Danh mục
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-tags
+                | Danh mục món 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              select.form-control-custom(name="maDanhMuc", required)
+                option(value="") -- Chọn danh mục thực đơn --
+                each dm in danhMucList
+                  option(value=dm._id)= dm.tenDanhMuc
+
+            //- Khẩu phần
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-bowl-food
+                | Khẩu phần hiển thị
+              input.form-control-custom(type="text", name="khauPhan", placeholder="1 phần, 2 miếng, Combo...", value="1 phần")
+
+            //- Giá gốc
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-tag
+                | Giá gốc (VNĐ) 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="number", name="giaGoc", placeholder="Ví dụ: 45000", min="0", required)
+
+            //- Giá khuyến mãi
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-percent
+                | Giá khuyến mãi (VNĐ)
+              input.form-control-custom(type="number", name="giaKhuyenMai", placeholder="Ví dụ: 39000", min="0")
+
+            //- Tồn kho
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-boxes-stacked
+                | Tồn kho ban đầu
+              input.form-control-custom(type="number", name="soLuongTon", value="100", min="0")
+
+            //- Trạng thái bán
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-toggle-on
+                | Trạng thái kinh doanh
+              select.form-control-custom(name="trangThai")
+                option(value="dang-ban") 🟢 Đang bán phục vụ khách
+                option(value="het-hang") 🟠 Hết hàng tạm thời
+                option(value="ngung-ban") 🔴 Ngừng bán
+
+            //- Huy hiệu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-fire
+                | Huy hiệu nổi bật (Badge)
+              input.form-control-custom(type="text", name="huyHieu", placeholder="Bán chạy, Siêu cay, New...")
+
+            //- Nổi bật Checkbox
+            .form-group-modal(style="display: flex; align-items: center; justify-content: flex-start; padding-top: 26px;")
+              .form-check
+                input.form-check-input#noiBatMoi(type="checkbox", name="noiBat", value="true")
+                label.form-check-label(for="noiBatMoi", style="font-size: 13px; font-weight: 600; color: #4A3E3D; cursor: pointer;")
+                  | ⭐ Ghim vào mục "Món Ăn Nổi Bật"
+
+            //- Đường dẫn hình ảnh & Preview trực tiếp
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-image
+                | Hình ảnh đại diện món ăn
+              .modal-image-row
+                .modal-image-thumb
+                  img#previewThemHinhAnh(src="/images/trang-chu/thuc-don-01.jpg", alt="Ảnh xem trước", onerror="this.src='/images/trang-chu/thuc-don-01.jpg'")
+                div(style="flex: 1;")
+                  input#inputThemHinhAnh.form-control-custom(
+                    type="text",
+                    name="hinhAnh",
+                    placeholder="Nhập link ảnh hoặc /images/trang-chu/thuc-don-01.jpg",
+                    value="/images/trang-chu/thuc-don-01.jpg"
+                  )
+                  small.text-muted(style="font-size: 11px;") Ảnh tự động xem trước bên cạnh khi nhập URL
+
+            //- Mô tả
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-align-left
+                | Mô tả hương vị &amp; nguyên liệu
+              textarea.form-control-custom(name="moTa", rows="3", placeholder="Độ giòn da, sốt ướp đậm đà, thịt mềm mọng nước...")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalThemSanPham')") Hủy bỏ
+          button.btn-modal-submit(type="submit")
+            i.fa-solid.fa-plus
+            span Thêm vào thực đơn
+
+  //- ========================================================
+  //- 5. POPUP MODAL CHỈNH SỬA SẢN PHẨM (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalSuaSanPham(onclick="handleBackdropClick(event, 'modalSuaSanPham')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-pen-to-square
+          div
+            h2.modal-header-title#modalSuaTieuDe Chỉnh sửa món ăn
+            p.modal-header-sub Cập nhật chi tiết giá, hình ảnh và khẩu phần phục vụ
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalSuaSanPham')", title="Đóng cửa sổ") &times;
+
+      form#formSuaSanPham(action="", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'PUT', modalId: 'modalSuaSanPham' })")
+        .modal-body
+          .form-grid-modal
+            //- Tên món ăn
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-burger
+                | Tên món ăn 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_tenSanPham.form-control-custom(type="text", name="tenSanPham", required)
+
+            //- Tên tiếng Anh
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-language
+                | Tên tiếng Anh (phụ)
+              input#edit_tenTiengAnh.form-control-custom(type="text", name="tenTiengAnh")
+
+            //- Slug
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-link
+                | Slug tĩnh (URL)
+              input#edit_slug.form-control-custom(type="text", name="slug")
+
+            //- Danh mục
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-tags
+                | Danh mục món 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              select#edit_maDanhMuc.form-control-custom(name="maDanhMuc", required)
+                each dm in danhMucList
+                  option(value=dm._id.toString())= dm.tenDanhMuc
+
+            //- Khẩu phần
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-bowl-food
+                | Khẩu phần hiển thị
+              input#edit_khauPhan.form-control-custom(type="text", name="khauPhan")
+
+            //- Giá gốc
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-tag
+                | Giá gốc (VNĐ) 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_giaGoc.form-control-custom(type="number", name="giaGoc", min="0", required)
+
+            //- Giá khuyến mãi
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-percent
+                | Giá khuyến mãi (VNĐ)
+              input#edit_giaKhuyenMai.form-control-custom(type="number", name="giaKhuyenMai", min="0")
+
+            //- Tồn kho
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-boxes-stacked
+                | Tồn kho
+              input#edit_soLuongTon.form-control-custom(type="number", name="soLuongTon", min="0")
+
+            //- Trạng thái bán
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-toggle-on
+                | Trạng thái kinh doanh
+              select#edit_trangThai.form-control-custom(name="trangThai")
+                option(value="dang-ban") 🟢 Đang bán phục vụ khách
+                option(value="het-hang") 🟠 Hết hàng tạm thời
+                option(value="ngung-ban") 🔴 Ngừng bán
+
+            //- Huy hiệu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-fire
+                | Huy hiệu nổi bật (Badge)
+              input#edit_huyHieu.form-control-custom(type="text", name="huyHieu")
+
+            //- Nổi bật Checkbox
+            .form-group-modal(style="display: flex; align-items: center; justify-content: flex-start; padding-top: 26px;")
+              .form-check
+                input.form-check-input#edit_noiBat(type="checkbox", name="noiBat", value="true")
+                label.form-check-label(for="edit_noiBat", style="font-size: 13px; font-weight: 600; color: #4A3E3D; cursor: pointer;")
+                  | ⭐ Ghim vào mục "Món Ăn Nổi Bật"
+
+            //- Hình ảnh & Preview trực tiếp
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-image
+                | Hình ảnh đại diện món ăn
+              .modal-image-row
+                .modal-image-thumb
+                  img#edit_imgPreview(src="/images/trang-chu/thuc-don-01.jpg", alt="Ảnh xem trước", onerror="this.src='/images/trang-chu/thuc-don-01.jpg'")
+                div(style="flex: 1;")
+                  input#edit_hinhAnh.form-control-custom(type="text", name="hinhAnh")
+                  small.text-muted(style="font-size: 11px;") Ảnh tự động xem trước bên cạnh khi nhập URL
+
+            //- Mô tả
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-align-left
+                | Mô tả hương vị &amp; nguyên liệu
+              textarea#edit_moTa.form-control-custom(name="moTa", rows="3")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalSuaSanPham')") Hủy bỏ
+          button.btn-modal-submit.btn-modal-submit--rose(type="submit")
+            i.fa-solid.fa-floppy-disk
+            span Lưu thay đổi
+
+  //- Script xử lý Popup Modal Sản phẩm & Realtime Filter
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      // Khởi tạo bộ lọc tự động Realtime (Không dùng nút lọc)
+      if (window.initRealtimeTableFilter) {
+        window.initRealtimeTableFilter({
+          tableSelector: ".table-custom",
+          searchInputId: "realtime-search-sp",
+          clearBtnId: "realtime-clear-sp",
+          selectIds: ["realtime-category-sp", "realtime-status-sp"],
+          countBadgeId: "realtime-count-sp",
+        });
+      }
+
+      // Gán xem trước ảnh trực tiếp
+      if (window.bindModalImagePreview) {
+        window.bindModalImagePreview("inputThemHinhAnh", "previewThemHinhAnh");
+        window.bindModalImagePreview("edit_hinhAnh", "edit_imgPreview");
+      }
+    });
+
+    function moModalSuaSanPham(btn) {
+      const d = btn.dataset;
+      const form = document.getElementById("formSuaSanPham");
+      if (!form) return;
+
+      // Cập nhật URL action RESTful PUT
+      form.action = "/admin/api/san-pham/" + d.id;
+
+      // Cập nhật tiêu đề modal
+      const tieuDe = document.getElementById("modalSuaTieuDe");
+      if (tieuDe) tieuDe.textContent = "Chỉnh sửa: " + d.tensanpham;
+
+      // Điền dữ liệu vào form
+      document.getElementById("edit_tenSanPham").value = d.tensanpham || "";
+      document.getElementById("edit_tenTiengAnh").value = d.tentienganh || "";
+      document.getElementById("edit_slug").value = d.slug || "";
+      document.getElementById("edit_maDanhMuc").value = d.danhmuc || "";
+      document.getElementById("edit_khauPhan").value = d.khauphan || "1 phần";
+      document.getElementById("edit_giaGoc").value = d.giagoc || 0;
+      document.getElementById("edit_giaKhuyenMai").value = d.giakhuyenmai || "";
+      document.getElementById("edit_soLuongTon").value = d.soluongton || 0;
+      document.getElementById("edit_huyHieu").value = d.huyhieu || "";
+      document.getElementById("edit_trangThai").value = d.trangthai || "dang-ban";
+      document.getElementById("edit_noiBat").checked = d.noibat === "1";
+      document.getElementById("edit_hinhAnh").value = d.hinhanh || "";
+      document.getElementById("edit_moTa").value = d.mota || "";
+
+      // Cập nhật ảnh preview
+      const preview = document.getElementById("edit_imgPreview");
+      if (preview) {
+        preview.src = d.hinhanh || "/images/trang-chu/thuc-don-01.jpg";
+      }
+
+      // Mở modal
+      window.openAdminModal("modalSuaSanPham");
+    }
+

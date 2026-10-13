@@ -1,0 +1,317 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-tags(style="color: #C98F91;")
+        | Quản lý danh mục loại món
+      .stats-badge-group
+        span.stat-pill.stat-pill-total(title="Tổng số danh mục món")
+          i.fa-solid.fa-list-check
+          | #{danhMucList ? danhMucList.length : 0} danh mục
+        span.stat-pill.stat-pill-active(title="Đang hiển thị cho khách xem")
+          i.fa-solid.fa-circle-check
+          | #{danhMucList ? danhMucList.filter(d => d.trangThai === 'hien-thi').length : 0} hiển thị
+        if danhMucList && danhMucList.some(d => d.trangThai === 'an')
+          span.stat-pill.stat-pill-disabled(title="Đang tạm ẩn")
+            i.fa-solid.fa-circle-xmark
+            | #{danhMucList.filter(d => d.trangThai === 'an').length} tạm ẩn
+
+    div(style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;")
+      button.btn-open-modal(type="button", onclick="openAdminModal('modalThemDanhMuc')")
+        i.fa-solid.fa-plus
+        span Thêm danh mục mới
+
+  //- ========================================================
+  //- 2. BỘ LỌC TỰ ĐỘNG REALTIME (CHUẨN BATHBOOM - KHÔNG DÙNG NÚT LỌC)
+  //- ========================================================
+  .filter-card-compact
+    .realtime-filter-wrap
+      .realtime-search-box
+        i.fa-solid.fa-magnifying-glass.realtime-search-icon
+        input#realtime-search-dm.realtime-search-input(
+          type="text",
+          placeholder="Gõ từ khóa để lọc danh mục theo tên, slug hoặc mô tả..."
+        )
+        button#realtime-clear-dm.realtime-search-clear(type="button", title="Xóa từ khóa") &times;
+
+      div(style="min-width: 170px;")
+        select#realtime-status-dm.realtime-select(data-filter-key="trangthai", style="width: 100%;")
+          option(value="tat-ca") -- Tất cả trạng thái --
+          option(value="hien-thi") 🟢 Đang hiển thị
+          option(value="an") 🔴 Đang tạm ẩn
+
+      span#realtime-count-dm.realtime-count-badge
+        i.fa-solid.fa-filter(style="font-size: 10px; color: #8E9F8E;")
+        | Đang hiển thị
+
+  //- ========================================================
+  //- 3. BẢNG DANH MỤC TOÀN MÀN HÌNH (CHUẨN BORDER BATHBOOM)
+  //- ========================================================
+  .bb-card
+    .table-responsive
+      table.table-custom
+        thead
+          tr
+            th(style="width: 60px; text-align: center;") Thứ tự
+            th(style="text-align: left; min-width: 170px;") Tên danh mục
+            th(style="width: 160px; text-align: left;") Slug tĩnh
+            th(style="text-align: left; min-width: 220px;") Mô tả danh mục
+            th(style="width: 100px; text-align: center;") Số món
+            th(style="width: 135px; text-align: center;") Ẩn / Hiện
+            th(style="width: 110px; text-align: center;") Thao tác
+        tbody
+          if danhMucList && danhMucList.length > 0
+            each dm in danhMucList
+              - const isAn = dm.trangThai === 'an';
+              tr(class=isAn ? 'row-disabled is-disabled' : '', data-trangthai=dm.trangThai)
+                //- Thứ tự
+                td(style="text-align: center; font-weight: 700; color: #888;")
+                  | ##{dm.thuTu}
+
+                //- Tên danh mục
+                td(style="text-align: left;")
+                  div(style="display: flex; align-items: center; gap: 9px;")
+                    span(style="width: 8px; height: 8px; border-radius: 50%; background: " + (dm.trangThai === 'hien-thi' ? '#8E9F8E' : '#E53935') + "; flex-shrink: 0; display: inline-block;")
+                    span.fw-bold(style="color: #4A3E3D; font-size: 13.5px;")= dm.tenDanhMuc
+
+                //- Slug tĩnh
+                td(style="text-align: left;")
+                  code(style="background: #FAF5F0; color: #7B6E6D; padding: 2px 6px; border-radius: 6px; border: 1px solid #ECE2D8; font-size: 11.5px;")
+                    = dm.slug
+
+                //- Mô tả
+                td(style="text-align: left; color: #666; font-size: 12.5px; line-height: 1.4;")
+                  if dm.moTa
+                    | #{dm.moTa}
+                  else
+                    span(style="color: #bbb; font-style: italic;") Chưa có mô tả chi tiết
+
+                //- Số món ăn
+                td(style="text-align: center;")
+                  span.badge(style="background: #FAF5F0; color: #4A3E3D; border: 1px solid #ECE2D8; padding: 4px 10px; font-size: 11.5px; font-weight: 600;")
+                    | #{dm.soLuongMon || 0} món
+
+                //- Trạng thái: CÔNG TẮC BẬT / TẮT (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                td(style="text-align: center;")
+                  label.bb-switch(title="Gạt công tắc để Bật/Tắt hiển thị danh mục")
+                    input(
+                      type="checkbox",
+                      checked=dm.trangThai === 'hien-thi',
+                      onchange=`toggleTrangThaiApi(this, '/admin/api/danh-muc/${dm._id}/trang-thai', 'Hiển thị', 'Tạm ẩn', 'hien-thi', 'an')`
+                    )
+                    span.bb-switch-slider
+                    span.bb-switch-label= dm.trangThai === 'hien-thi' ? 'Hiển thị' : 'Tạm ẩn'
+
+                //- Thao tác CRUD (RESTful)
+                td(style="text-align: center;")
+                  .table-actions
+                    //- Nút Sửa Mini (Mở Popup Modal ngay trên 1 màn hình)
+                    button.btn-mini-action.btn-mini-edit(
+                      type="button",
+                      title="Chỉnh sửa danh mục",
+                      data-id=dm._id,
+                      data-ten=dm.tenDanhMuc,
+                      data-thutu=dm.thuTu,
+                      data-slug=dm.slug,
+                      data-trangthai=dm.trangThai,
+                      data-bieutuong=dm.bieuTuong || 'restaurant_menu',
+                      data-mota=dm.moTa || '',
+                      onclick="moModalSuaDanhMuc(this)"
+                    )
+                      i.fa-solid.fa-pen-to-square
+
+                    //- Nút Xóa (RESTful DELETE)
+                    form.form-xac-nhan-xoa.m-0(
+                      action=`/admin/api/danh-muc/${dm._id}`,
+                      method="POST",
+                      data-ten-muc=dm.tenDanhMuc
+                    )
+                      button.btn-mini-action.btn-mini-delete(type="submit", title="Xóa danh mục")
+                        i.fa-solid.fa-trash-can
+          else
+            tr
+              td(colspan="7", style="text-align: center; padding: 45px 20px; color: #888;")
+                i.fa-solid.fa-tags(style="font-size: 32px; color: #DCD4CC; margin-bottom: 8px; display: block;")
+                strong Chưa có danh mục nào.
+                p.small.text-muted Nhấn nút "Thêm danh mục mới" để bắt đầu thiết lập thực đơn.
+
+  //- ========================================================
+  //- 3. POPUP MODAL THÊM DANH MỤC MỚI (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalThemDanhMuc(onclick="handleBackdropClick(event, 'modalThemDanhMuc')")
+    .modal-box.modal-box--sm
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-folder-plus
+          div
+            h2.modal-header-title Thêm danh mục món mới
+            p.modal-header-sub Thiết lập nhóm món cho thực đơn nhà hàng
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalThemDanhMuc')", title="Đóng cửa sổ") &times;
+
+      form(action="/admin/api/danh-muc", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'POST', modalId: 'modalThemDanhMuc' })")
+        .modal-body
+          .form-grid-modal
+            //- Tên danh mục
+            .form-group-modal.col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-tags
+                | Tên danh mục món 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="text", name="tenDanhMuc", placeholder="Ví dụ: Gà Giòn Truyền Thống, Burger, Đồ Uống...", required)
+
+            //- Thứ tự
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-arrow-down-1-9
+                | Thứ tự ưu tiên
+              input.form-control-custom(type="number", name="thuTu", value="1", min="0")
+
+            //- Trạng thái
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-eye
+                | Trạng thái hiển thị
+              select.form-control-custom(name="trangThai")
+                option(value="hien-thi") 🟢 Hiển thị trên website
+                option(value="an") 🔴 Tạm ẩn khỏi website
+
+            //- Biểu tượng
+            .form-group-modal.col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-icons
+                | Biểu tượng icon (Material Icon hoặc FontAwesome)
+              input.form-control-custom(type="text", name="bieuTuong", value="restaurant_menu", placeholder="restaurant_menu, fastfood, local_drink...")
+
+            //- Mô tả
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-align-left
+                | Mô tả chi tiết danh mục
+              textarea.form-control-custom(name="moTa", rows="3", placeholder="Giới thiệu về đặc trưng các món ăn thuộc nhóm này...")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalThemDanhMuc')") Hủy bỏ
+          button.btn-modal-submit(type="submit")
+            i.fa-solid.fa-plus
+            span Tạo danh mục
+
+  //- ========================================================
+  //- 4. POPUP MODAL CHỈNH SỬA DANH MỤC (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalSuaDanhMuc(onclick="handleBackdropClick(event, 'modalSuaDanhMuc')")
+    .modal-box.modal-box--sm
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-pen-to-square
+          div
+            h2.modal-header-title#modalSuaDanhMucTieuDe Chỉnh sửa danh mục
+            p.modal-header-sub Cập nhật thứ tự, tên gọi và trạng thái hiển thị
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalSuaDanhMuc')", title="Đóng cửa sổ") &times;
+
+      form#formSuaDanhMuc(action="", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'PUT', modalId: 'modalSuaDanhMuc' })")
+        .modal-body
+          .form-grid-modal
+            //- Tên danh mục
+            .form-group-modal.col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-tags
+                | Tên danh mục món 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_dm_tenDanhMuc.form-control-custom(type="text", name="tenDanhMuc", required)
+
+            //- Thứ tự
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-arrow-down-1-9
+                | Thứ tự ưu tiên
+              input#edit_dm_thuTu.form-control-custom(type="number", name="thuTu", min="0")
+
+            //- Trạng thái
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-eye
+                | Trạng thái hiển thị
+              select#edit_dm_trangThai.form-control-custom(name="trangThai")
+                option(value="hien-thi") 🟢 Hiển thị trên website
+                option(value="an") 🔴 Tạm ẩn khỏi website
+
+            //- Slug
+            .form-group-modal.col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-link
+                | Slug tĩnh (URL)
+              input#edit_dm_slug.form-control-custom(type="text", name="slug")
+
+            //- Biểu tượng
+            .form-group-modal.col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-icons
+                | Biểu tượng icon
+              input#edit_dm_bieuTuong.form-control-custom(type="text", name="bieuTuong")
+
+            //- Mô tả
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-align-left
+                | Mô tả chi tiết danh mục
+              textarea#edit_dm_moTa.form-control-custom(name="moTa", rows="3")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalSuaDanhMuc')") Hủy bỏ
+          button.btn-modal-submit.btn-modal-submit--rose(type="submit")
+            i.fa-solid.fa-floppy-disk
+            span Lưu thay đổi
+
+  //- Script điều khiển Modal Danh mục & Realtime Filter
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.initRealtimeTableFilter) {
+        window.initRealtimeTableFilter({
+          tableSelector: ".table-custom",
+          searchInputId: "realtime-search-dm",
+          clearBtnId: "realtime-clear-dm",
+          selectIds: ["realtime-status-dm"],
+          countBadgeId: "realtime-count-dm",
+        });
+      }
+    });
+
+    function moModalSuaDanhMuc(btn) {
+      const d = btn.dataset;
+      const form = document.getElementById("formSuaDanhMuc");
+      if (!form) return;
+
+      form.action = "/admin/api/danh-muc/" + d.id;
+
+      const tieuDe = document.getElementById("modalSuaDanhMucTieuDe");
+      if (tieuDe) tieuDe.textContent = "Chỉnh sửa: " + d.ten;
+
+      document.getElementById("edit_dm_tenDanhMuc").value = d.ten || "";
+      document.getElementById("edit_dm_thuTu").value = d.thutu || 1;
+      document.getElementById("edit_dm_slug").value = d.slug || "";
+      document.getElementById("edit_dm_trangThai").value = d.trangthai || "hien-thi";
+      document.getElementById("edit_dm_bieuTuong").value = d.bieutuong || "restaurant_menu";
+      document.getElementById("edit_dm_moTa").value = d.mota || "";
+
+      window.openAdminModal("modalSuaDanhMuc");
+    }
+
+

@@ -1,0 +1,97 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-user-pen(style="color: #8E9F8E;")
+        | Chỉnh sửa tài khoản: #{user.hoTen}
+      .stats-badge-group
+        span.stat-pill.stat-pill-total
+          i.fa-solid.fa-envelope
+          | #{user.email}
+
+    div(style="display: flex; gap: 8px;")
+      a.btn-filter-reset(href="/admin/nguoi-dung")
+        i.fa-solid.fa-arrow-left
+        span Quay lại danh sách
+
+  //- ========================================================
+  //- 2. FORM CHỈNH SỬA (CHUẨN FORM BATHBOOM)
+  //- ========================================================
+  .row.justify-content-center
+    .col-12.col-lg-8
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-id-card(style="color: #8E9F8E; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16.5px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Phân quyền &amp; Thông tin người dùng
+        .p-4
+          form(action=`/admin/nguoi-dung/chinh-sua/${user._id}`, method="POST")
+            .row.g-3
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Họ và tên 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="hoTen",
+                  value=user.hoTen,
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Địa chỉ Email
+                input.form-control-custom(
+                  type="email",
+                  value=user.email,
+                  style="background: #EFECE6; cursor: not-allowed; color: #7B6E6D;",
+                  disabled
+                )
+                small.text-muted(style="font-size: 11px;") Email là định danh không thể thay đổi.
+
+              .col-12.col-md-6
+                label.form-label-custom Số điện thoại
+                input.form-control-custom(
+                  type="tel",
+                  name="SDT",
+                  value=user.SDT || '',
+                  placeholder="0912345678"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Phân quyền vai trò
+                select.form-control-custom(name="vaiTro")
+                  option(value="khach-hang", selected=user.vaiTro === 'khach-hang') 👤 Khách hàng (Đặt mua hàng)
+                  option(value="nhan-vien", selected=user.vaiTro === 'nhan-vien') 💼 Nhân viên (Xử lý đơn hàng)
+                  option(value="admin", selected=user.vaiTro === 'admin') 🛡️ Quản trị viên (Toàn quyền)
+
+              .col-12.col-md-6
+                label.form-label-custom Trạng thái tài khoản
+                select.form-control-custom(name="trangThai")
+                  option(value="hoat-dong", selected=user.trangThai === 'hoat-dong') 🟢 Hoạt động bình thường
+                  option(value="khoa", selected=user.trangThai === 'khoa') 🔒 Khóa tài khoản
+
+              .col-12.col-md-6
+                label.form-label-custom Mật khẩu mới (Nếu cần đặt lại)
+                input.form-control-custom(
+                  type="password",
+                  name="matKhauMoi",
+                  placeholder="Để trống nếu không đổi mật khẩu"
+                )
+
+              .col-12
+                label.form-label-custom Địa chỉ nhận hàng mặc định
+                textarea.form-control-custom(
+                  name="diaChi",
+                  rows="3",
+                  placeholder="Địa chỉ nhà, số đường, phường, quận..."
+                )= user.diaChi
+
+            .form-actions-custom(style="margin-top: 18px; padding-top: 14px;")
+              button.btn-submit-custom(type="submit")
+                i.fa-solid.fa-floppy-disk
+                span Lưu thay đổi

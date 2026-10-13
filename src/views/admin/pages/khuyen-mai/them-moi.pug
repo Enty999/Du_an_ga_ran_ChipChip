@@ -1,0 +1,135 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-ticket(style="color: #C98F91;")
+        | Tạo mã khuyến mãi / Voucher mới
+      .stats-badge-group
+        span.stat-pill.stat-pill-total
+          i.fa-solid.fa-plus
+          | Tạo mới mã giảm giá
+
+    div(style="display: flex; gap: 8px;")
+      a.btn-filter-reset(href="/admin/khuyen-mai")
+        i.fa-solid.fa-arrow-left
+        span Quay lại danh sách
+
+  //- ========================================================
+  //- 2. FORM THÊM MỚI (CHUẨN FORM BATHBOOM)
+  //- ========================================================
+  .row.justify-content-center
+    .col-12.col-lg-8
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-gift(style="color: #C98F91; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16.5px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Thiết lập mã ưu đãi
+        .p-4
+          form(action="/admin/khuyen-mai/them-moi", method="POST")
+            .row.g-3
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Mã Voucher Code 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="maCode",
+                  placeholder="Ví dụ: CHIPCHIPHE, GIAM20K...",
+                  style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;",
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Tiêu đề chương trình 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="tieuDe",
+                  placeholder="Ví dụ: Giảm 20k cho đơn từ 100k",
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Loại giảm giá
+                select.form-control-custom(name="loaiGiamGia")
+                  option(value="phan-tram", selected) Theo phần trăm (%)
+                  option(value="tien-mat") Theo số tiền cố định (VNĐ)
+
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Giá trị giảm 
+                  span.required *
+                input.form-control-custom(
+                  type="number",
+                  name="giaTriGiam",
+                  placeholder="Ví dụ: 15 (nếu là %) hoặc 20000 (nếu là VNĐ)",
+                  min="1",
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Giảm tối đa (VNĐ)
+                input.form-control-custom(
+                  type="number",
+                  name="giamToiDa",
+                  placeholder="Để 0 nếu không giới hạn tối đa",
+                  value="0"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Đơn hàng tối thiểu (VNĐ)
+                input.form-control-custom(
+                  type="number",
+                  name="donHangToiThieu",
+                  placeholder="Ví dụ: 99000",
+                  value="0"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Số lượt phát hành (Số lượng)
+                input.form-control-custom(
+                  type="number",
+                  name="soLuong",
+                  value="100",
+                  min="1"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Trạng thái mã
+                select.form-control-custom(name="trangThai")
+                  option(value="hoat-dong", selected) 🟢 Đang áp dụng
+                  option(value="tam-dung") 🟠 Tạm dừng
+                  option(value="het-han") 🔴 Hết hạn
+
+              .col-12.col-md-6
+                label.form-label-custom Ngày bắt đầu
+                input.form-control-custom(
+                  type="date",
+                  name="ngayBatDau"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Ngày kết thúc
+                input.form-control-custom(
+                  type="date",
+                  name="ngayKetThuc"
+                )
+
+              .col-12
+                label.form-label-custom Mô tả &amp; Điều kiện áp dụng
+                textarea.form-control-custom(
+                  name="moTa",
+                  rows="3",
+                  placeholder="Điều kiện áp dụng voucher cho khách hàng..."
+                )
+
+            .form-actions-custom(style="margin-top: 18px; padding-top: 14px;")
+              button.btn-submit-custom(type="submit")
+                i.fa-solid.fa-plus
+                span Tạo mã khuyến mãi

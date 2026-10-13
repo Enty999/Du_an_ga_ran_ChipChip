@@ -248,6 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function initMenuFilters() {
   const filterButtons = document.querySelectorAll(".menu__filter-btn");
+  const cards = document.querySelectorAll(".menu__card");
   if (!filterButtons.length) return;
 
   filterButtons.forEach((btn) => {
@@ -258,6 +259,20 @@ function initMenuFilters() {
       });
       btn.classList.add("menu__filter-btn--active");
       btn.setAttribute("aria-selected", "true");
+
+      const category = btn.getAttribute("data-category");
+      if (!category || category === "tat-ca") {
+        cards.forEach((card) => (card.style.display = ""));
+      } else {
+        cards.forEach((card) => {
+          const cardCat = card.getAttribute("data-category");
+          if (!cardCat || cardCat === category) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
     });
   });
 }

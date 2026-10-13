@@ -4,7 +4,8 @@
   "description": "Website ban ga ran ChipChip dung Express.js, MongoDB va Pug SSR",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "seed": "node src/scripts/khoi-tao-du-lieu.js"
   },
   "keywords": [
     "express",

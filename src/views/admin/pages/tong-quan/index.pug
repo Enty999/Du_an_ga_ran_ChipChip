@@ -1,0 +1,421 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-chart-pie(style="color: #C98F91;")
+        | Báo cáo &amp; Thống kê doanh thu
+      .stats-badge-group
+        span.stat-pill.stat-pill-total(title="Tổng doanh thu")
+          i.fa-solid.fa-coins
+          | #{dinhDangTien(thongKe.tongDoanhThu)}
+        span.stat-pill.stat-pill-active(title="Đơn hoàn tất")
+          i.fa-solid.fa-circle-check
+          | #{thongKe.donHoanTat} thành công
+        span.stat-pill.stat-pill-out(title="Đơn đang chờ duyệt")
+          i.fa-solid.fa-clock
+          | #{thongKe.donChoXacNhan} chờ duyệt
+        if thongKe.donDaHuy > 0
+          span.stat-pill.stat-pill-disabled(title="Đơn đã hủy")
+            i.fa-solid.fa-circle-xmark
+            | #{thongKe.donDaHuy} đã hủy
+
+    div(style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;")
+      a.btn-export-excel(href="/admin/don-hang")
+        i.fa-solid.fa-file-invoice-dollar
+        span Xem tất cả đơn
+      a.btn-open-modal(href="/admin/san-pham/them-moi")
+        i.fa-solid.fa-plus
+        span Thêm món mới
+
+  //- ========================================================
+  //- 2. BỘ LỌC THỜI GIAN THỐNG KÊ (CHUẨN BATHBOOM)
+  //- ========================================================
+  .stats-filter-card
+    .stats-filter-presets
+      span.stats-filter-label
+        i.fa-solid.fa-calendar-days(style="color: #C98F91;")
+        | Mốc thời gian:
+      a.stats-filter-btn.is-active(href="#") Tất cả
+      a.stats-filter-btn(href="#") Hôm nay
+      a.stats-filter-btn(href="#") Hôm qua
+      a.stats-filter-btn(href="#") 7 ngày qua
+      a.stats-filter-btn(href="#") 30 ngày qua
+      a.stats-filter-btn(href="#") Tháng này
+      a.stats-filter-btn(href="#") Năm nay
+
+  //- ========================================================
+  //- 3. 4 THẺ THỐNG KÊ TỔNG QUAN (METRIC GRID BATHBOOM)
+  //- ========================================================
+  .metric-grid
+    //- Thẻ 1: Doanh thu
+    .metric-card.card-revenue
+      .metric-header
+        span.metric-label TỔNG DOANH THU
+        .metric-icon-box.metric-icon-box--pink
+          i.fa-solid.fa-sack-dollar
+      .metric-value= dinhDangTien(thongKe.tongDoanhThu)
+      .metric-footer
+        i.fa-solid.fa-arrow-trend-up(style="color: #2E7D32;")
+        span(style="color: #2E7D32; font-weight: 600;") Đã hoàn tất &amp; thanh toán
+
+    //- Thẻ 2: Tổng đơn hàng
+    .metric-card.card-orders
+      .metric-header
+        span.metric-label TỔNG ĐƠN HÀNG
+        .metric-icon-box.metric-icon-box--green
+          i.fa-solid.fa-boxes-stacked
+      .metric-value= thongKe.tongDonHang
+      .metric-footer
+        i.fa-solid.fa-clock(style="color: #E65100;")
+        span(style="color: #E65100; font-weight: 600;") #{thongKe.donChoXacNhan} đơn chờ xác nhận
+
+    //- Thẻ 3: Món ăn trong bếp
+    .metric-card.card-products
+      .metric-header
+        span.metric-label MÓN ĂN TRONG BẾP
+        .metric-icon-box.metric-icon-box--blue
+          i.fa-solid.fa-utensils
+      .metric-value= thongKe.tongSanPham
+      .metric-footer
+        i.fa-solid.fa-circle-check(style="color: #2E7D32;")
+        span #{thongKe.sanPhamDangBan} đang bán / #{thongKe.sanPhamHetHang} hết hàng
+
+    //- Thẻ 4: Khách hàng
+    .metric-card.card-rating
+      .metric-header
+        span.metric-label TÀI KHOẢN KHÁCH
+        .metric-icon-box.metric-icon-box--yellow
+          i.fa-solid.fa-users
+      .metric-value= thongKe.tongKhachHang
+      .metric-footer
+        i.fa-solid.fa-shield-halved(style="color: #7B1FA2;")
+        span #{thongKe.tongNguoiDung} tổng người dùng
+
+  //- ========================================================
+  //- 4. KHUNG 2 BIỂU ĐỒ CHART.JS HIỆN ĐẠI (CHUẨN BATHBOOM THONGKE)
+  //- ========================================================
+  .charts-grid
+    //- Biểu đồ 1: Doanh thu theo thời gian (Line Chart)
+    .chart-card
+      .chart-header
+        h3.chart-title
+          i.fa-solid.fa-chart-line(style="color: #C98F91;")
+          | Biểu đồ Doanh thu &amp; Tăng trưởng bán hàng
+        span.chart-badge
+          i.fa-regular.fa-calendar-check.me-1
+          | 7 ngày qua
+      .chart-canvas-wrapper
+        canvas#revenueLineChart
+
+    //- Biểu đồ 2: Cơ cấu trạng thái đơn hàng (Donut Chart)
+    .chart-card
+      .chart-header
+        h3.chart-title
+          i.fa-solid.fa-chart-pie(style="color: #8E9F8E;")
+          | Trạng thái đơn hàng
+        span.chart-badge Tỷ lệ %
+      .chart-canvas-wrapper(style="position: relative;")
+        canvas#orderStatusDonutChart
+        //- Chữ hiển thị ở giữa Donut
+        div(style="position: absolute; top: 44%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;")
+          div(style="font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: #4A3E3D; line-height: 1;")
+            = thongKe.tongDonHang
+          div(style="font-size: 11.5px; color: #888; font-weight: 600; margin-top: 3px;") Tổng đơn
+
+  //- ========================================================
+  //- 5. TIẾN TRÌNH ĐƠN HÀNG (4 THẺ MINI TÁCH BIỆT BORDER DÀY)
+  //- ========================================================
+  .row.g-3.mb-4
+    .col-12.col-sm-6.col-xl-3
+      .bb-card.p-3.d-flex.justify-content-between.align-items-center(style="border-left: 4.5px solid #E65100 !important;")
+        div
+          .small.fw-bold.text-muted ĐƠN CHỜ DUYỆT
+          .fs-4.fw-bold.text-dark= thongKe.donChoXacNhan
+        span.badge.rounded-pill(style="background: #FFF3E0; color: #E65100; font-size: 14px; padding: 8px 12px;")
+          i.fa-solid.fa-clock
+
+    .col-12.col-sm-6.col-xl-3
+      .bb-card.p-3.d-flex.justify-content-between.align-items-center(style="border-left: 4.5px solid #1565C0 !important;")
+        div
+          .small.fw-bold.text-muted ĐANG GIAO HÀNG
+          .fs-4.fw-bold.text-dark= thongKe.donDangGiao
+        span.badge.rounded-pill(style="background: #E3F2FD; color: #1565C0; font-size: 14px; padding: 8px 12px;")
+          i.fa-solid.fa-truck-fast
+
+    .col-12.col-sm-6.col-xl-3
+      .bb-card.p-3.d-flex.justify-content-between.align-items-center(style="border-left: 4.5px solid #2E7D32 !important;")
+        div
+          .small.fw-bold.text-muted GIAO THÀNH CÔNG
+          .fs-4.fw-bold.text-dark= thongKe.donHoanTat
+        span.badge.rounded-pill(style="background: #E8F5E9; color: #2E7D32; font-size: 14px; padding: 8px 12px;")
+          i.fa-solid.fa-circle-check
+
+    .col-12.col-sm-6.col-xl-3
+      .bb-card.p-3.d-flex.justify-content-between.align-items-center(style="border-left: 4.5px solid #C62828 !important;")
+        div
+          .small.fw-bold.text-muted ĐƠN ĐÃ HỦY
+          .fs-4.fw-bold.text-dark= thongKe.donDaHuy
+        span.badge.rounded-pill(style="background: #FFEBEE; color: #C62828; font-size: 14px; padding: 8px 12px;")
+          i.fa-solid.fa-circle-xmark
+
+  //- ========================================================
+  //- 6. HÀNG BẢNG DỮ LIỆU ĐƠN MỚI & MÓN BÁN CHẠY (BORDẺ CỰC ĐẬM BATHBOOM)
+  //- ========================================================
+  .row.g-4
+    //- Cột trái: Đơn hàng mới nhất
+    .col-12.col-xl-8
+      .bb-card
+        .p-3.d-flex.justify-content-between.align-items-center(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          div.d-flex.align-items-center.gap-2
+            i.fa-solid.fa-file-invoice-dollar(style="color: #C98F91; font-size: 18px;")
+            h3(style="font-family: 'Playfair Display', serif; font-size: 17px; margin: 0; color: #4A3E3D; font-weight: 700;")
+              | Đơn hàng mới đặt gần đây
+          a.stats-filter-btn(href="/admin/don-hang", title="Xem tất cả đơn", style="font-size: 12px; font-weight: 600;")
+            span Xem tất cả &rarr;
+
+        .table-responsive
+          table.table-custom
+            thead
+              tr
+                th(style="width: 100px;") Mã ĐH
+                th(style="text-align: left;") Khách hàng
+                th(style="width: 120px;") Ngày đặt
+                th(style="text-align: right; width: 120px;") Tổng tiền
+                th(style="width: 130px;") Trạng thái
+                th(style="width: 70px;") Xem
+            tbody
+              if thongKe.donHangMoiNhat && thongKe.donHangMoiNhat.length > 0
+                each don in thongKe.donHangMoiNhat
+                  tr
+                    td(style="text-align: center; font-weight: 700; color: #8E9F8E;")
+                      | ##{don.maDonHang}
+                    td(style="text-align: left;")
+                      .fw-bold(style="color: #4A3E3D;")= don.thongTinNguoiNhan.hoTen
+                      .small.text-muted= don.thongTinNguoiNhan.soDienThoai
+                    td(style="text-align: center; color: #7B6E6D; font-size: 12px;")
+                      = dinhDangNgay(don.createdAt)
+                    td(style="text-align: right; font-weight: 700; color: #2B2523;")
+                      = dinhDangTien(don.tongThanhToan)
+                    td(style="text-align: center;")
+                      if don.trangThaiDonHang === 'cho-xac-nhan'
+                        span.bb-badge.bb-badge--amber
+                          i.fa-solid.fa-clock(style="font-size: 9.5px;")
+                          | Chờ duyệt
+                      else if don.trangThaiDonHang === 'da-xac-nhan'
+                        span.bb-badge.bb-badge--blue
+                          i.fa-solid.fa-circle-check(style="font-size: 9.5px;")
+                          | Đã xác nhận
+                      else if don.trangThaiDonHang === 'dang-che-bien'
+                        span.bb-badge.bb-badge--purple
+                          i.fa-solid.fa-fire(style="font-size: 9.5px;")
+                          | Đang chiên gà
+                      else if don.trangThaiDonHang === 'dang-giao'
+                        span.bb-badge.bb-badge--blue
+                          i.fa-solid.fa-truck-fast(style="font-size: 9.5px;")
+                          | Đang giao
+                      else if don.trangThaiDonHang === 'da-giao'
+                        span.bb-badge.bb-badge--green
+                          i.fa-solid.fa-circle-check(style="font-size: 9.5px;")
+                          | Hoàn tất
+                      else if don.trangThaiDonHang === 'da-huy'
+                        span.bb-badge.bb-badge--red
+                          i.fa-solid.fa-circle-xmark(style="font-size: 9.5px;")
+                          | Đã hủy
+                    td(style="text-align: center;")
+                      .table-actions
+                        a.btn-mini-action.btn-mini-view(href=`/admin/don-hang/chi-tiet/${don._id}`, title="Xem chi tiết đơn")
+                          i.fa-solid.fa-eye
+              else
+                tr
+                  td(colspan="6", style="text-align: center; padding: 30px; color: #888;")
+                    | Chưa có đơn hàng nào trong hệ thống.
+
+    //- Cột phải: Top món bán chạy nhất
+    .col-12.col-xl-4
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-fire-flame-curved(style="color: #E65100; font-size: 18px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 17px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Món ăn bán chạy nhất
+        .p-0
+          if thongKe.monBanChayNhat && thongKe.monBanChayNhat.length > 0
+            table.table-custom
+              thead
+                tr
+                  th(style="width: 45px;") Top
+                  th(style="text-align: left;") Món ăn
+                  th(style="text-align: right; width: 100px;") Đã bán
+              tbody
+                each mon, index in thongKe.monBanChayNhat
+                  tr
+                    td(style="text-align: center;")
+                      if index === 0
+                        span(style="background: #FFE082; color: #F57F17; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;") 1
+                      else if index === 1
+                        span(style="background: #CFD8DC; color: #455A64; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;") 2
+                      else if index === 2
+                        span(style="background: #D7CCC8; color: #5D4037; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;") 3
+                      else
+                        span(style="color: #888; font-weight: 600; font-size: 12px;")= index + 1
+                    td(style="text-align: left;")
+                      .d-flex.align-items-center.gap-2
+                        img(src=mon.hinhAnh, alt=mon.tenSanPham, onerror="this.src='/images/trang-chu/thuc-don-01.jpg'", style="width: 34px; height: 34px; border-radius: 7px; object-fit: cover; border: 1px solid #ECE4DC;")
+                        div
+                          .fw-bold(style="color: #4A3E3D; font-size: 12.5px; line-height: 1.25;")= mon.tenSanPham
+                          .small.text-muted(style="font-size: 11px;")= mon.maDanhMuc ? mon.maDanhMuc.tenDanhMuc : 'Món ăn'
+                    td(style="text-align: right; white-space: nowrap;")
+                      span.badge(style="background: #FFF3E0; color: #E65100; border: 1px solid #FFE0B2; font-weight: 700;")
+                        i.fa-solid.fa-fire.me-1
+                        | #{mon.daBan} phần
+          else
+            .text-center.py-5.text-muted Chưa có dữ liệu món bán chạy.
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Dữ liệu từ Service Controller
+      const lineLabels = !{JSON.stringify(thongKe.chartLabels || [])};
+      const lineRevenue = !{JSON.stringify(thongKe.chartRevenue || [])};
+      const donutLabels = !{JSON.stringify(thongKe.donutLabels || [])};
+      const donutCounts = !{JSON.stringify(thongKe.donutCounts || [])};
+      const donutColors = !{JSON.stringify(thongKe.donutColors || [])};
+
+      // Thiết lập Font chữ chuẩn BATHBOOM
+      if (typeof Chart !== 'undefined') {
+        Chart.defaults.font.family = "'Poppins', 'Be Vietnam Pro', sans-serif";
+        Chart.defaults.color = '#7B6E6D';
+
+        // ==========================================
+        // BIỂU ĐỒ 1: DOANH THU & TĂNG TRƯỞNG (LINE CHART)
+        // ==========================================
+        const ctxLine = document.getElementById('revenueLineChart');
+        if (ctxLine) {
+          const lineContext = ctxLine.getContext('2d');
+          const revenueGradient = lineContext.createLinearGradient(0, 0, 0, 260);
+          revenueGradient.addColorStop(0, 'rgba(201, 143, 145, 0.45)');
+          revenueGradient.addColorStop(1, 'rgba(201, 143, 145, 0.02)');
+
+          new Chart(ctxLine, {
+            type: 'line',
+            data: {
+              labels: lineLabels.length > 0 ? lineLabels : ['Chưa có số liệu'],
+              datasets: [{
+                label: 'Doanh thu (VNĐ)',
+                data: lineRevenue.length > 0 ? lineRevenue : [0],
+                borderColor: '#C98F91',
+                borderWidth: 3,
+                backgroundColor: revenueGradient,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#C98F91',
+                pointBorderWidth: 2.5,
+                pointRadius: 5,
+                pointHoverRadius: 8,
+                pointHoverBackgroundColor: '#C98F91',
+                pointHoverBorderColor: '#ffffff',
+                pointHoverBorderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#4A3E3D',
+                  titleColor: '#FAF7F2',
+                  bodyColor: '#FAF7F2',
+                  padding: 12,
+                  cornerRadius: 10,
+                  displayColors: false,
+                  callbacks: {
+                    label: function(context) {
+                      const val = context.parsed.y || 0;
+                      return ' Doanh thu: ' + val.toLocaleString('vi-VN') + ' đ';
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: { display: false, drawBorder: false },
+                  ticks: { font: { size: 12 }, color: '#888' }
+                },
+                y: {
+                  beginAtZero: true,
+                  grid: { color: 'rgba(236, 228, 220, 0.6)', drawBorder: false },
+                  ticks: {
+                    font: { size: 11.5 },
+                    color: '#888',
+                    callback: function(value) {
+                      if (value >= 1000000) return (value / 1000000).toFixed(1).replace('.0', '') + ' tr';
+                      if (value >= 1000) return (value / 1000).toFixed(0) + ' k';
+                      return value;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // ==========================================
+        // BIỂU ĐỒ 2: CƠ CẤU TRẠNG THÁI (DONUT CHART)
+        // ==========================================
+        const ctxDonut = document.getElementById('orderStatusDonutChart');
+        if (ctxDonut) {
+          new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+              labels: donutLabels,
+              datasets: [{
+                data: donutCounts,
+                backgroundColor: donutColors,
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                hoverOffset: 6,
+                borderRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '72%',
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: {
+                    padding: 14,
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    font: { size: 11.5, weight: '500' },
+                    color: '#555'
+                  }
+                },
+                tooltip: {
+                  backgroundColor: '#4A3E3D',
+                  titleColor: '#FAF7F2',
+                  bodyColor: '#FAF7F2',
+                  padding: 10,
+                  cornerRadius: 8,
+                  callbacks: {
+                    label: function(context) {
+                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                      const val = context.parsed || 0;
+                      const pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                      return ' ' + context.label + ': ' + val + ' đơn (' + pct + '%)';
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+    });

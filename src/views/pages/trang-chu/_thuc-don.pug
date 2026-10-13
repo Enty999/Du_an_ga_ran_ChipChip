@@ -14,41 +14,73 @@ section.menu#thuc-don(aria-labelledby="menu-section-title")
 
       //- Bộ lọc phân loại món ăn (Category Filter Tabs)
       .menu__filters(role="tablist", aria-label="Phân loại thực đơn")
-        button.menu__filter-btn.menu__filter-btn--active(type="button", role="tab", aria-selected="true")
+        button.menu__filter-btn.menu__filter-btn--active(type="button", role="tab", aria-selected="true", data-category="tat-ca")
           | Tất cả món
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Gà sốt đậm vị
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Gà truyền thống giòn da
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Burger &amp; Món phụ
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Đồ uống mát lạnh
+        if danhMucList && danhMucList.length > 0
+          each dm in danhMucList
+            button.menu__filter-btn(type="button", role="tab", aria-selected="false", data-category=dm.slug)
+              = dm.tenDanhMuc
+        else
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Gà sốt đậm vị
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Gà truyền thống giòn da
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Burger &amp; Món phụ
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Đồ uống mát lạnh
 
-    //- Lưới 6 thẻ món ăn đặc trưng (Food Menu Grid)
+    //- Lưới thẻ món ăn đặc trưng (Food Menu Grid)
     .menu__grid
-      //- Món 1: Gà Cay Sốt Cay Ngọt Seoul
-      article.menu__card
-        .menu__card-content
-          .menu__card-media
-            img.menu__card-img(
-              src="/images/trang-chu/thuc-don-01.jpg",
-              alt="Gà Cay Sốt Cay Ngọt Seoul phủ sốt đỏ óng và đậu phộng"
-            )
-            span.menu__badge-tag.menu__badge-tag--secondary Bán chạy nhất
-            span.menu__badge-portion 2 miếng
+      if sanPhamList && sanPhamList.length > 0
+        each mon in sanPhamList
+          article.menu__card(data-category=mon.maDanhMuc ? mon.maDanhMuc.slug : '')
+            .menu__card-content
+              .menu__card-media
+                img.menu__card-img(
+                  src=mon.hinhAnh,
+                  alt=mon.tenSanPham,
+                  onerror="this.src='/images/trang-chu/thuc-don-01.jpg'"
+                )
+                if mon.huyHieu
+                  span.menu__badge-tag(class=`menu__badge-tag--${mon.loaiHuyHieu || 'secondary'}`)= mon.huyHieu
+                if mon.khauPhan
+                  span.menu__badge-portion= mon.khauPhan
 
-          .menu__card-header
-            h3.menu__card-title Gà Cay Sốt Cay Ngọt Seoul
-          p.menu__card-subtitle Seoul Yangnyeom Crisp
-          p.menu__card-desc
-            | Lớp vỏ giòn tan quyện đều sốt ớt Hàn Quốc ngọt dịu, thơm bùi mè rang và đậu phộng rang giòn.
+              .menu__card-header
+                h3.menu__card-title= mon.tenSanPham
+              if mon.tenTiengAnh
+                p.menu__card-subtitle= mon.tenTiengAnh
+              p.menu__card-desc= mon.moTa || 'Lớp vỏ giòn tan quyện đều sốt độc quyền, thịt gà tươi ngọt đậm đà.'
 
-        .menu__card-footer
-          span.menu__price 45.000đ
-          button.menu__btn-add(type="button")
-            span.material-symbols-outlined add
-            span Thêm vào đơn
+            .menu__card-footer
+              span.menu__price= dinhDangTien ? dinhDangTien(mon.giaKhuyenMai > 0 ? mon.giaKhuyenMai : mon.giaGoc) : mon.giaGoc + 'đ'
+              button.menu__btn-add(type="button", data-id=mon._id)
+                span.material-symbols-outlined add
+                span Thêm vào đơn
+      else
+        //- Món 1: Gà Cay Sốt Cay Ngọt Seoul
+        article.menu__card
+          .menu__card-content
+            .menu__card-media
+              img.menu__card-img(
+                src="/images/trang-chu/thuc-don-01.jpg",
+                alt="Gà Cay Sốt Cay Ngọt Seoul phủ sốt đỏ óng và đậu phộng"
+              )
+              span.menu__badge-tag.menu__badge-tag--secondary Bán chạy nhất
+              span.menu__badge-portion 2 miếng
+
+            .menu__card-header
+              h3.menu__card-title Gà Cay Sốt Cay Ngọt Seoul
+            p.menu__card-subtitle Seoul Yangnyeom Crisp
+            p.menu__card-desc
+              | Lớp vỏ giòn tan quyện đều sốt ớt Hàn Quốc ngọt dịu, thơm bùi mè rang và đậu phộng rang giòn.
+
+          .menu__card-footer
+            span.menu__price 45.000đ
+            button.menu__btn-add(type="button")
+              span.material-symbols-outlined add
+              span Thêm vào đơn
 
       //- Món 2: Đùi Gà Rán Giòn Rụm Da Vàng
       article.menu__card

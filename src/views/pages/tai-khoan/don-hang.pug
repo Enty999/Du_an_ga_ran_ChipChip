@@ -40,16 +40,51 @@ block content
               p.text-muted.small.mb-0 Theo dõi trạng thái các đơn gà rán bạn đã đặt
             span.material-symbols-outlined.fs-1.text-warning receipt_long
 
-          //- Giao diện khi chưa có đơn hàng nào (Empty State đẹp mắt)
-          .text-center.py-5
-            .d-inline-flex.align-items-center.justify-content-center.rounded-circle.bg-light.mb-3(style="width: 100px; height: 100px;")
-              span.material-symbols-outlined.text-muted(style="font-size: 48px;") shopping_bag
-            h5.fw-bold.text-dark Chưa có đơn hàng nào
-            p.text-muted.small.mx-auto.mb-4(style="max-width: 400px;")
-              | Bạn chưa đặt món ăn nào tại ChipChip. Hãy khám phá thực đơn gà rán giòn rụm và ưu đãi nóng hổi ngay nhé!
-            a.btn.px-4.py-2.fw-bold.text-white.rounded-pill(
-              href="/#thuc-don"
-              style="background-color: #ea580c; border: none;"
-            )
-              i.fas.fa-utensils.me-2
-              | Khám phá Thực đơn & Đặt món ngay
+          if donHangList && donHangList.length > 0
+            .d-flex.flex-column.gap-3
+              each don in donHangList
+                .border.rounded-3.p-3.bg-white.shadow-sm
+                  .d-flex.flex-wrap.justify-content-between.align-items-center.border-bottom.pb-2.mb-3.gap-2
+                    div
+                      span.fw-bold.text-dark Đơn hàng: 
+                      span.badge.bg-dark.text-white= don.maDonHang
+                      span.text-muted.small.ms-2= dinhDangNgay ? dinhDangNgay(don.createdAt) : ''
+                    div
+                      if don.trangThaiDonHang === 'cho-xac-nhan'
+                        span.badge.bg-warning.text-dark Chờ xác nhận
+                      else if don.trangThaiDonHang === 'da-xac-nhan'
+                        span.badge.bg-info.text-dark Đã xác nhận
+                      else if don.trangThaiDonHang === 'dang-che-bien'
+                        span.badge.bg-primary.text-white Đang chế biến
+                      else if don.trangThaiDonHang === 'dang-giao'
+                        span.badge.bg-info.text-white Đang giao hàng
+                      else if don.trangThaiDonHang === 'da-giao'
+                        span.badge.bg-success.text-white Đã giao thành công
+                      else if don.trangThaiDonHang === 'da-huy'
+                        span.badge.bg-danger.text-white Đã hủy
+
+                  .mb-3
+                    each item in don.danhSachMon
+                      .d-flex.justify-content-between.align-items-center.py-1
+                        span.text-dark #{item.tenSanPham} x #{item.soLuong}
+                        span.fw-semibold= dinhDangTien ? dinhDangTien(item.thanhTien) : item.thanhTien + 'đ'
+
+                  .d-flex.justify-content-between.align-items-center.pt-2.border-top
+                    span.text-muted.small Địa chỉ: #{don.thongTinNguoiNhan.diaChi}
+                    .text-end
+                      span.text-muted.small Tổng thanh toán: 
+                      span.fw-bold.fs-5(style="color: #ea580c;")= dinhDangTien ? dinhDangTien(don.tongThanhToan) : don.tongThanhToan + 'đ'
+          else
+            //- Giao diện khi chưa có đơn hàng nào (Empty State đẹp mắt)
+            .text-center.py-5
+              .d-inline-flex.align-items-center.justify-content-center.rounded-circle.bg-light.mb-3(style="width: 100px; height: 100px;")
+                span.material-symbols-outlined.text-muted(style="font-size: 48px;") shopping_bag
+              h5.fw-bold.text-dark Chưa có đơn hàng nào
+              p.text-muted.small.mx-auto.mb-4(style="max-width: 400px;")
+                | Bạn chưa đặt món ăn nào tại ChipChip. Hãy khám phá thực đơn gà rán giòn rụm và ưu đãi nóng hổi ngay nhé!
+              a.btn.px-4.py-2.fw-bold.text-white.rounded-pill(
+                href="/#thuc-don"
+                style="background-color: #ea580c; border: none;"
+              )
+                i.fas.fa-utensils.me-2
+                | Khám phá Thực đơn & Đặt món ngay

@@ -1,0 +1,161 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-file-invoice-dollar(style="color: #C98F91;")
+        | Chi tiết Đơn hàng: ##{donHang.maDonHang}
+      .stats-badge-group
+        if donHang.trangThaiDonHang === 'cho-xac-nhan'
+          span.bb-badge.bb-badge--amber
+            i.fa-solid.fa-clock
+            | Chờ duyệt
+        else if donHang.trangThaiDonHang === 'da-xac-nhan'
+          span.bb-badge.bb-badge--blue
+            i.fa-solid.fa-circle-check
+            | Đã xác nhận
+        else if donHang.trangThaiDonHang === 'dang-che-bien'
+          span.bb-badge.bb-badge--purple
+            i.fa-solid.fa-fire
+            | Đang chiên gà
+        else if donHang.trangThaiDonHang === 'dang-giao'
+          span.bb-badge.bb-badge--blue
+            i.fa-solid.fa-truck-fast
+            | Đang giao hàng
+        else if donHang.trangThaiDonHang === 'da-giao'
+          span.bb-badge.bb-badge--green
+            i.fa-solid.fa-circle-check
+            | Giao thành công
+        else if donHang.trangThaiDonHang === 'da-huy'
+          span.bb-badge.bb-badge--red
+            i.fa-solid.fa-circle-xmark
+            | Đã hủy
+
+    div(style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;")
+      button.btn-export-excel(onclick="window.print()", type="button")
+        i.fa-solid.fa-print
+        span In hóa đơn
+      a.btn-filter-reset(href="/admin/don-hang")
+        i.fa-solid.fa-arrow-left
+        span Quay lại danh sách
+
+  //- ========================================================
+  //- 2. BỐ CỤC CHI TIẾT ĐƠN HÀNG (2 CỘT VIỀN ĐẬM BATHBOOM)
+  //- ========================================================
+  .row.g-4
+    //- Cột trái: Danh sách món ăn trong hóa đơn
+    .col-12.col-lg-8
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-utensils(style="color: #C98F91; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16.5px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Các món ăn đã gọi trong hóa đơn
+
+        .table-responsive
+          table.table-custom
+            thead
+              tr
+                th(style="text-align: left; min-width: 170px;") Món ăn
+                th(style="width: 110px; text-align: right;") Đơn giá
+                th(style="width: 80px; text-align: center;") Số lượng
+                th(style="width: 120px; text-align: right;") Thành tiền
+            tbody
+              each item in donHang.danhSachMon
+                tr
+                  td(style="text-align: left;")
+                    .d-flex.align-items-center.gap-3
+                      img(
+                        src=item.hinhAnh,
+                        alt=item.tenSanPham,
+                        onerror="this.src='/images/trang-chu/thuc-don-01.jpg'",
+                        style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid #ECE4DC;"
+                      )
+                      div
+                        .fw-bold(style="color: #4A3E3D;")= item.tenSanPham
+                  td(style="text-align: right; color: #4A3E3D;")= dinhDangTien(item.gia)
+                  td(style="text-align: center;")
+                    span.badge(style="background: #FAF5F0; color: #4A3E3D; border: 1px solid #ECE2D8; padding: 4px 10px; font-weight: 700;")= item.soLuong
+                  td(style="text-align: right; font-weight: 700; color: #2B2523;")= dinhDangTien(item.thanhTien)
+
+        //- Tổng kết tiền hóa đơn
+        .p-4(style="background: #FAF8F5; border-top: 2px solid #B0A298;")
+          .row.justify-content-end
+            .col-12.col-md-7
+              .d-flex.justify-content-between.mb-2(style="font-size: 13.5px;")
+                span(style="color: #7B6E6D;") Tiền món ăn:
+                strong(style="color: #4A3E3D;")= dinhDangTien(donHang.tongTienMon)
+              .d-flex.justify-content-between.mb-2(style="font-size: 13.5px;")
+                span(style="color: #7B6E6D;") Phí giao hàng (Freeship/Ship):
+                strong(style="color: #4A3E3D;")= dinhDangTien(donHang.phiVanChuyen)
+              if donHang.tienGiamGia > 0
+                .d-flex.justify-content-between.mb-2(style="font-size: 13.5px; color: #2E7D32;")
+                  span Giảm giá (#{donHang.maGiamGia || 'Voucher'}):
+                  strong -#{dinhDangTien(donHang.tienGiamGia)}
+              .d-flex.justify-content-between.pt-3(style="border-top: 2px dashed #CFC3B8; margin-top: 8px;")
+                span(style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #4A3E3D;") Tổng thanh toán:
+                span(style="font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #C98F91;")= dinhDangTien(donHang.tongThanhToan)
+
+    //- Cột phải: Thông tin khách hàng & Cập nhật trạng thái
+    .col-12.col-lg-4
+      //- Khung cập nhật trạng thái đơn
+      .bb-card.mb-4
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-traffic-light(style="color: #8E9F8E; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Cập nhật trạng thái đơn
+        .p-3
+          form(action=`/admin/don-hang/cap-nhat-trang-thai/${donHang._id}`, method="POST")
+            .mb-3
+              label.form-label-custom Tiến trình đơn hàng
+              select.form-control-custom(name="trangThaiDonHang")
+                option(value="cho-xac-nhan", selected=donHang.trangThaiDonHang === 'cho-xac-nhan') 🟠 1. Chờ xác nhận
+                option(value="da-xac-nhan", selected=donHang.trangThaiDonHang === 'da-xac-nhan') 🔵 2. Đã xác nhận
+                option(value="dang-che-bien", selected=donHang.trangThaiDonHang === 'dang-che-bien') 🟣 3. Đang chiên gà
+                option(value="dang-giao", selected=donHang.trangThaiDonHang === 'dang-giao') 🚚 4. Đang giao hàng
+                option(value="da-giao", selected=donHang.trangThaiDonHang === 'da-giao') 🟢 5. Đã giao thành công
+                option(value="da-huy", selected=donHang.trangThaiDonHang === 'da-huy') 🔴 6. Hủy đơn hàng
+
+            .mb-3
+              label.form-label-custom Trạng thái thanh toán
+              select.form-control-custom(name="trangThaiThanhToan")
+                option(value="chua-thanh-toan", selected=donHang.trangThaiThanhToan === 'chua-thanh-toan') ⏳ Chưa thanh toán
+                option(value="da-thanh-toan", selected=donHang.trangThaiThanhToan === 'da-thanh-toan') 💳 Đã thanh toán xong
+
+            .mb-3
+              label.form-label-custom Ghi chú nội bộ
+              textarea.form-control-custom(name="ghiChu", placeholder="Ghi chú nhân viên...", style="min-height: 65px;")= donHang.ghiChu
+
+            button.btn-submit-custom.w-100(type="submit")
+              i.fa-solid.fa-floppy-disk
+              span Lưu cập nhật
+
+      //- Khung thông tin khách hàng
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-user(style="color: #C98F91; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Thông tin giao hàng
+        .p-3(style="font-size: 13px; line-height: 1.7; color: #4A3E3D;")
+          div
+            strong Người nhận: 
+            span= donHang.thongTinNguoiNhan.hoTen
+          div
+            strong Điện thoại: 
+            a(href=`tel:${donHang.thongTinNguoiNhan.soDienThoai}`, style="color: #8E9F8E; font-weight: 600; text-decoration: none;")
+              = donHang.thongTinNguoiNhan.soDienThoai
+          if donHang.thongTinNguoiNhan.email
+            div
+              strong Email: 
+              span= donHang.thongTinNguoiNhan.email
+          div
+            strong Địa chỉ: 
+            span= donHang.thongTinNguoiNhan.diaChiGiaoHang
+          if donHang.thongTinNguoiNhan.ghiChuGiaoHang
+            div.mt-2.p-2(style="background: #FFF9E6; border: 1px solid #FFE082; border-radius: 8px; color: #8C6D00; font-size: 12px;")
+              i.fa-solid.fa-note-sticky.me-1
+              strong Khách dặn: 
+              span= donHang.thongTinNguoiNhan.ghiChuGiaoHang

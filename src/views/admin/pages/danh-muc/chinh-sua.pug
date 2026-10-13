@@ -1,0 +1,88 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-pen-to-square(style="color: #C98F91;")
+        | Chỉnh sửa danh mục: #{danhMuc.tenDanhMuc}
+      .stats-badge-group
+        span.stat-pill.stat-pill-total
+          i.fa-solid.fa-link
+          | #{danhMuc.slug}
+
+    div(style="display: flex; gap: 8px;")
+      a.btn-filter-reset(href="/admin/danh-muc")
+        i.fa-solid.fa-arrow-left
+        span Quay lại danh sách
+
+  //- ========================================================
+  //- 2. FORM CHỈNH SỬA (CHUẨN FORM BATHBOOM)
+  //- ========================================================
+  .row.justify-content-center
+    .col-12.col-lg-8
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-folder-open(style="color: #C98F91; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16.5px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Cập nhật loại sản phẩm
+        .p-4
+          form(action=`/admin/danh-muc/chinh-sua/${danhMuc._id}`, method="POST")
+            .row.g-3
+              .col-12.col-md-7
+                label.form-label-custom
+                  | Tên danh mục món 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="tenDanhMuc",
+                  value=danhMuc.tenDanhMuc,
+                  required
+                )
+
+              .col-12.col-md-5
+                label.form-label-custom Thứ tự hiển thị
+                input.form-control-custom(
+                  type="number",
+                  name="thuTu",
+                  value=danhMuc.thuTu,
+                  min="0"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Đường dẫn tĩnh (Slug)
+                input.form-control-custom(
+                  type="text",
+                  name="slug",
+                  value=danhMuc.slug
+                )
+                small.text-muted(style="font-size: 11px;") Để trống nếu muốn tự động tạo lại theo tên.
+
+              .col-12.col-md-6
+                label.form-label-custom Trạng thái hiển thị
+                select.form-control-custom(name="trangThai")
+                  option(value="hien-thi", selected=danhMuc.trangThai === 'hien-thi') 🟢 Hiển thị trên website
+                  option(value="an", selected=danhMuc.trangThai === 'an') 🔴 Tạm ẩn khỏi website
+
+              .col-12.col-md-6
+                label.form-label-custom Biểu tượng
+                input.form-control-custom(
+                  type="text",
+                  name="bieuTuong",
+                  value=danhMuc.bieuTuong || 'restaurant_menu'
+                )
+
+              .col-12
+                label.form-label-custom Mô tả chi tiết danh mục
+                textarea.form-control-custom(
+                  name="moTa",
+                  rows="3"
+                )= danhMuc.moTa
+
+            .form-actions-custom(style="margin-top: 18px; padding-top: 14px;")
+              button.btn-submit-custom(type="submit")
+                i.fa-solid.fa-floppy-disk
+                span Lưu thay đổi

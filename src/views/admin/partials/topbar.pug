@@ -1,0 +1,17 @@
+header.admin-topbar
+  .admin-topbar-left
+    button.admin-menu-toggle#admin-sidebar-toggle(type="button", aria-label="Mở menu quản trị")
+      i.fa-solid.fa-bars
+    .admin-topbar-title
+      | Hệ thống Quản trị Cửa hàng ChipChip
+
+  .admin-topbar-right
+    a.topbar-store-link(href="/", target="_blank", title="Xem trang bán hàng ngoài Website")
+      i.fa-solid.fa-arrow-up-right-from-square
+      span Xem Website
+
+    .admin-topbar-profile
+      .admin-topbar-profile-info
+        strong.admin-topbar-name= locals.nguoiDung ? locals.nguoiDung.hoTen : 'Quản trị viên'
+        span.admin-topbar-role= locals.nguoiDung && locals.nguoiDung.vaiTro === 'admin' ? 'Quản trị viên' : 'Nhân viên'
+      .admin-topbar-avatar= locals.nguoiDung ? locals.nguoiDung.hoTen.charAt(0).toUpperCase() : 'A'

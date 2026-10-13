@@ -1,0 +1,309 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-file-invoice-dollar(style="color: #C98F91;")
+        | Quản lý đơn hàng
+      .stats-badge-group
+        span.stat-pill.stat-pill-total(title="Tổng số đơn hàng")
+          i.fa-solid.fa-boxes-stacked
+          | #{tongSo} đơn
+        if boLoc.trangThaiDonHang && boLoc.trangThaiDonHang !== 'tat-ca'
+          span.stat-pill.stat-pill-out(title="Đang lọc theo trạng thái")
+            i.fa-solid.fa-traffic-light
+            | #{boLoc.trangThaiDonHang}
+        if boLoc.trangThaiThanhToan && boLoc.trangThaiThanhToan !== 'tat-ca'
+          span.stat-pill.stat-pill-active(title="Đang lọc theo thanh toán")
+            i.fa-solid.fa-credit-card
+            | #{boLoc.trangThaiThanhToan}
+
+  //- ========================================================
+  //- 2. BỘ LỌC TỰ ĐỘNG REALTIME (CHUẨN BATHBOOM - KHÔNG DÙNG NÚT LỌC)
+  //- ========================================================
+  .filter-card-compact
+    .realtime-filter-wrap
+      //- Tìm kiếm realtime
+      .realtime-search-box
+        i.fa-solid.fa-magnifying-glass.realtime-search-icon
+        input#realtime-search-order.realtime-search-input(
+          type="text",
+          placeholder="Gõ từ khóa để lọc mã đơn #HD, tên khách, SĐT, địa chỉ, món ăn..."
+        )
+        button#realtime-clear-order.realtime-search-clear(type="button", title="Xóa từ khóa") &times;
+
+      //- Lọc theo Trạng thái đơn realtime
+      div(style="min-width: 175px;")
+        select#realtime-status-order.realtime-select(data-filter-key="trangthaidh", style="width: 100%;")
+          option(value="tat-ca") -- Trạng thái đơn --
+          option(value="cho-xac-nhan") 🟠 Chờ duyệt
+          option(value="da-xac-nhan") 🔵 Đã nhận
+          option(value="dang-che-bien") 🟣 Đang chiên gà
+          option(value="dang-giao") 🚚 Đang giao hàng
+          option(value="da-giao") 🟢 Hoàn tất đơn
+          option(value="da-huy") 🔴 Đã hủy đơn
+
+      //- Lọc theo Thanh toán realtime
+      div(style="min-width: 165px;")
+        select#realtime-payment-order.realtime-select(data-filter-key="trangthaitt", style="width: 100%;")
+          option(value="tat-ca") -- Thanh toán --
+          option(value="chua-thanh-toan") ⏳ Chưa thanh toán
+          option(value="da-thanh-toan") 💳 Đã thanh toán
+
+      //- Huy hiệu đếm realtime
+      span#realtime-count-order.realtime-count-badge
+        i.fa-solid.fa-filter(style="font-size: 10px; color: #8E9F8E;")
+        | Đang hiển thị
+
+  //- ========================================================
+  //- 3. BẢNG DANH SÁCH ĐƠN HÀNG (VIỀN CỰC ĐẬM CHUẨN BATHBOOM)
+  //- ========================================================
+  .bb-card
+    .table-responsive
+      table.table-custom
+        thead
+          tr
+            th(style="width: 90px; text-align: center;") Mã ĐH
+            th(style="text-align: left; min-width: 150px;") Khách hàng
+            th(style="text-align: left; min-width: 160px;") Món ăn đã đặt
+            th(style="width: 115px; text-align: right;") Tổng tiền
+            th(style="width: 120px; text-align: center;") Thanh toán
+            th(style="width: 140px; text-align: center;") Trạng thái
+            th(style="width: 120px; text-align: center;") Ngày đặt
+            th(style="width: 80px; text-align: center;") Chi tiết
+        tbody
+          - const orders = donHangList || donHang || [];
+          if orders && orders.length > 0
+            each don in orders
+              - const isHuy = don.trangThaiDonHang === 'da-huy';
+              tr(class=isHuy ? 'row-disabled is-disabled' : '', data-trangthaidh=don.trangThaiDonHang, data-trangthaitt=don.trangThaiThanhToan)
+                //- 1. Mã đơn
+                td(style="text-align: center; font-weight: 700; color: #8E9F8E;")
+                  | ##{don.maDonHang}
+
+                //- 2. Khách hàng
+                td(style="text-align: left;")
+                  .fw-bold(style="color: #4A3E3D;")= don.thongTinNguoiNhan.hoTen
+                  .small.text-muted= don.thongTinNguoiNhan.soDienThoai
+                  if don.thongTinNguoiNhan.diaChiGiaoHang
+                    .small.text-truncate(style="max-width: 200px; color: #888; font-size: 11px;")
+                      = don.thongTinNguoiNhan.diaChiGiaoHang
+
+                //- 3. Món đã đặt
+                td(style="text-align: left;")
+                  if don.danhSachMon && don.danhSachMon.length > 0
+                    .small(style="color: #4A3E3D;")
+                      each item, idx in don.danhSachMon.slice(0, 2)
+                        div
+                          strong #{item.soLuong}x 
+                          span= item.tenSanPham
+                      if don.danhSachMon.length > 2
+                        span.text-muted(style="font-style: italic; font-size: 11px;") +#{don.danhSachMon.length - 2} món khác
+
+                //- 4. Tổng tiền
+                td(style="text-align: right; font-weight: 700; color: #2B2523;")
+                  = dinhDangTien(don.tongThanhToan)
+
+                //- 5. Thanh toán
+                td(style="text-align: center;")
+                  if don.trangThaiThanhToan === 'da-thanh-toan'
+                    span.bb-badge.bb-badge--green
+                      i.fa-solid.fa-circle-check(style="font-size: 9px;")
+                      | Đã trả (#{don.phuongThucThanhToan ? don.phuongThucThanhToan.toUpperCase() : 'COD'})
+                  else
+                    span.bb-badge.bb-badge--amber
+                      i.fa-solid.fa-clock(style="font-size: 9px;")
+                      | Chưa trả (#{don.phuongThucThanhToan ? don.phuongThucThanhToan.toUpperCase() : 'COD'})
+
+                //- 6. Trạng thái đơn (RESTful API tức thì không tải lại trang)
+                td(style="text-align: center;")
+                  select.table-status-select(
+                    data-current-val=don.trangThaiDonHang,
+                    onchange=`capNhatTrangThaiDonHangApi(this, '${don._id}')`
+                  )
+                    option(value="cho-xac-nhan", selected=don.trangThaiDonHang === 'cho-xac-nhan') 🟠 Chờ duyệt
+                    option(value="da-xac-nhan", selected=don.trangThaiDonHang === 'da-xac-nhan') 🔵 Đã nhận
+                    option(value="dang-che-bien", selected=don.trangThaiDonHang === 'dang-che-bien') 🟣 Chiên gà
+                    option(value="dang-giao", selected=don.trangThaiDonHang === 'dang-giao') 🚚 Đang giao
+                    option(value="da-giao", selected=don.trangThaiDonHang === 'da-giao') 🟢 Hoàn tất
+                    option(value="da-huy", selected=don.trangThaiDonHang === 'da-huy') 🔴 Đã hủy
+
+                //- 7. Ngày đặt
+                td(style="text-align: center; color: #7B6E6D; font-size: 12px;")
+                  = dinhDangNgay(don.createdAt)
+
+                //- 8. Chi tiết
+                td(style="text-align: center;")
+                  .table-actions
+                    //- Nút Xem nhanh Popup Modal
+                    button.btn-mini-action.btn-mini-view(
+                      type="button",
+                      title="Xem nhanh hóa đơn",
+                      data-id=don._id,
+                      data-madon=don.maDonHang,
+                      data-hoten=don.thongTinNguoiNhan.hoTen,
+                      data-sdt=don.thongTinNguoiNhan.soDienThoai,
+                      data-diachi=don.thongTinNguoiNhan.diaChiGiaoHang,
+                      data-tongtien=dinhDangTien(don.tongThanhToan),
+                      data-phuongthuc=don.phuongThucThanhToan ? don.phuongThucThanhToan.toUpperCase() : 'COD',
+                      data-trangthaitt=don.trangThaiThanhToan,
+                      data-trangthaidh=don.trangThaiDonHang,
+                      data-ghichu=don.ghiChu || '',
+                      data-ngay=dinhDangNgay(don.createdAt),
+                      onclick="moModalXemDonHang(this)"
+                    )
+                      i.fa-solid.fa-eye
+
+                    //- Link xem trang chi tiết đầy đủ
+                    a.btn-mini-action.btn-mini-edit(
+                      href=`/admin/don-hang/chi-tiet/${don._id}`,
+                      title="Mở toàn bộ hóa đơn chi tiết"
+                    )
+                      i.fa-solid.fa-file-lines
+          else
+            tr
+              td(colspan="8", style="text-align: center; padding: 45px 20px; color: #888;")
+                i.fa-solid.fa-file-invoice(style="font-size: 32px; color: #DCD4CC; margin-bottom: 8px; display: block;")
+                strong Không tìm thấy đơn hàng nào.
+                p.small.text-muted Thử đổi bộ lọc hoặc từ khóa tìm kiếm.
+
+    //- Phân trang (Pager chuẩn BATHBOOM)
+    if tongSoTrang > 1
+      .bb-pager
+        if trangHienTai > 1
+          a(href=`/admin/don-hang?trang=${trangHienTai - 1}&tuKhoa=${boLoc.tuKhoa}&trangThaiDonHang=${boLoc.trangThaiDonHang}&trangThaiThanhToan=${boLoc.trangThaiThanhToan}`, title="Trang trước") &laquo;
+        - for (let p = 1; p <= tongSoTrang; p++)
+          if p === trangHienTai
+            span.is-current= p
+          else
+            a(href=`/admin/don-hang?trang=${p}&tuKhoa=${boLoc.tuKhoa}&trangThaiDonHang=${boLoc.trangThaiDonHang}&trangThaiThanhToan=${boLoc.trangThaiThanhToan}`)= p
+        if trangHienTai < tongSoTrang
+          a(href=`/admin/don-hang?trang=${trangHienTai + 1}&tuKhoa=${boLoc.tuKhoa}&trangThaiDonHang=${boLoc.trangThaiDonHang}&trangThaiThanhToan=${boLoc.trangThaiThanhToan}`, title="Trang sau") &raquo;
+
+  //- ========================================================
+  //- 4. POPUP MODAL XEM & CẬP NHẬT ĐƠN HÀNG (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalChiTietDonHang(onclick="handleBackdropClick(event, 'modalChiTietDonHang')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #EDF6FC; color: #557984;")
+            i.fa-solid.fa-receipt
+          div
+            h2.modal-header-title#modalDonHangTieuDe Chi tiết đơn hàng
+            p.modal-header-sub#modalDonHangSub Thông tin khách hàng &amp; xử lý giao nhận
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalChiTietDonHang')", title="Đóng cửa sổ") &times;
+
+      form#formCapNhatDonHang(action="", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'PATCH', modalId: 'modalChiTietDonHang' })")
+        .modal-body
+          .row.g-3
+            .col-12.col-md-6
+              .p-3(style="background: #FAF8F5; border: 1.5px solid #E6DCD2; border-radius: 12px;")
+                .d-flex.align-items-center.gap-2.mb-2
+                  span.label-icon-badge.badge-pink
+                    i.fa-solid.fa-user
+                  strong(style="color: #4A3E3D; font-size: 13px;") Khách hàng nhận
+                .fw-bold#modal_dh_hoTen(style="font-size: 14px; color: #2B2523;") -
+                .small.text-muted#modal_dh_sdt(style="margin-top: 3px;") -
+                .small(style="color: #666; margin-top: 6px; line-height: 1.4;")
+                  i.fa-solid.fa-location-dot(style="color: #C98F91; margin-right: 4px;")
+                  span#modal_dh_diaChi -
+
+            .col-12.col-md-6
+              .p-3(style="background: #FAF8F5; border: 1.5px solid #E6DCD2; border-radius: 12px;")
+                .d-flex.align-items-center.gap-2.mb-2
+                  span.label-icon-badge.badge-yellow
+                    i.fa-solid.fa-money-bill-wave
+                  strong(style="color: #4A3E3D; font-size: 13px;") Thanh toán &amp; Thời gian
+                .d-flex.justify-content-between.align-items-center
+                  span.text-muted(style="font-size: 12.5px;") Tổng tiền thanh toán:
+                  strong#modal_dh_tongTien(style="font-size: 16px; color: #D32F2F;") -
+                .d-flex.justify-content-between.align-items-center.mt-1
+                  span.text-muted(style="font-size: 12px;") Hình thức:
+                  span#modal_dh_phuongThuc(style="font-weight: 600; font-size: 12px;") COD
+                .d-flex.justify-content-between.align-items-center.mt-1
+                  span.text-muted(style="font-size: 12px;") Ngày đặt món:
+                  span#modal_dh_ngay(style="font-size: 12px; color: #7B6E6D;") -
+
+            .col-12
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-truck-fast
+                | Trạng thái đơn hàng
+              select#modal_dh_trangThaiDH.form-control-custom(name="trangThaiDonHang")
+                option(value="cho-xac-nhan") 🟠 Chờ xác nhận đơn
+                option(value="da-xac-nhan") 🔵 Đã nhận đơn &amp; chuyển bếp
+                option(value="dang-che-bien") 🟣 Bếp đang chiên gà
+                option(value="dang-giao") 🚚 Shipper đang giao tới khách
+                option(value="da-giao") 🟢 Hoàn tất đơn hàng thành công
+                option(value="da-huy") 🔴 Hủy đơn hàng
+
+            .col-12#modal_dh_ghiChuBox(style="display: none;")
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-note-sticky
+                | Ghi chú của khách
+              .p-2.small#modal_dh_ghiChu(style="background: #FFFDF8; border: 1px dashed #E8DCC8; border-radius: 8px; color: #665;") -
+
+        .modal-footer
+          a#modal_dh_linkChiTiet.btn-modal-cancel(href="#", style="text-decoration: none;")
+            i.fa-solid.fa-print
+            span Xem hóa đơn đầy đủ
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalChiTietDonHang')") Đóng
+          button.btn-modal-submit(type="submit")
+            i.fa-solid.fa-arrows-rotate
+            span Cập nhật trạng thái
+
+  //- Script điều khiển Modal Đơn Hàng & Realtime Filter
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.initRealtimeTableFilter) {
+        window.initRealtimeTableFilter({
+          tableSelector: ".table-custom",
+          searchInputId: "realtime-search-order",
+          clearBtnId: "realtime-clear-order",
+          selectIds: ["realtime-status-order", "realtime-payment-order"],
+          countBadgeId: "realtime-count-order",
+        });
+      }
+    });
+
+    function moModalXemDonHang(btn) {
+      const d = btn.dataset;
+      const form = document.getElementById("formCapNhatDonHang");
+      if (!form) return;
+
+      form.action = "/admin/api/don-hang/" + d.id + "/trang-thai";
+
+      document.getElementById("modalDonHangTieuDe").textContent = "Đơn hàng #" + d.madon;
+      document.getElementById("modalDonHangSub").textContent = "Đặt ngày: " + d.ngay;
+
+      document.getElementById("modal_dh_hoTen").textContent = d.hoten || "Khách vãng lai";
+      document.getElementById("modal_dh_sdt").textContent = "SĐT: " + (d.sdt || "-");
+      document.getElementById("modal_dh_diaChi").textContent = d.diachi || "Nhận tại quán";
+      document.getElementById("modal_dh_tongTien").textContent = d.tongtien || "0 đ";
+      document.getElementById("modal_dh_phuongThuc").textContent = d.phuongthuc || "COD";
+      document.getElementById("modal_dh_ngay").textContent = d.ngay || "-";
+      document.getElementById("modal_dh_trangThaiDH").value = d.trangthaidh || "cho-xac-nhan";
+
+      const ghiChuBox = document.getElementById("modal_dh_ghiChuBox");
+      const ghiChu = document.getElementById("modal_dh_ghiChu");
+      if (d.ghichu && d.ghichu.trim()) {
+        ghiChuBox.style.display = "block";
+        ghiChu.textContent = d.ghichu;
+      } else {
+        ghiChuBox.style.display = "none";
+      }
+
+      const linkChiTiet = document.getElementById("modal_dh_linkChiTiet");
+      if (linkChiTiet) {
+        linkChiTiet.href = "/admin/don-hang/chi-tiet/" + d.id;
+      }
+
+      window.openAdminModal("modalChiTietDonHang");
+    }
+

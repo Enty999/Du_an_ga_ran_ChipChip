@@ -1,0 +1,394 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-users-gear(style="color: #8E9F8E; font-size: 20px;")
+        | Quản lý người dùng &amp; Phân quyền
+      .stats-badge-group
+        span.stat-pill.stat-pill-total(title="Tổng số tài khoản trong hệ thống")
+          i.fa-solid.fa-database(style="font-size: 10px;")
+          | #{tongSo} tài khoản
+        span.stat-pill.stat-pill-user(title="Tài khoản khách hàng")
+          i.fa-solid.fa-user(style="font-size: 10px;")
+          | Khách hàng
+        span.stat-pill.stat-pill-admin(title="Tài khoản quản trị viên")
+          i.fa-solid.fa-shield-halved(style="font-size: 10px;")
+          | Admin
+
+    div(style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;")
+      button.btn-open-modal(type="button", onclick="openAdminModal('modalThemNguoiDung')")
+        i.fa-solid.fa-user-plus
+        span Thêm tài khoản mới
+
+  //- ========================================================
+  //- ========================================================
+  //- 2. BỘ LỌC TỰ ĐỘNG REALTIME (CHUẨN BATHBOOM - KHÔNG DÙNG NÚT LỌC)
+  //- ========================================================
+  .filter-card-compact
+    .realtime-filter-wrap
+      //- Tìm kiếm realtime
+      .realtime-search-box
+        i.fa-solid.fa-magnifying-glass.realtime-search-icon
+        input#realtime-search-user.realtime-search-input(
+          type="text",
+          placeholder="Gõ từ khóa để lọc tài khoản theo tên, email, SĐT, địa chỉ..."
+        )
+        button#realtime-clear-user.realtime-search-clear(type="button", title="Xóa từ khóa") &times;
+
+      //- Lọc vai trò realtime
+      div(style="min-width: 175px;")
+        select#realtime-role-user.realtime-select(data-filter-key="vaitro", style="width: 100%;")
+          option(value="tat-ca") -- Tất cả vai trò --
+          option(value="khach-hang") 👤 Khách hàng
+          option(value="nhan-vien") 💼 Nhân viên
+          option(value="admin") 🛡️ Quản trị viên
+
+      //- Lọc trạng thái realtime
+      div(style="min-width: 165px;")
+        select#realtime-status-user.realtime-select(data-filter-key="trangthai", style="width: 100%;")
+          option(value="tat-ca") -- Tất cả trạng thái --
+          option(value="hoat-dong") 🟢 Đang hoạt động
+          option(value="khoa") 🔒 Đang bị khóa
+
+      //- Huy hiệu đếm realtime
+      span#realtime-count-user.realtime-count-badge
+        i.fa-solid.fa-filter(style="font-size: 10px; color: #8E9F8E;")
+        | Đang hiển thị
+
+  //- ========================================================
+  //- 3. BẢNG DANH SÁCH NGƯỜI DÙNG (VIỀN CỰC ĐẬM CHUẨN BATHBOOM)
+  //- ========================================================
+  .bb-card
+    .table-responsive
+      table.table-custom
+        thead
+          tr
+            th(style="width: 55px; text-align: center;") STT
+            th(style="text-align: left; min-width: 170px;") Họ tên &amp; Email
+            th(style="width: 130px; text-align: center;") Số điện thoại
+            th(style="text-align: left; min-width: 180px;") Địa chỉ
+            th(style="width: 125px; text-align: center;") Vai trò
+            th(style="width: 135px; text-align: center;") Khóa / Mở
+            th(style="width: 110px; text-align: center;") Ngày tạo
+            th(style="width: 110px; text-align: center;") Thao tác
+        tbody
+          if nguoiDungList && nguoiDungList.length > 0
+            each u, index in nguoiDungList
+              - const isKhoa = u.trangThai === 'khoa';
+              tr(class=isKhoa ? 'row-disabled is-disabled' : '', data-vaitro=u.vaiTro, data-trangthai=u.trangThai)
+                //- 1. STT
+                td(style="text-align: center; font-weight: 700; color: #888;")
+                  | ##{index + 1}
+
+                //- 2. Họ tên & Avatar
+                td(style="text-align: left;")
+                  .d-flex.align-items-center.gap-2
+                    .sidebar-user-avatar(style="width: 34px; height: 34px; font-size: 12.5px; background: " + (u.vaiTro === 'admin' ? '#C98F91' : '#8E9F8E') + ";")
+                      = u.hoTen ? u.hoTen.charAt(0).toUpperCase() : 'U'
+                    div
+                      .fw-bold(style="color: #4A3E3D; font-size: 13px;")= u.hoTen
+                      .small.text-muted(style="font-size: 11.5px;")= u.email
+
+                //- 3. Số điện thoại
+                td(style="text-align: center; color: #4A3E3D; font-weight: 500;")
+                  = u.SDT || '-'
+
+                //- 4. Địa chỉ
+                td(style="text-align: left; color: #666; font-size: 12px;")
+                  if u.diaChi
+                    span.text-truncate.d-inline-block(style="max-width: 220px;")= u.diaChi
+                  else
+                    span(style="color: #bbb; font-style: italic;") Chưa cập nhật
+
+                //- 5. Vai trò
+                td(style="text-align: center;")
+                  if u.vaiTro === 'admin'
+                    span.bb-badge.bb-badge--purple
+                      i.fa-solid.fa-shield-halved(style="font-size: 9.5px;")
+                      | Quản trị viên
+                  else if u.vaiTro === 'nhan-vien'
+                    span.bb-badge.bb-badge--amber
+                      i.fa-solid.fa-user-tie(style="font-size: 9.5px;")
+                      | Nhân viên
+                  else
+                    span.bb-badge.bb-badge--blue
+                      i.fa-solid.fa-user(style="font-size: 9.5px;")
+                      | Khách hàng
+
+                //- 6. Trạng thái: CÔNG TẮC BẬT / TẮT (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                td(style="text-align: center;")
+                  label.bb-switch(title="Gạt công tắc để Khóa/Mở khóa tài khoản")
+                    input(
+                      type="checkbox",
+                      checked=u.trangThai === 'hoat-dong',
+                      onchange=`toggleTrangThaiApi(this, '/admin/api/nguoi-dung/${u._id}/trang-thai', 'Hoạt động', 'Đã khóa', 'hoat-dong', 'khoa')`
+                    )
+                    span.bb-switch-slider
+                    span.bb-switch-label= u.trangThai === 'hoat-dong' ? 'Hoạt động' : 'Đã khóa'
+
+                //- 7. Ngày tạo
+                td(style="text-align: center; color: #7B6E6D; font-size: 12px;")
+                  = dinhDangNgay(u.createdAt, false)
+
+                //- 8. Thao tác CRUD (RESTful)
+                td(style="text-align: center;")
+                  .table-actions
+                    //- Nút Sửa Mini (Mở Popup Modal ngay trên 1 màn hình)
+                    button.btn-mini-action.btn-mini-edit(
+                      type="button",
+                      title="Chỉnh sửa quyền tài khoản",
+                      data-id=u._id,
+                      data-hoten=u.hoTen,
+                      data-email=u.email,
+                      data-sdt=u.SDT || '',
+                      data-vaitro=u.vaiTro,
+                      data-trangthai=u.trangThai,
+                      data-diachi=u.diaChi || '',
+                      onclick="moModalSuaNguoiDung(this)"
+                    )
+                      i.fa-solid.fa-pen-to-square
+
+                    if u.vaiTro !== 'admin'
+                      //- Nút Xóa (RESTful DELETE)
+                      form.form-xac-nhan-xoa.m-0(
+                        action=`/admin/api/nguoi-dung/${u._id}`,
+                        method="POST",
+                        data-ten-muc=u.hoTen
+                      )
+                        button.btn-mini-action.btn-mini-delete(type="submit", title="Xóa tài khoản")
+                          i.fa-solid.fa-trash-can
+          else
+            tr
+              td(colspan="8", style="text-align: center; padding: 45px 20px; color: #888;")
+                i.fa-solid.fa-users(style="font-size: 32px; color: #DCD4CC; margin-bottom: 8px; display: block;")
+                strong Không tìm thấy tài khoản người dùng nào.
+                p.small.text-muted Thử tìm với từ khóa hoặc điều kiện lọc khác.
+
+    //- Phân trang (Pager chuẩn BATHBOOM)
+    if tongSoTrang > 1
+      .bb-pager
+        if trangHienTai > 1
+          a(href=`/admin/nguoi-dung?trang=${trangHienTai - 1}&tuKhoa=${boLoc.tuKhoa}&vaiTro=${boLoc.vaiTro}&trangThai=${boLoc.trangThai}`, title="Trang trước") &laquo;
+        - for (let p = 1; p <= tongSoTrang; p++)
+          if p === trangHienTai
+            span.is-current= p
+          else
+            a(href=`/admin/nguoi-dung?trang=${p}&tuKhoa=${boLoc.tuKhoa}&vaiTro=${boLoc.vaiTro}&trangThai=${boLoc.trangThai}`)= p
+        if trangHienTai < tongSoTrang
+          a(href=`/admin/nguoi-dung?trang=${trangHienTai + 1}&tuKhoa=${boLoc.tuKhoa}&vaiTro=${boLoc.vaiTro}&trangThai=${boLoc.trangThai}`, title="Trang sau") &raquo;
+
+  //- ========================================================
+  //- 4. POPUP MODAL THÊM NGƯỜI DÙNG MỚI (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalThemNguoiDung(onclick="handleBackdropClick(event, 'modalThemNguoiDung')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #EFF7EE; color: #8E9F8E;")
+            i.fa-solid.fa-user-plus
+          div
+            h2.modal-header-title Thêm tài khoản người dùng mới
+            p.modal-header-sub Khởi tạo tài khoản phân quyền quản trị, nhân viên hoặc khách hàng
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalThemNguoiDung')", title="Đóng cửa sổ") &times;
+
+      form(action="/admin/api/nguoi-dung", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'POST', modalId: 'modalThemNguoiDung' })")
+        .modal-body
+          .form-grid-modal
+            //- Họ và tên
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-user
+                | Họ và tên 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="text", name="hoTen", placeholder="Ví dụ: Nguyễn Văn An", required)
+
+            //- Email
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-envelope
+                | Địa chỉ Email 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="email", name="email", placeholder="email@example.com", required)
+
+            //- Mật khẩu khởi tạo
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-key
+                | Mật khẩu ban đầu
+              input.form-control-custom(type="password", name="password", placeholder="Mặc định: 123456")
+
+            //- Số điện thoại
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-phone
+                | Số điện thoại
+              input.form-control-custom(type="tel", name="SDT", placeholder="0912345678")
+
+            //- Phân quyền vai trò
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-shield-halved
+                | Phân quyền vai trò
+              select.form-control-custom(name="vaiTro")
+                option(value="khach-hang") 👤 Khách hàng (Mua hàng &amp; Xem đơn)
+                option(value="nhan-vien") 💼 Nhân viên (Xử lý đơn &amp; Món)
+                option(value="admin") 🛡️ Quản trị viên (Toàn quyền hệ thống)
+
+            //- Trạng thái
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-toggle-on
+                | Trạng thái tài khoản
+              select.form-control-custom(name="trangThai")
+                option(value="hoat-dong") 🟢 Đang hoạt động bình thường
+                option(value="khoa") 🔒 Khóa tài khoản
+
+            //- Địa chỉ nhận hàng
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-location-dot
+                | Địa chỉ nhận hàng mặc định
+              textarea.form-control-custom(name="diaChi", rows="3", placeholder="Địa chỉ giao nhận, số nhà, phường xã, quận huyện...")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalThemNguoiDung')") Hủy bỏ
+          button.btn-modal-submit(type="submit")
+            i.fa-solid.fa-user-plus
+            span Tạo tài khoản
+
+  //- ========================================================
+  //- 5. POPUP MODAL CHỈNH SỬA NGƯỜI DÙNG (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalSuaNguoiDung(onclick="handleBackdropClick(event, 'modalSuaNguoiDung')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-user-pen
+          div
+            h2.modal-header-title#modalSuaUserTieuDe Chỉnh sửa tài khoản
+            p.modal-header-sub Phân quyền vai trò, đổi mật khẩu và cập nhật thông tin
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalSuaNguoiDung')", title="Đóng cửa sổ") &times;
+
+      form#formSuaNguoiDung(action="", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'PUT', modalId: 'modalSuaNguoiDung' })")
+        .modal-body
+          .form-grid-modal
+            //- Họ và tên
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-user
+                | Họ và tên 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_u_hoTen.form-control-custom(type="text", name="hoTen", required)
+
+            //- Email (Định danh cố định)
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-envelope
+                | Địa chỉ Email
+              input#edit_u_email.form-control-custom(
+                type="email",
+                style="background: #F4EFEB; cursor: not-allowed; color: #7B6E6D;",
+                disabled
+              )
+              small.text-muted(style="font-size: 11px;") Email là định danh không thể thay đổi
+
+            //- Số điện thoại
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-phone
+                | Số điện thoại
+              input#edit_u_SDT.form-control-custom(type="tel", name="SDT")
+
+            //- Phân quyền
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-shield-halved
+                | Phân quyền vai trò
+              select#edit_u_vaiTro.form-control-custom(name="vaiTro")
+                option(value="khach-hang") 👤 Khách hàng (Mua hàng &amp; Xem đơn)
+                option(value="nhan-vien") 💼 Nhân viên (Xử lý đơn &amp; Món)
+                option(value="admin") 🛡️ Quản trị viên (Toàn quyền hệ thống)
+
+            //- Trạng thái
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-toggle-on
+                | Trạng thái tài khoản
+              select#edit_u_trangThai.form-control-custom(name="trangThai")
+                option(value="hoat-dong") 🟢 Đang hoạt động bình thường
+                option(value="khoa") 🔒 Khóa tài khoản
+
+            //- Đặt lại mật khẩu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-key
+                | Mật khẩu mới (Nếu cần đổi)
+              input.form-control-custom(type="password", name="matKhauMoi", placeholder="Để trống nếu không đổi")
+
+            //- Địa chỉ
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-location-dot
+                | Địa chỉ nhận hàng mặc định
+              textarea#edit_u_diaChi.form-control-custom(name="diaChi", rows="3")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalSuaNguoiDung')") Hủy bỏ
+          button.btn-modal-submit.btn-modal-submit--rose(type="submit")
+            i.fa-solid.fa-floppy-disk
+            span Lưu thay đổi
+
+  //- Script điều khiển Modal Người Dùng & Realtime Filter
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.initRealtimeTableFilter) {
+        window.initRealtimeTableFilter({
+          tableSelector: ".table-custom",
+          searchInputId: "realtime-search-user",
+          clearBtnId: "realtime-clear-user",
+          selectIds: ["realtime-role-user", "realtime-status-user"],
+          countBadgeId: "realtime-count-user",
+        });
+      }
+    });
+
+    function moModalSuaNguoiDung(btn) {
+      const d = btn.dataset;
+      const form = document.getElementById("formSuaNguoiDung");
+      if (!form) return;
+
+      form.action = "/admin/api/nguoi-dung/" + d.id;
+
+      const tieuDe = document.getElementById("modalSuaUserTieuDe");
+      if (tieuDe) tieuDe.textContent = "Chỉnh sửa: " + d.hoten;
+
+      document.getElementById("edit_u_hoTen").value = d.hoten || "";
+      document.getElementById("edit_u_email").value = d.email || "";
+      document.getElementById("edit_u_SDT").value = d.sdt || "";
+      document.getElementById("edit_u_vaiTro").value = d.vaitro || "khach-hang";
+      document.getElementById("edit_u_trangThai").value = d.trangthai || "hoat-dong";
+      document.getElementById("edit_u_diaChi").value = d.diachi || "";
+
+      window.openAdminModal("modalSuaNguoiDung");
+    }
+

@@ -1,0 +1,134 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-pen-to-square(style="color: #C98F91;")
+        | Chỉnh sửa mã: #{khuyenMai.maCode}
+      .stats-badge-group
+        span.stat-pill.stat-pill-total
+          i.fa-solid.fa-ticket
+          | #{khuyenMai.tieuDe}
+
+    div(style="display: flex; gap: 8px;")
+      a.btn-filter-reset(href="/admin/khuyen-mai")
+        i.fa-solid.fa-arrow-left
+        span Quay lại danh sách
+
+  //- ========================================================
+  //- 2. FORM CHỈNH SỬA (CHUẨN FORM BATHBOOM)
+  //- ========================================================
+  .row.justify-content-center
+    .col-12.col-lg-8
+      .bb-card
+        .p-3.d-flex.align-items-center.gap-2(style="background: #FCFAF8; border-bottom: 2px solid #8D7B6F;")
+          i.fa-solid.fa-gift(style="color: #C98F91; font-size: 16px;")
+          h3(style="font-family: 'Playfair Display', serif; font-size: 16.5px; margin: 0; color: #4A3E3D; font-weight: 700;")
+            | Cập nhật chương trình khuyến mãi
+        .p-4
+          form(action=`/admin/khuyen-mai/chinh-sua/${khuyenMai._id}`, method="POST")
+            .row.g-3
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Mã Voucher Code 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="maCode",
+                  value=khuyenMai.maCode,
+                  style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;",
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Tiêu đề chương trình 
+                  span.required *
+                input.form-control-custom(
+                  type="text",
+                  name="tieuDe",
+                  value=khuyenMai.tieuDe,
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Loại giảm giá
+                select.form-control-custom(name="loaiGiamGia")
+                  option(value="phan-tram", selected=khuyenMai.loaiGiamGia === 'phan-tram') Theo phần trăm (%)
+                  option(value="tien-mat", selected=khuyenMai.loaiGiamGia === 'tien-mat') Theo số tiền cố định (VNĐ)
+
+              .col-12.col-md-6
+                label.form-label-custom
+                  | Giá trị giảm 
+                  span.required *
+                input.form-control-custom(
+                  type="number",
+                  name="giaTriGiam",
+                  value=khuyenMai.giaTriGiam,
+                  min="1",
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Giảm tối đa (VNĐ)
+                input.form-control-custom(
+                  type="number",
+                  name="giamToiDa",
+                  value=khuyenMai.giamToiDa || 0
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Đơn hàng tối thiểu (VNĐ)
+                input.form-control-custom(
+                  type="number",
+                  name="donHangToiThieu",
+                  value=khuyenMai.donHangToiThieu || 0
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Số lượng phát hành
+                input.form-control-custom(
+                  type="number",
+                  name="soLuong",
+                  value=khuyenMai.soLuong,
+                  min="1"
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Trạng thái mã
+                select.form-control-custom(name="trangThai")
+                  option(value="hoat-dong", selected=khuyenMai.trangThai === 'hoat-dong') 🟢 Đang áp dụng
+                  option(value="tam-dung", selected=khuyenMai.trangThai === 'tam-dung') 🟠 Tạm dừng
+                  option(value="het-han", selected=khuyenMai.trangThai === 'het-han') 🔴 Hết hạn
+
+              .col-12.col-md-6
+                label.form-label-custom Ngày bắt đầu
+                input.form-control-custom(
+                  type="date",
+                  name="ngayBatDau",
+                  value=khuyenMai.ngayBatDau ? new Date(khuyenMai.ngayBatDau).toISOString().split('T')[0] : ''
+                )
+
+              .col-12.col-md-6
+                label.form-label-custom Ngày kết thúc
+                input.form-control-custom(
+                  type="date",
+                  name="ngayKetThuc",
+                  value=khuyenMai.ngayKetThuc ? new Date(khuyenMai.ngayKetThuc).toISOString().split('T')[0] : ''
+                )
+
+              .col-12
+                label.form-label-custom Mô tả &amp; Điều kiện áp dụng
+                textarea.form-control-custom(
+                  name="moTa",
+                  rows="3"
+                )= khuyenMai.moTa
+
+            .form-actions-custom(style="margin-top: 18px; padding-top: 14px;")
+              button.btn-submit-custom(type="submit")
+                i.fa-solid.fa-floppy-disk
+                span Lưu thay đổi

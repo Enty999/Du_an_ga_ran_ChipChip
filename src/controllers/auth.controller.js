@@ -70,51 +70,77 @@ const xuLiDangKy = async (req, res) => {
   }
 };
 
-// [POST] /api/auth/dang-nhap
-// Xử lý logic đăng nhập tài khoản qua API
-const xuLiDangNhap = async (req, res) =>{
+// [POST] /auth/dang-nhap
+// Xử lý logic đăng nhập tài khoản
+const xuLiDangNhap = async (req, res) => {
   try {
-    // Lấy email và password từ request body
-    const {email, password} = req.body;
+    const { email, password } = req.body;
+    const input = (email || "").trim().toLowerCase();
 
-    // Tìm kiếm tài khoản người dùng theo email trong database
-    const timNguoiDung = await NguoiDung.findOne({email});
-    if(!timNguoiDung){
-      // Không tìm thấy tài khoản thì trả về thông báo lỗi
-      return res.render("pages/auth/dang-nhap", {
-        title: "Đăng nhập",
-        error: "Email hoặc mật khẩu không đúng"
-      });
-    }
-
-    // Gọi phương thức so sánh mật khẩu đã được định nghĩa trong model
-    const matKhauDung = await timNguoiDung.kiemTraMatKhau(password);
-    if(!matKhauDung){
-      // Mật khẩu không trùng khớp thì trả về thông báo lỗi
-      return res.render("pages/auth/dang-nhap", {
-        title: "Đăng nhập",
-        error: "Email hoặc mật khẩu không đúng"
-      });
-    }
-
-    // Mật khẩu hợp lệ, tạo token xác thực JWT cho phiên đăng nhập
-    const maXacThuc = taoMaXacThuc(timNguoiDung._id);
-
-    // Lưu token vào cookie trước khi redirect
-    res.cookie("maXacThuc", maXacThuc, {
-      httpOnly: true,                                  // JS phía trình duyệt không đọc được
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",   // chỉ gửi qua HTTPS khi chạy thật
-      maxAge: 24 * 60 * 60 * 1000,                     // 1 ngày, khớp expiresIn của JWT
+    // Tìm kiếm tài khoản linh hoạt: theo email, hoặc nếu nhập "admin" thì tìm tài khoản quản trị
+    let timNguoiDung = await NguoiDung.findOne({
+      $or: [
+        { email: input },
+        ...(input === "admin"
+          ? [
+              { email: "admin@chipchip.vn" },
+              { email: "admin@gmail.com" },
+              { vaiTro: "admin" },
+            ]
+          : []),
+      ],
     });
 
-    // Phản hồi thành công và chuyển hướng về trang chủ
-    res.redirect("/?dangNhap=thanhcong");
+    if (!timNguoiDung) {
+      return res.render("pages/auth/dang-nhap", {
+        title: "Đăng nhập",
+        error: "Email hoặc mật khẩu không đúng",
+      });
+    }
+
+    // Kiểm tra tài khoản có bị khóa không
+    if (timNguoiDung.trangThai === "khoa") {
+      return res.render("pages/auth/dang-nhap", {
+        title: "Đăng nhập",
+        error: "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.",
+      });
+    }
+
+    // So sánh mật khẩu
+    const matKhauDung = await timNguoiDung.kiemTraMatKhau(password);
+    if (!matKhauDung) {
+      return res.render("pages/auth/dang-nhap", {
+        title: "Đăng nhập",
+        error: "Email hoặc mật khẩu không đúng",
+      });
+    }
+
+    // Mật khẩu hợp lệ, tạo token xác thực JWT
+    const maXacThuc = taoMaXacThuc(timNguoiDung._id);
+
+    // Lưu token vào cookie
+    res.cookie("maXacThuc", maXacThuc, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000, // 1 ngày
+    });
+
+    // Điều hướng: Ưu tiên redirect param -> Nếu là admin/nhân viên thì vào /admin -> Khách thì về trang chủ
+    const redirectUrl =
+      req.query.redirect ||
+      (timNguoiDung.vaiTro === "admin" || timNguoiDung.vaiTro === "nhan-vien"
+        ? "/admin"
+        : "/?dangNhap=thanhcong");
+
+    res.redirect(redirectUrl);
   } catch (error) {
-    // Bắt lỗi hệ thống/server và trả về mã lỗi 500
-    res.status(500).json({ message: error.message });
+    res.status(500).render("pages/auth/dang-nhap", {
+      title: "Đăng nhập",
+      error: "Lỗi hệ thống: " + error.message,
+    });
   }
-}
+};
 
 // Xử lý logic xác nhận OTP qua API
 const xuLiXacNhanOTP = async (req, res) => {

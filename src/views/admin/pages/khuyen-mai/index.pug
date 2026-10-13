@@ -1,0 +1,443 @@
+extends ../../layouts/admin
+
+block content
+  //- ========================================================
+  //- 1. THANH TIÊU ĐỀ & THỐNG KÊ NHANH (CHUẨN BATHBOOM)
+  //- ========================================================
+  .mgmt-topbar
+    .mgmt-title-group
+      h1.mgmt-title
+        i.fa-solid.fa-ticket(style="color: #C98F91;")
+        | Quản lý mã khuyến mãi &amp; Voucher
+      .stats-badge-group
+        span.stat-pill.stat-pill-total(title="Tổng số mã voucher")
+          i.fa-solid.fa-tags
+          | #{khuyenMaiList ? khuyenMaiList.length : 0} mã
+        span.stat-pill.stat-pill-active(title="Mã đang có hiệu lực")
+          i.fa-solid.fa-circle-check
+          | #{khuyenMaiList ? khuyenMaiList.filter(k => k.trangThai === 'hoat-dong').length : 0} đang áp dụng
+
+    div(style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;")
+      button.btn-open-modal(type="button", onclick="openAdminModal('modalThemKhuyenMai')")
+        i.fa-solid.fa-plus
+        span Tạo mã khuyến mãi mới
+
+  //- ========================================================
+  //- 2. BỘ LỌC TỰ ĐỘNG REALTIME (CHUẨN BATHBOOM - KHÔNG DÙNG NÚT LỌC)
+  //- ========================================================
+  .filter-card-compact
+    .realtime-filter-wrap
+      .realtime-search-box
+        i.fa-solid.fa-magnifying-glass.realtime-search-icon
+        input#realtime-search-km.realtime-search-input(
+          type="text",
+          placeholder="Gõ từ khóa để lọc voucher theo mã code, tiêu đề..."
+        )
+        button#realtime-clear-km.realtime-search-clear(type="button", title="Xóa từ khóa") &times;
+
+      div(style="min-width: 170px;")
+        select#realtime-status-km.realtime-select(data-filter-key="trangthai", style="width: 100%;")
+          option(value="tat-ca") -- Tất cả trạng thái --
+          option(value="hoat-dong") 🟢 Đang áp dụng
+          option(value="tam-dung") 🟠 Đang tạm dừng
+          option(value="het-han") 🔴 Hết hạn dùng
+
+      span#realtime-count-km.realtime-count-badge
+        i.fa-solid.fa-filter(style="font-size: 10px; color: #8E9F8E;")
+        | Đang hiển thị
+
+  //- ========================================================
+  //- 3. BẢNG DANH SÁCH MÃ GIẢM GIÁ (VIỀN CỰC ĐẬM CHUẨN BATHBOOM)
+  //- ========================================================
+  .bb-card
+    .table-responsive
+      table.table-custom
+        thead
+          tr
+            th(style="width: 120px; text-align: center;") Mã Code
+            th(style="text-align: left; min-width: 170px;") Tiêu đề khuyến mãi
+            th(style="width: 130px; text-align: right;") Mức giảm
+            th(style="width: 120px; text-align: right;") Đơn tối thiểu
+            th(style="width: 95px; text-align: center;") Đã dùng
+            th(style="width: 120px; text-align: center;") Hạn sử dụng
+            th(style="width: 135px; text-align: center;") Bật / Tắt mã
+            th(style="width: 110px; text-align: center;") Thao tác
+        tbody
+          if khuyenMaiList && khuyenMaiList.length > 0
+            each km in khuyenMaiList
+              - const isNgung = km.trangThai !== 'hoat-dong';
+              tr(class=isNgung ? 'row-disabled is-disabled' : '', data-trangthai=km.trangThai)
+                //- 1. Mã Code
+                td(style="text-align: center;")
+                  span(style="background: #2B2523; color: #FFF8F0; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-family: monospace; font-size: 13px; letter-spacing: 0.5px; display: inline-block;")
+                    = km.maCode
+
+                //- 2. Tiêu đề
+                td(style="text-align: left;")
+                  .fw-bold(style="color: #4A3E3D; line-height: 1.35;")= km.tieuDe
+                  if km.moTa
+                    .small.text-muted(style="font-size: 11.5px;")= km.moTa
+
+                //- 3. Mức giảm
+                td(style="text-align: right;")
+                  if km.loaiGiamGia === 'phan-tram'
+                    span(style="color: #D32F2F; font-weight: 700;") Giảm #{km.giaTriGiam}%
+                    if km.giamToiDa > 0
+                      .small.text-muted(style="font-size: 10.5px;") (Tối đa #{dinhDangTien(km.giamToiDa)})
+                  else
+                    span(style="color: #D32F2F; font-weight: 700;") Giảm #{dinhDangTien(km.giaTriGiam)}
+
+                //- 4. Đơn tối thiểu
+                td(style="text-align: right; color: #4A3E3D; font-weight: 600;")
+                  = dinhDangTien(km.donHangToiThieu)
+
+                //- 5. Đã dùng
+                td(style="text-align: center; color: #4A3E3D;")
+                  span.badge(style="background: #FAF5F0; color: #4A3E3D; border: 1px solid #ECE2D8; padding: 3px 8px; font-size: 11px;")
+                    | #{km.daSuDung} / #{km.soLuong}
+
+                //- 6. Hạn sử dụng
+                td(style="text-align: center; font-size: 12px; color: #7B6E6D;")
+                  if km.ngayKetThuc
+                    = dinhDangNgay(km.ngayKetThuc, false)
+                  else
+                    span(style="color: #8E9F8E; font-weight: 600;") Vô thời hạn
+
+                //- 7. Trạng thái: CÔNG TẮC BẬT / TẮT (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                td(style="text-align: center;")
+                  label.bb-switch(title="Gạt công tắc để Bật/Tắt hiệu lực mã khuyến mãi")
+                    input(
+                      type="checkbox",
+                      checked=km.trangThai === 'hoat-dong',
+                      onchange=`toggleTrangThaiApi(this, '/admin/api/khuyen-mai/${km._id}/trang-thai', 'Áp dụng', 'Tạm dừng', 'hoat-dong', 'tam-dung')`
+                    )
+                    span.bb-switch-slider
+                    span.bb-switch-label= km.trangThai === 'hoat-dong' ? 'Áp dụng' : (km.trangThai === 'tam-dung' ? 'Tạm dừng' : 'Hết hạn')
+
+                //- 8. Thao tác CRUD (RESTful)
+                td(style="text-align: center;")
+                  .table-actions
+                    //- Nút Sửa Mini (Mở Popup Modal ngay trên 1 màn hình)
+                    button.btn-mini-action.btn-mini-edit(
+                      type="button",
+                      title="Chỉnh sửa mã khuyến mãi",
+                      data-id=km._id,
+                      data-code=km.maCode,
+                      data-tieude=km.tieuDe,
+                      data-loaigiam=km.loaiGiamGia,
+                      data-giatri=km.giaTriGiam,
+                      data-giamtoida=km.giamToiDa || 0,
+                      data-toithieu=km.donHangToiThieu || 0,
+                      data-soluong=km.soLuong,
+                      data-trangthai=km.trangThai,
+                      data-batdau=km.ngayBatDau ? new Date(km.ngayBatDau).toISOString().split('T')[0] : '',
+                      data-ketthuc=km.ngayKetThuc ? new Date(km.ngayKetThuc).toISOString().split('T')[0] : '',
+                      data-mota=km.moTa || '',
+                      onclick="moModalSuaKhuyenMai(this)"
+                    )
+                      i.fa-solid.fa-pen-to-square
+
+                    //- Nút Xóa (RESTful DELETE)
+                    form.form-xac-nhan-xoa.m-0(
+                      action=`/admin/api/khuyen-mai/${km._id}`,
+                      method="POST",
+                      data-ten-muc=km.maCode
+                    )
+                      button.btn-mini-action.btn-mini-delete(type="submit", title="Xóa mã khuyến mãi")
+                        i.fa-solid.fa-trash-can
+          else
+            tr
+              td(colspan="8", style="text-align: center; padding: 45px 20px; color: #888;")
+                i.fa-solid.fa-ticket(style="font-size: 32px; color: #DCD4CC; margin-bottom: 8px; display: block;")
+                strong Chưa có mã khuyến mãi nào.
+                p.small.text-muted Nhấn nút "Tạo mã khuyến mãi mới" để bắt đầu phát hành voucher.
+
+  //- ========================================================
+  //- 3. POPUP MODAL TẠO MÃ KHUYẾN MÃI MỚI (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalThemKhuyenMai(onclick="handleBackdropClick(event, 'modalThemKhuyenMai')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-ticket
+          div
+            h2.modal-header-title Tạo mã khuyến mãi mới
+            p.modal-header-sub Phát hành voucher ưu đãi giảm giá kích cầu đơn hàng
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalThemKhuyenMai')", title="Đóng cửa sổ") &times;
+
+      form(action="/admin/api/khuyen-mai", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'POST', modalId: 'modalThemKhuyenMai' })")
+        .modal-body
+          .form-grid-modal
+            //- Mã Code
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-barcode
+                | Mã Voucher Code 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(
+                type="text",
+                name="maCode",
+                placeholder="Ví dụ: CHIPCHIP50, FREESHIP...",
+                style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;",
+                required
+              )
+
+            //- Tiêu đề
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-gift
+                | Tiêu đề chương trình 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="text", name="tieuDe", placeholder="Ví dụ: Giảm 20% cho đơn đầu tiên", required)
+
+            //- Loại giảm giá
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-percent
+                | Loại giảm giá
+              select.form-control-custom(name="loaiGiamGia")
+                option(value="phan-tram") Theo phần trăm (%)
+                option(value="tien-mat") Theo số tiền cố định (VNĐ)
+
+            //- Giá trị giảm
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-tag
+                | Giá trị giảm 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input.form-control-custom(type="number", name="giaTriGiam", placeholder="Ví dụ: 20 hoặc 30000", min="1", required)
+
+            //- Giảm tối đa
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-money-bill-wave
+                | Giảm tối đa (VNĐ)
+              input.form-control-custom(type="number", name="giamToiDa", placeholder="0 nếu không giới hạn", value="0")
+
+            //- Đơn hàng tối thiểu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-cart-shopping
+                | Đơn hàng tối thiểu (VNĐ)
+              input.form-control-custom(type="number", name="donHangToiThieu", placeholder="Ví dụ: 100000", value="0")
+
+            //- Số lượng
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-layer-group
+                | Số lượng phát hành
+              input.form-control-custom(type="number", name="soLuong", value="100", min="1")
+
+            //- Trạng thái
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-toggle-on
+                | Trạng thái áp dụng
+              select.form-control-custom(name="trangThai")
+                option(value="hoat-dong") 🟢 Đang áp dụng ngay
+                option(value="tam-dung") 🟠 Tạm dừng kích hoạt
+                option(value="het-han") 🔴 Hết hạn sử dụng
+
+            //- Ngày bắt đầu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-calendar-days
+                | Ngày bắt đầu
+              input.form-control-custom(type="date", name="ngayBatDau")
+
+            //- Ngày kết thúc
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-calendar-check
+                | Ngày kết thúc (Hạn dùng)
+              input.form-control-custom(type="date", name="ngayKetThuc")
+
+            //- Mô tả
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-circle-info
+                | Mô tả &amp; Điều kiện áp dụng
+              textarea.form-control-custom(name="moTa", rows="3", placeholder="Áp dụng cho tất cả món gà rán hoặc thực đơn combo...")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalThemKhuyenMai')") Hủy bỏ
+          button.btn-modal-submit(type="submit")
+            i.fa-solid.fa-plus
+            span Phát hành mã
+
+  //- ========================================================
+  //- 4. POPUP MODAL CHỈNH SỬA MÃ KHUYẾN MÃI (CHUẨN 1 MÀN HÌNH BATHBOOM)
+  //- ========================================================
+  .modal-overlay#modalSuaKhuyenMai(onclick="handleBackdropClick(event, 'modalSuaKhuyenMai')")
+    .modal-box
+      .modal-header
+        .d-flex.align-items-center.gap-2
+          .modal-header-icon(style="background: #FDE8E8; color: #C98F91;")
+            i.fa-solid.fa-pen-to-square
+          div
+            h2.modal-header-title#modalSuaKMTieuDe Chỉnh sửa mã khuyến mãi
+            p.modal-header-sub Cập nhật giá trị giảm, thời hạn và số lượng phát hành
+        button.modal-close-btn(type="button", onclick="closeAdminModal('modalSuaKhuyenMai')", title="Đóng cửa sổ") &times;
+
+      form#formSuaKhuyenMai(action="", method="POST", onsubmit="event.preventDefault(); window.xuLiSubmitModalRestful(this, { method: 'PUT', modalId: 'modalSuaKhuyenMai' })")
+        .modal-body
+          .form-grid-modal
+            //- Mã Code
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-barcode
+                | Mã Voucher Code 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_km_maCode.form-control-custom(
+                type="text",
+                name="maCode",
+                style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;",
+                required
+              )
+
+            //- Tiêu đề
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-gift
+                | Tiêu đề chương trình 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_km_tieuDe.form-control-custom(type="text", name="tieuDe", required)
+
+            //- Loại giảm giá
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-percent
+                | Loại giảm giá
+              select#edit_km_loaiGiamGia.form-control-custom(name="loaiGiamGia")
+                option(value="phan-tram") Theo phần trăm (%)
+                option(value="tien-mat") Theo số tiền cố định (VNĐ)
+
+            //- Giá trị giảm
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-tag
+                | Giá trị giảm 
+                span(style="color: #D32F2F; font-weight: 700;") *
+              input#edit_km_giaTriGiam.form-control-custom(type="number", name="giaTriGiam", min="1", required)
+
+            //- Giảm tối đa
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-money-bill-wave
+                | Giảm tối đa (VNĐ)
+              input#edit_km_giamToiDa.form-control-custom(type="number", name="giamToiDa")
+
+            //- Đơn hàng tối thiểu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-teal
+                  i.fa-solid.fa-cart-shopping
+                | Đơn hàng tối thiểu (VNĐ)
+              input#edit_km_donHangToiThieu.form-control-custom(type="number", name="donHangToiThieu")
+
+            //- Số lượng
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-purple
+                  i.fa-solid.fa-layer-group
+                | Số lượng phát hành
+              input#edit_km_soLuong.form-control-custom(type="number", name="soLuong", min="1")
+
+            //- Trạng thái
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-green
+                  i.fa-solid.fa-toggle-on
+                | Trạng thái áp dụng
+              select#edit_km_trangThai.form-control-custom(name="trangThai")
+                option(value="hoat-dong") 🟢 Đang áp dụng
+                option(value="tam-dung") 🟠 Tạm dừng
+                option(value="het-han") 🔴 Hết hạn
+
+            //- Ngày bắt đầu
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-blue
+                  i.fa-solid.fa-calendar-days
+                | Ngày bắt đầu
+              input#edit_km_ngayBatDau.form-control-custom(type="date", name="ngayBatDau")
+
+            //- Ngày kết thúc
+            .form-group-modal
+              label.form-label-with-icon
+                span.label-icon-badge.badge-pink
+                  i.fa-solid.fa-calendar-check
+                | Ngày kết thúc
+              input#edit_km_ngayKetThuc.form-control-custom(type="date", name="ngayKetThuc")
+
+            //- Mô tả
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-circle-info
+                | Mô tả &amp; Điều kiện áp dụng
+              textarea#edit_km_moTa.form-control-custom(name="moTa", rows="3")
+
+        .modal-footer
+          button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalSuaKhuyenMai')") Hủy bỏ
+          button.btn-modal-submit.btn-modal-submit--rose(type="submit")
+            i.fa-solid.fa-floppy-disk
+            span Lưu thay đổi
+
+  //- Script điều khiển Modal Khuyến Mãi & Realtime Filter
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.initRealtimeTableFilter) {
+        window.initRealtimeTableFilter({
+          tableSelector: ".table-custom",
+          searchInputId: "realtime-search-km",
+          clearBtnId: "realtime-clear-km",
+          selectIds: ["realtime-status-km"],
+          countBadgeId: "realtime-count-km",
+        });
+      }
+    });
+
+    function moModalSuaKhuyenMai(btn) {
+      const d = btn.dataset;
+      const form = document.getElementById("formSuaKhuyenMai");
+      if (!form) return;
+
+      form.action = "/admin/api/khuyen-mai/" + d.id;
+
+      const tieuDe = document.getElementById("modalSuaKMTieuDe");
+      if (tieuDe) tieuDe.textContent = "Chỉnh sửa mã: " + d.code;
+
+      document.getElementById("edit_km_maCode").value = d.code || "";
+      document.getElementById("edit_km_tieuDe").value = d.tieude || "";
+      document.getElementById("edit_km_loaiGiamGia").value = d.loaigiam || "phan-tram";
+      document.getElementById("edit_km_giaTriGiam").value = d.giatri || 0;
+      document.getElementById("edit_km_giamToiDa").value = d.giamtoida || 0;
+      document.getElementById("edit_km_donHangToiThieu").value = d.toithieu || 0;
+      document.getElementById("edit_km_soLuong").value = d.soluong || 100;
+      document.getElementById("edit_km_trangThai").value = d.trangthai || "hoat-dong";
+      document.getElementById("edit_km_ngayBatDau").value = d.batdau || "";
+      document.getElementById("edit_km_ngayKetThuc").value = d.ketthuc || "";
+      document.getElementById("edit_km_moTa").value = d.mota || "";
+
+      window.openAdminModal("modalSuaKhuyenMai");
+    }
+
+
