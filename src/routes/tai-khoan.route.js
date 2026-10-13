@@ -7,12 +7,16 @@ router.use(yeuCauDangNhap);
 
 // GET /tai-khoan
 router.get("/", (req, res) => {
-  res.send(`<h1>Xin chào ${res.locals.nguoiDung.hoTen}!</h1>`);
+  res.render("pages/tai-khoan/thong-tin",{
+    title: "Thông tin tài khoản",
+  });
 });
 
 // GET /tai-khoan/don-hang
 router.get("/don-hang", (req, res) => {
-  res.send(`<h1>Danh sách đơn hàng của bạn</h1>`);
+  res.render('pages/tai-khoan/don-hang',{
+    title: "Đơn hàng của tôi",
+  });
 });
 
 module.exports = router;

@@ -24,6 +24,22 @@ const soDoNguoiDung = new mongoose.Schema(
       type: String,     // Kiểu dữ liệu là chuỗi
       required: true,   // Bắt buộc phải có
     },
+    SDT: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    diaChi: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    ghiChuGiaoHang: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    
   },
   { 
     // Tự động thêm hai trường createdAt (thời gian tạo) và updatedAt (thời gian cập nhật gần nhất)
