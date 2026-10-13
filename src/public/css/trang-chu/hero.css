@@ -6,7 +6,7 @@
 .hero {
   position: relative;
   width: 100%;
-  background-color: var(--color-secondary);
+  background: var(--gradient-hero, var(--color-secondary));
   color: var(--color-on-secondary);
   overflow: hidden;
   padding-bottom: var(--space-2xl);
@@ -244,17 +244,23 @@
   gap: var(--space-xs);
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-full);
-  background-color: rgba(252, 100, 81, 0.4);
+  background-color: var(--hero-btn-secondary-bg);
+  border: var(--hero-btn-secondary-border);
+  box-shadow: var(--hero-btn-secondary-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--color-on-secondary);
   font-size: var(--text-title-card-size);
   line-height: var(--text-title-card-line);
   font-weight: 600;
   text-decoration: none;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .hero__btn-secondary:hover {
-  background-color: rgba(252, 100, 81, 0.6);
+  background-color: var(--hero-btn-secondary-bg-hover);
+  border: var(--hero-btn-secondary-border-hover);
+  box-shadow: var(--hero-btn-secondary-shadow-hover);
   color: var(--color-on-secondary);
   transform: translateY(-2px);
 }
@@ -539,19 +545,23 @@
 }
 
 .hero__quick-item {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--hero-card-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border: var(--hero-card-border);
+  box-shadow: var(--hero-card-shadow);
   border-radius: var(--radius-2xl);
   padding: var(--space-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .hero__quick-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--hero-card-bg-hover);
+  border: var(--hero-card-border-hover);
+  box-shadow: var(--hero-card-shadow-hover);
 }
 
 .hero__quick-item-body {
