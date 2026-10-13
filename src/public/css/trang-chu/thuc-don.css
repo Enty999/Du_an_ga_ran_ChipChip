@@ -34,19 +34,9 @@
   max-width: 100%;
 }
 
-@media (min-width: 1024px) {
-  .menu__header {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-lg);
-  }
-}
-
 .menu__heading-block {
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   max-width: 100%;
 }
 
@@ -107,12 +97,33 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   Thanh phụ: Dòng chữ nhỏ mô tả và 5 nút lọc nằm thẳng hàng nhau
+   -------------------------------------------------------------------------- */
+.menu__bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 100%;
+  margin-top: var(--space-xs);
+}
+
+@media (min-width: 1024px) {
+  .menu__bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+  }
+}
+
 .menu__intro {
-  font-size: var(--text-body-md-size);
-  line-height: var(--text-body-md-line);
+  font-size: 13.5px;
+  line-height: 1.4;
   color: var(--color-text-muted);
-  margin: var(--space-xs) 0 0 0;
-  max-width: 32rem;
+  margin: 0;
+  white-space: nowrap;
+  max-width: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -122,13 +133,13 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: var(--space-xs);
+  gap: 6px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   max-width: 100%;
   min-width: 0;
-  padding-bottom: var(--space-xs);
+  padding-bottom: 0;
 }
 
 @media (min-width: 1024px) {
@@ -144,10 +155,10 @@
 .menu__filter-btn {
   white-space: nowrap;
   flex-shrink: 0;
-  padding: var(--space-xs) var(--space-md);
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-full);
-  font-size: var(--text-label-tag-size);
-  line-height: var(--text-label-tag-line);
+  font-size: 12.5px;
+  line-height: 1.25rem;
   font-weight: 600;
   border: none;
   cursor: pointer;

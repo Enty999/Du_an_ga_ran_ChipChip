@@ -1,109 +1,110 @@
 extends ../../layouts/main
 
 block content
-  .container.py-5.my-3
-    .row.g-4
-      //- Cột trái: Thẻ thông tin vắn tắt & Menu điều hướng
-      .col-12.col-lg-4
-        .card.border-0.shadow-sm.rounded-4.overflow-hidden.mb-4
-          .card-body.text-center.p-4
-            //- Avatar tròn với chữ cái đầu của tên
-            .d-inline-flex.align-items-center.justify-content-center.rounded-circle.text-white.fw-bold.fs-2.mb-3(
-              style="width: 80px; height: 80px; background-color: #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);"
-            )= chuCaiDau
+  .account-page
+    .container.py-5
+      .row.g-4
+        //- Cột trái: Thẻ thông tin vắn tắt & Menu điều hướng
+        .col-12.col-lg-4
+          .card.border-0.shadow-sm.rounded-4.overflow-hidden.mb-4
+            .card-body.text-center.p-4
+              //- Avatar tròn với chữ cái đầu của tên
+              .d-inline-flex.align-items-center.justify-content-center.rounded-circle.text-white.fw-bold.fs-2.mb-3(
+                style="width: 80px; height: 80px; background-color: #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);"
+              )= chuCaiDau
 
-            h5.fw-bold.mb-1= tenHienThi
-            p.text-muted.small.mb-2= nguoiDung.email
+              h5.fw-bold.mb-1= tenHienThi
+              p.text-muted.small.mb-2= nguoiDung.email
 
-            span.badge.rounded-pill.px-3.py-2.text-white(style="background-color: #ea580c;")
-              i.fas.fa-crown.me-1
-              | Thành viên ChipChip VIP
+              span.badge.rounded-pill.px-3.py-2.text-white(style="background-color: #ea580c;")
+                i.fas.fa-crown.me-1
+                | Thành viên ChipChip VIP
 
-        //- Menu chuyển hướng nhanh giữa các trang tài khoản
-        .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
-          a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
-            href="/tai-khoan"
-            style="background-color: #ea580c; border-color: #ea580c;"
-          )
-            i.fas.fa-user.me-2
-            | Thông tin cá nhân & Giao hàng
-          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
-            href="/tai-khoan/don-hang"
-          )
-            i.fas.fa-receipt.me-2
-            | Đơn hàng của tôi
+          //- Menu chuyển hướng nhanh giữa các trang tài khoản
+          .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
+            a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
+              href="/tai-khoan"
+              style="background-color: #ea580c; border-color: #ea580c;"
+            )
+              i.fas.fa-user.me-2
+              | Thông tin cá nhân & Giao hàng
+            a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+              href="/tai-khoan/don-hang"
+            )
+              i.fas.fa-receipt.me-2
+              | Đơn hàng của tôi
 
-      //- Cột phải: Form cập nhật thông tin nhận đồ ăn
-      .col-12.col-lg-8
-        .card.border-0.shadow-sm.rounded-4.p-4.p-md-5
-          .d-flex.justify-content-between.align-items-center.mb-4.pb-3.border-bottom
-            div
-              h4.fw-bold.text-dark.mb-1 Thông tin nhận hàng
-              p.text-muted.small.mb-0 Cập nhật thông tin để shipper giao gà rán nóng hổi đến đúng nơi!
-            span.material-symbols-outlined.fs-1.text-warning local_shipping
+        //- Cột phải: Form cập nhật thông tin nhận đồ ăn
+        .col-12.col-lg-8
+          .card.border-0.shadow-sm.rounded-4.p-4.p-md-5
+            .d-flex.justify-content-between.align-items-center.mb-4.pb-3.border-bottom
+              div
+                h4.fw-bold.text-dark.mb-1 Thông tin nhận hàng
+                p.text-muted.small.mb-0 Cập nhật thông tin để shipper giao gà rán nóng hổi đến đúng nơi!
+              span.material-symbols-outlined.fs-1.text-warning local_shipping
 
-          //- Thông báo thành công nếu có
-          if message
-            .alert.alert-success.rounded-3.py-2.small= message
+            //- Thông báo thành công nếu có
+            if message
+              .alert.alert-success.rounded-3.py-2.small= message
 
-          form(action="/tai-khoan/cap-nhat", method="POST")
-            .row.g-3
-              //- Họ và tên
-              .col-12.col-md-6
-                label.form-label.fw-semibold(for="hoTen") Họ và tên người nhận
-                input#hoTen.form-control(
-                  type="text"
-                  name="hoTen"
-                  value=nguoiDung.hoTen
-                  required
-                )
+            form(action="/tai-khoan/cap-nhat", method="POST")
+              .row.g-3
+                //- Họ và tên
+                .col-12.col-md-6
+                  label.form-label.fw-semibold(for="hoTen") Họ và tên người nhận
+                  input#hoTen.form-control(
+                    type="text"
+                    name="hoTen"
+                    value=nguoiDung.hoTen
+                    required
+                  )
 
-              //- Số điện thoại (rất quan trọng khi ship hàng)
-              .col-12.col-md-6
-                label.form-label.fw-semibold(for="SDT") Số điện thoại nhận hàng
-                input#SDT.form-control(
-                  type="tel"
-                  name="SDT"
-                  placeholder="Ví dụ: 0912345678"
-                  value=nguoiDung.SDT || ''
-                  required
-                )
+                //- Số điện thoại (rất quan trọng khi ship hàng)
+                .col-12.col-md-6
+                  label.form-label.fw-semibold(for="SDT") Số điện thoại nhận hàng
+                  input#SDT.form-control(
+                    type="tel"
+                    name="SDT"
+                    placeholder="Ví dụ: 0912345678"
+                    value=nguoiDung.SDT || ''
+                    required
+                  )
 
-              //- Email (Không cho sửa vì là tài khoản định danh)
-              .col-12
-                label.form-label.fw-semibold(for="email") Email tài khoản
-                input#email.form-control.bg-light(
-                  type="email"
-                  value=nguoiDung.email
-                  disabled
-                )
-                small.text-muted Email dùng để nhận hóa đơn và thông báo đặt món.
+                //- Email (Không cho sửa vì là tài khoản định danh)
+                .col-12
+                  label.form-label.fw-semibold(for="email") Email tài khoản
+                  input#email.form-control.bg-light(
+                    type="email"
+                    value=nguoiDung.email
+                    disabled
+                  )
+                  small.text-muted Email dùng để nhận hóa đơn và thông báo đặt món.
 
-              //- Địa chỉ giao hàng chi tiết
-              .col-12
-                label.form-label.fw-semibold(for="diaChi") Địa chỉ giao hàng
-                input#diaChi.form-control(
-                  type="text"
-                  name="diaChi"
-                  placeholder="Ví dụ: Số 123, đường Nguyễn Văn Linh, Quận 7, TP.HCM"
-                  value=nguoiDung.diaChi || ''
-                  required
-                )
+                //- Địa chỉ giao hàng chi tiết
+                .col-12
+                  label.form-label.fw-semibold(for="diaChi") Địa chỉ giao hàng
+                  input#diaChi.form-control(
+                    type="text"
+                    name="diaChi"
+                    placeholder="Ví dụ: Số 123, đường Nguyễn Văn Linh, Quận 7, TP.HCM"
+                    value=nguoiDung.diaChi || ''
+                    required
+                  )
 
-              //- Ghi chú giao hàng
-              .col-12
-                label.form-label.fw-semibold(for="ghiChuGiaoHang") Ghi chú cho Shipper
-                textarea#ghiChuGiaoHang.form-control(
-                  name="ghiChuGiaoHang"
-                  rows="3"
-                  placeholder="Ví dụ: Bấm chuông cửa, giao tận phòng, hoặc để ở quầy lễ tân..."
-                )= nguoiDung.ghiChuGiaoHang || ''
+                //- Ghi chú giao hàng
+                .col-12
+                  label.form-label.fw-semibold(for="ghiChuGiaoHang") Ghi chú cho Shipper
+                  textarea#ghiChuGiaoHang.form-control(
+                    name="ghiChuGiaoHang"
+                    rows="3"
+                    placeholder="Ví dụ: Bấm chuông cửa, giao tận phòng, hoặc để ở quầy lễ tân..."
+                  )= nguoiDung.ghiChuGiaoHang || ''
 
-              //- Nút lưu thông tin
-              .col-12.mt-4.text-end
-                button.btn.px-4.py-2.fw-bold.text-white.rounded-3(
-                  type="submit"
-                  style="background-color: #ea580c; border: none;"
-                )
-                  i.fas.fa-save.me-2
-                  | Lưu thông tin giao hàng
+                //- Nút lưu thông tin
+                .col-12.mt-4.text-end
+                  button.btn.px-4.py-2.fw-bold.text-white.rounded-3(
+                    type="submit"
+                    style="background-color: #ea580c; border: none;"
+                  )
+                    i.fas.fa-save.me-2
+                    | Lưu thông tin giao hàng

@@ -1,55 +1,56 @@
 extends ../../layouts/main
 
 block content
-  .container.py-5.my-3
-    .row.g-4
-      //- Cột trái: Thẻ thông tin vắn tắt & Menu điều hướng (Đồng bộ với trang cá nhân)
-      .col-12.col-lg-4
-        .card.border-0.shadow-sm.rounded-4.overflow-hidden.mb-4
-          .card-body.text-center.p-4
-            .d-inline-flex.align-items-center.justify-content-center.rounded-circle.text-white.fw-bold.fs-2.mb-3(
-              style="width: 80px; height: 80px; background-color: #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);"
-            )= chuCaiDau
+  .account-page
+    .container.py-5
+      .row.g-4
+        //- Cột trái: Thẻ thông tin vắn tắt & Menu điều hướng (Đồng bộ với trang cá nhân)
+        .col-12.col-lg-4
+          .card.border-0.shadow-sm.rounded-4.overflow-hidden.mb-4
+            .card-body.text-center.p-4
+              .d-inline-flex.align-items-center.justify-content-center.rounded-circle.text-white.fw-bold.fs-2.mb-3(
+                style="width: 80px; height: 80px; background-color: #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);"
+              )= chuCaiDau
 
-            h5.fw-bold.mb-1= tenHienThi
-            p.text-muted.small.mb-2= nguoiDung.email
-            span.badge.rounded-pill.px-3.py-2.text-white(style="background-color: #ea580c;")
-              i.fas.fa-crown.me-1
-              | Thành viên ChipChip VIP
+              h5.fw-bold.mb-1= tenHienThi
+              p.text-muted.small.mb-2= nguoiDung.email
+              span.badge.rounded-pill.px-3.py-2.text-white(style="background-color: #ea580c;")
+                i.fas.fa-crown.me-1
+                | Thành viên ChipChip VIP
 
-        //- Menu điều hướng
-        .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
-          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
-            href="/tai-khoan"
-          )
-            i.fas.fa-user.me-2
-            | Thông tin cá nhân & Giao hàng
-          a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
-            href="/tai-khoan/don-hang"
-            style="background-color: #ea580c; border-color: #ea580c;"
-          )
-            i.fas.fa-receipt.me-2
-            | Đơn hàng của tôi
-
-      //- Cột phải: Danh sách đơn hàng
-      .col-12.col-lg-8
-        .card.border-0.shadow-sm.rounded-4.p-4.p-md-5
-          .d-flex.justify-content-between.align-items-center.mb-4.pb-3.border-bottom
-            div
-              h4.fw-bold.text-dark.mb-1 Lịch sử đơn hàng
-              p.text-muted.small.mb-0 Theo dõi trạng thái các đơn gà rán bạn đã đặt
-            span.material-symbols-outlined.fs-1.text-warning receipt_long
-
-          //- Giao diện khi chưa có đơn hàng nào (Empty State đẹp mắt)
-          .text-center.py-5
-            .d-inline-flex.align-items-center.justify-content-center.rounded-circle.bg-light.mb-3(style="width: 100px; height: 100px;")
-              span.material-symbols-outlined.text-muted(style="font-size: 48px;") shopping_bag
-            h5.fw-bold.text-dark Chưa có đơn hàng nào
-            p.text-muted.small.mx-auto.mb-4(style="max-width: 400px;")
-              | Bạn chưa đặt món ăn nào tại ChipChip. Hãy khám phá thực đơn gà rán giòn rụm và ưu đãi nóng hổi ngay nhé!
-            a.btn.px-4.py-2.fw-bold.text-white.rounded-pill(
-              href="/#thuc-don"
-              style="background-color: #ea580c; border: none;"
+          //- Menu điều hướng
+          .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
+            a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+              href="/tai-khoan"
             )
-              i.fas.fa-utensils.me-2
-              | Khám phá Thực đơn & Đặt món ngay
+              i.fas.fa-user.me-2
+              | Thông tin cá nhân & Giao hàng
+            a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
+              href="/tai-khoan/don-hang"
+              style="background-color: #ea580c; border-color: #ea580c;"
+            )
+              i.fas.fa-receipt.me-2
+              | Đơn hàng của tôi
+
+        //- Cột phải: Danh sách đơn hàng
+        .col-12.col-lg-8
+          .card.border-0.shadow-sm.rounded-4.p-4.p-md-5
+            .d-flex.justify-content-between.align-items-center.mb-4.pb-3.border-bottom
+              div
+                h4.fw-bold.text-dark.mb-1 Lịch sử đơn hàng
+                p.text-muted.small.mb-0 Theo dõi trạng thái các đơn gà rán bạn đã đặt
+              span.material-symbols-outlined.fs-1.text-warning receipt_long
+
+            //- Giao diện khi chưa có đơn hàng nào (Empty State đẹp mắt)
+            .text-center.py-5
+              .d-inline-flex.align-items-center.justify-content-center.rounded-circle.bg-light.mb-3(style="width: 100px; height: 100px;")
+                span.material-symbols-outlined.text-muted(style="font-size: 48px;") shopping_bag
+              h5.fw-bold.text-dark.mb-2 Chưa có đơn hàng nào
+              p.text-muted.small.mx-auto.mb-4(style="max-width: 420px;")
+                | Bạn chưa đặt món ăn nào tại ChipChip. Hãy khám phá thực đơn gà rán giòn rụm và ưu đãi nóng hổi ngay nhé!
+              a.btn.px-4.py-2.fw-bold.text-white.rounded-pill(
+                href="/#thuc-don"
+                style="background-color: #ea580c; border: none;"
+              )
+                i.fas.fa-utensils.me-2
+                | Khám phá Thực đơn & Đặt món ngay
