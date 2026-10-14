@@ -380,13 +380,21 @@ block content
                 | Tên tiếng Anh (phụ)
               input#edit_tenTiengAnh.form-control-custom(type="text", name="tenTiengAnh")
 
-            //- Slug
+            //- Slug (Tự động sinh từ tên món ăn, không sửa thủ công)
             .form-group-modal
               label.form-label-with-icon
                 span.label-icon-badge.badge-teal
                   i.fa-solid.fa-link
                 | Slug tĩnh (URL)
-              input#edit_slug.form-control-custom(type="text", name="slug")
+                small(style="font-size: 11px; color: #888; font-weight: 500; margin-left: 6px;") (Tự động sinh từ tên món)
+              input#edit_slug.form-control-custom(
+                type="text",
+                name="slug",
+                readonly="readonly",
+                data-slug-source="#edit_tenSanPham",
+                style="background-color: #F8F9FA; cursor: not-allowed; color: #555; font-family: monospace; font-size: 12.5px; border-color: #E2E8F0;",
+                title="Đường dẫn tĩnh được tự động tạo từ tên món, không sửa thủ công"
+              )
 
             //- Danh mục
             .form-group-modal

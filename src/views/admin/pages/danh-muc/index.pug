@@ -253,13 +253,21 @@ block content
                 option(value="hien-thi") 🟢 Hiển thị trên website
                 option(value="an") 🔴 Tạm ẩn khỏi website
 
-            //- Slug
+            //- Slug (Tự động sinh từ tên danh mục, không sửa thủ công)
             .form-group-modal.col-full
               label.form-label-with-icon
                 span.label-icon-badge.badge-teal
                   i.fa-solid.fa-link
                 | Slug tĩnh (URL)
-              input#edit_dm_slug.form-control-custom(type="text", name="slug")
+                small(style="font-size: 11px; color: #888; font-weight: 500; margin-left: 6px;") (Tự động sinh từ tên danh mục)
+              input#edit_dm_slug.form-control-custom(
+                type="text",
+                name="slug",
+                readonly="readonly",
+                data-slug-source="#edit_dm_tenDanhMuc",
+                style="background-color: #F8F9FA; cursor: not-allowed; color: #555; font-family: monospace; font-size: 12.5px; border-color: #E2E8F0;",
+                title="Đường dẫn tĩnh được tự động tạo từ tên danh mục, không sửa thủ công"
+              )
 
             //- Biểu tượng
             .form-group-modal.col-full

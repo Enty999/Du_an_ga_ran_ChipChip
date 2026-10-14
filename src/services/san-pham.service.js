@@ -96,11 +96,8 @@ class SanPhamService {
       trangThai,
     } = duLieu;
 
-    if (!slug || slug.trim() === "") {
-      slug = taoSlug(tenSanPham);
-    } else {
-      slug = taoSlug(slug);
-    }
+    // Slug luôn tự động sinh từ tên món ăn
+    slug = taoSlug(tenSanPham);
 
     // Đảm bảo slug là duy nhất
     const daCoSlug = await SanPham.findOne({ slug });
@@ -166,13 +163,14 @@ class SanPhamService {
       ...(trangThai && { trangThai }),
     };
 
-    if (slug) {
-      slug = taoSlug(slug);
-      const trungSlug = await SanPham.findOne({ slug, _id: { $ne: id } });
+    // Slug tự động sinh theo tên món ăn mới khi cập nhật tên
+    if (tenSanPham && tenSanPham.trim() !== "") {
+      let slugMoi = taoSlug(tenSanPham);
+      const trungSlug = await SanPham.findOne({ slug: slugMoi, _id: { $ne: id } });
       if (trungSlug) {
-        slug = `${slug}-${Date.now().toString().slice(-4)}`;
+        slugMoi = `${slugMoi}-${Date.now().toString().slice(-4)}`;
       }
-      duLieuCapNhat.slug = slug;
+      duLieuCapNhat.slug = slugMoi;
     }
 
     return await SanPham.findByIdAndUpdate(id, duLieuCapNhat, {

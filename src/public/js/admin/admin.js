@@ -662,4 +662,39 @@ window.initRealtimeTableFilter = function ({
   locDuLieu();
 };
 
+/**
+ * ==========================================================================
+ * HÀM TẠO SLUG TIẾNG VIỆT CHUẨN CLIENT-SIDE (TỰ ĐỘNG ĐỒNG BỘ TỪ TÊN)
+ * ==========================================================================
+ */
+window.taoSlug = function (chuoi) {
+  if (!chuoi) return "";
+  let str = chuoi.toString().toLowerCase().trim();
+  str = str
+    .replace(/[áàảãạăắằẳẵặâấầẩẫậ]/g, "a")
+    .replace(/[éèẻẽẹêếềểễệ]/g, "e")
+    .replace(/[íìỉĩị]/g, "i")
+    .replace(/[óòỏõọôốồổỗộơớờởỡợ]/g, "o")
+    .replace(/[úùủũụưứừửữự]/g, "u")
+    .replace(/[ýỳỷỹỵ]/g, "y")
+    .replace(/đ/g, "d")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+  return str;
+};
+
+// Tự động kết nối tất cả các trường slug với nguồn tên tương ứng
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("[data-slug-source]").forEach(function (slugTarget) {
+    const sourceSelector = slugTarget.getAttribute("data-slug-source");
+    const sourceEl = document.querySelector(sourceSelector);
+    if (sourceEl) {
+      sourceEl.addEventListener("input", function () {
+        slugTarget.value = window.taoSlug(this.value);
+      });
+    }
+  });
+});
+
 

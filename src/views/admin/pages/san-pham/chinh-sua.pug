@@ -53,13 +53,18 @@ block content
                 )
 
               .col-12.col-md-6
-                label.form-label-custom Đường dẫn tĩnh (Slug)
+                label.form-label-custom
+                  | Đường dẫn tĩnh (Slug) 
+                  small(style="font-size: 11px; color: #888; font-weight: normal;") (Tự động sinh từ tên món)
                 input.form-control-custom(
                   type="text",
                   name="slug",
-                  value=monAn.slug
+                  value=monAn.slug,
+                  readonly="readonly",
+                  data-slug-source="input[name='tenSanPham']",
+                  style="background-color: #F8F9FA; cursor: not-allowed; color: #555; font-family: monospace; font-size: 12.5px; border-color: #E2E8F0;",
+                  title="Đường dẫn tĩnh được tự động tạo từ tên món, không sửa thủ công"
                 )
-                small.text-muted(style="font-size: 11px;") Để trống nếu muốn tự động tạo lại theo tên món.
 
               .col-12.col-md-6
                 label.form-label-custom

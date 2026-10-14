@@ -41,11 +41,8 @@ class DanhMucService {
   async taoMoi(duLieu) {
     let { tenDanhMuc, slug, moTa, bieuTuong, hinhAnh, thuTu, trangThai } = duLieu;
     
-    if (!slug || slug.trim() === "") {
-      slug = taoSlug(tenDanhMuc);
-    } else {
-      slug = taoSlug(slug);
-    }
+    // Slug luôn tự động sinh từ tên danh mục
+    slug = taoSlug(tenDanhMuc);
 
     // Đảm bảo slug không trùng
     const daTonTaiSlug = await DanhMuc.findOne({ slug });
@@ -70,12 +67,14 @@ class DanhMucService {
   async capNhat(id, duLieu) {
     let { tenDanhMuc, slug, moTa, bieuTuong, hinhAnh, thuTu, trangThai } = duLieu;
 
-    if (slug) {
-      slug = taoSlug(slug);
-      const trungSlug = await DanhMuc.findOne({ slug, _id: { $ne: id } });
+    // Slug tự động đồng bộ theo tên danh mục mới khi cập nhật tên
+    if (tenDanhMuc && tenDanhMuc.trim() !== "") {
+      let slugMoi = taoSlug(tenDanhMuc);
+      const trungSlug = await DanhMuc.findOne({ slug: slugMoi, _id: { $ne: id } });
       if (trungSlug) {
-        slug = `${slug}-${Date.now().toString().slice(-4)}`;
+        slugMoi = `${slugMoi}-${Date.now().toString().slice(-4)}`;
       }
+      slug = slugMoi;
     }
 
     return await DanhMuc.findByIdAndUpdate(
