@@ -89,7 +89,7 @@ class DanhMucService {
         ...(thuTu !== undefined && { thuTu: Number(thuTu) }),
         ...(trangThai && { trangThai }),
       },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
   }
 
@@ -112,7 +112,7 @@ class DanhMucService {
     return await DanhMuc.findByIdAndUpdate(
       id,
       { trangThai: trangThaiMoi },
-      { new: true }
+      { returnDocument: 'after' }
     );
   }
 }

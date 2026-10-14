@@ -71,7 +71,7 @@ class NguoiDungService {
     if (trangThai) capNhat.trangThai = trangThai;
 
     return await NguoiDung.findByIdAndUpdate(id, capNhat, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     }).select("-password");
   }
@@ -83,7 +83,7 @@ class NguoiDungService {
     return await NguoiDung.findByIdAndUpdate(
       id,
       { vaiTro: vaiTroMoi },
-      { new: true }
+      { returnDocument: "after" }
     ).select("-password");
   }
 
@@ -94,7 +94,7 @@ class NguoiDungService {
     return await NguoiDung.findByIdAndUpdate(
       id,
       { trangThai: trangThaiMoi },
-      { new: true }
+      { returnDocument: "after" }
     ).select("-password");
   }
 

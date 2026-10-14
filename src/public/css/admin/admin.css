@@ -798,6 +798,121 @@ body, body.admin-body {
 }
 
 /* ==========================================================================
+   8.1. CÔNG TẮC BẬT / TẮT TRẠNG THÁI (BATHBOOM SWITCH TOGGLE)
+   Thiết kế công tắc gạt viên thuốc cao cấp đồng bộ toàn hệ thống Admin
+   ========================================================================== */
+.bb-switch {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  user-select: none !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  padding: 2px 0 !important;
+}
+
+/* Ẩn checkbox mặc định của trình duyệt */
+.bb-switch input[type="checkbox"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Thanh trượt công tắc (Pill Track) */
+.bb-switch-slider {
+  position: relative !important;
+  display: inline-block !important;
+  width: 44px !important;
+  height: 23px !important;
+  background-color: #D8CEC5 !important;
+  border-radius: 999px !important;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: inset 0 1.5px 3px rgba(74, 62, 61, 0.16) !important;
+  border: 1.5px solid #C4B8AD !important;
+  flex-shrink: 0 !important;
+}
+
+/* Nút tròn gạt (Knob) */
+.bb-switch-slider::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 1.5px !important;
+  left: 2px !important;
+  width: 17px !important;
+  height: 17px !important;
+  background-color: #ffffff !important;
+  border-radius: 50% !important;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 5px rgba(74, 62, 61, 0.24), 0 0 1px rgba(74, 62, 61, 0.12) !important;
+}
+
+/* Hiệu ứng rê chuột */
+.bb-switch:hover .bb-switch-slider {
+  border-color: #B0A298 !important;
+}
+.bb-switch:hover .bb-switch-slider::after {
+  transform: scale(1.06);
+}
+
+/* Trạng thái BẬT (Checked: Xanh Sage / Green đặc trưng BATHBOOM) */
+.bb-switch input[type="checkbox"]:checked + .bb-switch-slider {
+  background-color: #8E9F8E !important;
+  border-color: #7A8C7A !important;
+  box-shadow: 0 0 10px rgba(142, 159, 142, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+}
+
+.bb-switch input[type="checkbox"]:checked + .bb-switch-slider::after {
+  transform: translateX(21px) !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.3) !important;
+}
+
+/* Trạng thái Bị vô hiệu hóa / Đang gửi request */
+.bb-switch input[type="checkbox"]:disabled + .bb-switch-slider {
+  opacity: 0.6 !important;
+  cursor: wait !important;
+}
+
+/* Nhãn chữ hiển thị cạnh công tắc (Badge Label) */
+.bb-switch-label {
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  padding: 3px 9px !important;
+  border-radius: 12px !important;
+  transition: all 0.24s ease !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  line-height: 1.2 !important;
+  background: #F4EFEA !important;
+  color: #7B6E6D !important;
+  border: 1px solid #E4DBD2 !important;
+}
+
+/* Nhãn khi công tắc ĐANG BẬT */
+.bb-switch input[type="checkbox"]:checked ~ .bb-switch-label {
+  background: #EFF7EE !important;
+  color: #2E7D32 !important;
+  border: 1px solid #C8E6C9 !important;
+}
+
+/* Hàng trong bảng khi bị ẩn/ngừng bán */
+tr.row-disabled,
+tr.is-disabled {
+  background-color: #FAF8F5 !important;
+  opacity: 0.65 !important;
+  transition: all 0.3s ease !important;
+}
+tr.row-disabled td,
+tr.is-disabled td {
+  color: #9E8E85 !important;
+}
+
+/* ==========================================================================
    9. HUY HIỆU TRẠNG THÁI (STATUS BADGES BATHBOOM)
    ========================================================================== */
 .bb-badge {

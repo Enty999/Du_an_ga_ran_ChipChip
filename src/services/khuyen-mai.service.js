@@ -93,7 +93,7 @@ class KhuyenMaiService {
         ...(ngayKetThuc !== undefined && { ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null }),
         ...(trangThai && { trangThai }),
       },
-      { new: true, runValidators: true }
+      { returnDocument: "after", runValidators: true }
     );
   }
 
@@ -111,7 +111,7 @@ class KhuyenMaiService {
     return await KhuyenMai.findByIdAndUpdate(
       id,
       { trangThai: trangThaiMoi },
-      { new: true }
+      { returnDocument: "after" }
     );
   }
 }

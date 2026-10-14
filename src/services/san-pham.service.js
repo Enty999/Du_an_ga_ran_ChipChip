@@ -176,7 +176,7 @@ class SanPhamService {
     }
 
     return await SanPham.findByIdAndUpdate(id, duLieuCapNhat, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
   }
@@ -195,7 +195,7 @@ class SanPhamService {
     return await SanPham.findByIdAndUpdate(
       id,
       { trangThai: trangThaiMoi },
-      { new: true }
+      { returnDocument: "after" }
     );
   }
 }

@@ -85,7 +85,7 @@ class DonHangService {
       capNhat.trangThaiThanhToan = "da-thanh-toan";
     }
 
-    return await DonHang.findByIdAndUpdate(id, capNhat, { new: true });
+    return await DonHang.findByIdAndUpdate(id, capNhat, { returnDocument: "after" });
   }
 
   /**
