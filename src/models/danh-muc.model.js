@@ -52,4 +52,13 @@ const soDoDanhMuc = new mongoose.Schema(
   }
 );
 
+const { taoSlug } = require("../utils/dinh-dang.util");
+
+// Tự động sinh slug chuẩn SEO trước khi validate dữ liệu
+soDoDanhMuc.pre("validate", function () {
+  if (this.tenDanhMuc && (!this.slug || this.isModified("tenDanhMuc"))) {
+    this.slug = taoSlug(this.tenDanhMuc);
+  }
+});
+
 module.exports = mongoose.model("DanhMuc", soDoDanhMuc);

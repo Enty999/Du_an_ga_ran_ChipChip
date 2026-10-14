@@ -104,12 +104,21 @@ const soDoSanPham = new mongoose.Schema(
   }
 );
 
+const { taoSlug } = require("../utils/dinh-dang.util");
+
 // Virtual field: giá bán thực tế sau khi tính khuyến mãi
 soDoSanPham.virtual("giaHienTai").get(function () {
   if (this.giaKhuyenMai && this.giaKhuyenMai > 0 && this.giaKhuyenMai < this.giaGoc) {
     return this.giaKhuyenMai;
   }
   return this.giaGoc;
+});
+
+// Tự động sinh slug chuẩn SEO trước khi validate dữ liệu
+soDoSanPham.pre("validate", function () {
+  if (this.tenSanPham && (!this.slug || this.isModified("tenSanPham"))) {
+    this.slug = taoSlug(this.tenSanPham);
+  }
 });
 
 // Kích hoạt virtual fields khi chuyển đổi sang JSON/Object
