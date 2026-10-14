@@ -418,11 +418,14 @@ window.xuLiSubmitModalRestful = async function (formEl, options = {}) {
 window.toggleTrangThaiApi = async function (checkbox, url, activeText, inactiveText, activeVal, inactiveVal) {
   const isChecked = checkbox.checked;
   const newVal = isChecked ? activeVal : inactiveVal;
-  const labelEl = checkbox.parentElement.querySelector(".bb-switch-label");
+  const switchBox = checkbox.closest(".switch, .bb-switch") || checkbox.parentElement;
+  const cellEl = checkbox.closest("td");
+  const labelEl = (cellEl ? cellEl.querySelector(".switch-status-label, .bb-switch-label") : null) || checkbox.parentElement.querySelector(".bb-switch-label");
   const rowEl = checkbox.closest("tr");
 
-  // Vô hiệu hóa tạm thời để tránh bấm liên tục
+  // Vô hiệu hóa tạm thời để tránh bấm liên tục khi đang gửi request
   checkbox.disabled = true;
+  if (switchBox) switchBox.classList.add("is-disabled");
 
   try {
     let res;
@@ -436,6 +439,7 @@ window.toggleTrangThaiApi = async function (checkbox, url, activeText, inactiveT
     // Cập nhật nhãn chữ
     if (labelEl) {
       labelEl.textContent = isChecked ? activeText : inactiveText;
+      labelEl.style.color = isChecked ? "#2e7d32" : "#888888";
     }
 
     // Cập nhật giao diện hàng
@@ -455,7 +459,7 @@ window.toggleTrangThaiApi = async function (checkbox, url, activeText, inactiveT
         icon: "success",
         title: isChecked ? `Đã kích hoạt: ${activeText}` : `Đã tạm ẩn: ${inactiveText}`,
         showConfirmButton: false,
-        timer: 2000,
+        timer: 1800,
         timerProgressBar: true,
       });
     }
@@ -475,6 +479,7 @@ window.toggleTrangThaiApi = async function (checkbox, url, activeText, inactiveT
     }
   } finally {
     checkbox.disabled = false;
+    if (switchBox) switchBox.classList.remove("is-disabled");
   }
 };
 

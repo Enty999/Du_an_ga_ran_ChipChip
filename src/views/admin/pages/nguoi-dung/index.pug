@@ -120,16 +120,19 @@ block content
                       i.fa-solid.fa-user(style="font-size: 9.5px;")
                       | Khách hàng
 
-                //- 6. Trạng thái: CÔNG TẮC BẬT / TẮT (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                //- 6. Trạng thái: CÔNG TẮC 3D BẬT / TẮT (CHUẨN UIVERSE DRY-RABBIT-69 & RESTFUL PATCH)
                 td(style="text-align: center;")
-                  label.bb-switch(title="Gạt công tắc để Khóa/Mở khóa tài khoản")
-                    input(
-                      type="checkbox",
-                      checked=u.trangThai === 'hoat-dong',
-                      onchange=`toggleTrangThaiApi(this, '/admin/api/nguoi-dung/${u._id}/trang-thai', 'Hoạt động', 'Đã khóa', 'hoat-dong', 'khoa')`
-                    )
-                    span.bb-switch-slider
-                    span.bb-switch-label= u.trangThai === 'hoat-dong' ? 'Hoạt động' : 'Đã khóa'
+                  .switch-status-wrap
+                    label.switch.switch--sm(title="Gạt công tắc để Khóa/Mở khóa tài khoản")
+                      input.cb(
+                        type="checkbox",
+                        checked=u.trangThai === 'hoat-dong',
+                        onchange=`toggleTrangThaiApi(this, '/admin/api/nguoi-dung/${u._id}/trang-thai', 'Hoạt động', 'Đã khóa', 'hoat-dong', 'khoa')`
+                      )
+                      span.toggle
+                        span.left off
+                        span.right on
+                    span.switch-status-label(style="color: " + (u.trangThai === 'hoat-dong' ? '#2e7d32' : '#888888'))= u.trangThai === 'hoat-dong' ? 'Hoạt động' : 'Đã khóa'
 
                 //- 7. Ngày tạo
                 td(style="text-align: center; color: #7B6E6D; font-size: 12px;")

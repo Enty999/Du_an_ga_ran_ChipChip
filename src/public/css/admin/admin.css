@@ -1712,95 +1712,191 @@ textarea.form-control-custom {
 /* ==========================================================================
    15. CÔNG TẮC BẬT / TẮT TRẠNG THÁI CAO CẤP (CHUẨN BATHBOOM SWITCH TOGGLE)
    ========================================================================== */
-.bb-switch {
-  position: relative !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  cursor: pointer !important;
-  user-select: none !important;
-  margin: 0 !important;
-  vertical-align: middle !important;
-  padding: 2px 4px !important;
-  border-radius: 20px !important;
-  transition: all 0.2s ease !important;
+/* ==========================================================================
+   15. CÔNG TẮC 3D ROCKER SWITCH (CHUẨN UIVERSE DRY-RABBIT-69 & BATHBOOM)
+   Thiết kế công tắc cơ học 3D nghiêng ấn OFF/ON với bóng viền sắc nét
+   ========================================================================== */
+.switch {
+  font-size: 11px;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 5em;
+  height: 2.5em;
+  user-select: none;
+  flex-shrink: 0;
 }
 
-.bb-switch:hover {
-  background-color: rgba(142, 159, 142, 0.08) !important;
+/* Các kích thước scale */
+.switch--sm {
+  font-size: 10px;
 }
 
-.bb-switch input {
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  position: absolute !important;
+.switch--md {
+  font-size: 12px;
+}
+
+.switch--lg {
+  font-size: 15px;
+}
+
+/* Ẩn checkbox mặc định */
+.switch .cb,
+.switch input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+/* Khung viền đế công tắc 3D */
+.toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  background-color: #373737;
+  border-radius: 4px;
+  transition: 0.4s;
+  text-transform: uppercase;
+  font-weight: 700;
+  overflow: hidden;
+  box-shadow: -0.3em 0 0 0 #373737, -0.3em 0.3em 0 0 #373737,
+    0.3em 0 0 0 #373737, 0.3em 0.3em 0 0 #373737, 0 0.3em 0 0 #373737;
+}
+
+/* Nửa công tắc bên trái: OFF */
+.toggle > .left {
+  position: absolute;
+  display: flex;
+  width: 50%;
+  height: 88%;
+  background-color: #f3f3f3;
+  color: #373737;
+  left: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  transform-origin: right;
+  transform: rotateX(10deg);
+  transform-style: preserve-3d;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.82em;
+  letter-spacing: 0.5px;
+}
+
+.left::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(206, 206, 206);
+  transform-origin: center left;
+  transform: rotateY(90deg);
+}
+
+.left::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(112, 112, 112);
+  transform-origin: center bottom;
+  transform: rotateX(90deg);
+}
+
+/* Nửa công tắc bên phải: ON */
+.toggle > .right {
+  position: absolute;
+  display: flex;
+  width: 50%;
+  height: 88%;
+  background-color: #f3f3f3;
+  color: rgb(206, 206, 206);
+  right: 1px;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  transform-origin: left;
+  transform: rotateX(10deg) rotateY(-45deg);
+  transform-style: preserve-3d;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.82em;
+  letter-spacing: 0.5px;
+}
+
+.right::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(206, 206, 206);
+  transform-origin: center right;
+  transform: rotateY(-90deg);
+}
+
+.right::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgb(112, 112, 112);
+  transform-origin: center bottom;
+  transform: rotateX(90deg);
+}
+
+/* Khi BẬT (Checked): Bên trái thụt xuống, Bên phải nhô lên màu xanh nổi bật */
+.switch input:checked + .toggle > .left,
+.switch .cb:checked + .toggle > .left {
+  transform: rotateX(10deg) rotateY(45deg);
+  color: rgb(206, 206, 206);
+}
+
+.switch input:checked + .toggle > .right,
+.switch .cb:checked + .toggle > .right {
+  transform: rotateX(10deg) rotateY(0deg);
+  color: #487bdb;
+}
+
+/* Hiệu ứng rê chuột */
+.switch:hover .toggle {
+  box-shadow: -0.3em 0 0 0 #282828, -0.3em 0.3em 0 0 #282828,
+    0.3em 0 0 0 #282828, 0.3em 0.3em 0 0 #282828, 0 0.3em 0 0 #282828;
+}
+
+/* Trạng thái bị khóa / đang gửi ajax */
+.switch.is-disabled,
+.switch.is-loading {
+  opacity: 0.55;
+  cursor: wait !important;
   pointer-events: none !important;
 }
 
-.bb-switch-slider {
-  position: relative !important;
-  width: 44px !important;
-  height: 24px !important;
-  background-color: #D6CBC1 !important;
-  border: 1.5px solid #BDB0A4 !important;
-  border-radius: 24px !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12) !important;
-  display: inline-block !important;
-  flex-shrink: 0 !important;
+.switch input:disabled + .toggle,
+.switch .cb:disabled + .toggle {
+  cursor: not-allowed;
 }
 
-.bb-switch-slider::before {
-  content: "" !important;
-  position: absolute !important;
-  height: 18px !important;
-  width: 18px !important;
-  left: 2px !important;
-  top: 1.5px !important;
-  background-color: #ffffff !important;
-  border-radius: 50% !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22), 0 0 1px rgba(0, 0, 0, 0.2) !important;
+/* Khung bọc công tắc và nhãn trạng thái đi kèm trong bảng */
+.switch-status-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
-.bb-switch input:checked + .bb-switch-slider {
-  background-color: #8E9F8E !important;
-  border-color: #728572 !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 6px rgba(142, 159, 142, 0.35) !important;
-}
-
-.bb-switch input:checked + .bb-switch-slider::before {
-  transform: translateX(20px) !important;
-  background-color: #ffffff !important;
-}
-
-.bb-switch:active .bb-switch-slider::before {
-  width: 21px !important;
-}
-
-.bb-switch-label {
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.3px !important;
-  padding: 2.5px 8px !important;
-  border-radius: 12px !important;
-  transition: all 0.25s ease !important;
-  display: inline-block !important;
-  line-height: 1.3 !important;
-  white-space: nowrap !important;
-}
-
-.bb-switch input:checked ~ .bb-switch-label {
-  background-color: #EFF7EE !important;
-  color: #2E7D32 !important;
-  border: 1px solid #C5E1BE !important;
-}
-
-.bb-switch input:not(:checked) ~ .bb-switch-label {
-  background-color: #FDE8E8 !important;
-  color: #C62828 !important;
-  border: 1px solid #F5C6CB !important;
+.switch-status-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: color 0.25s ease;
+  white-space: nowrap;
 }
 
 /* ==========================================================================

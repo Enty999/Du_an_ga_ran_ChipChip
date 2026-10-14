@@ -103,16 +103,19 @@ block content
                   else
                     span(style="color: #8E9F8E; font-weight: 600;") Vô thời hạn
 
-                //- 7. Trạng thái: CÔNG TẮC BẬT / TẮT (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                //- 7. Trạng thái: CÔNG TẮC 3D BẬT / TẮT (CHUẨN UIVERSE DRY-RABBIT-69 & RESTFUL PATCH)
                 td(style="text-align: center;")
-                  label.bb-switch(title="Gạt công tắc để Bật/Tắt hiệu lực mã khuyến mãi")
-                    input(
-                      type="checkbox",
-                      checked=km.trangThai === 'hoat-dong',
-                      onchange=`toggleTrangThaiApi(this, '/admin/api/khuyen-mai/${km._id}/trang-thai', 'Áp dụng', 'Tạm dừng', 'hoat-dong', 'tam-dung')`
-                    )
-                    span.bb-switch-slider
-                    span.bb-switch-label= km.trangThai === 'hoat-dong' ? 'Áp dụng' : (km.trangThai === 'tam-dung' ? 'Tạm dừng' : 'Hết hạn')
+                  .switch-status-wrap
+                    label.switch.switch--sm(title="Gạt công tắc để Bật/Tắt hiệu lực mã khuyến mãi")
+                      input.cb(
+                        type="checkbox",
+                        checked=km.trangThai === 'hoat-dong',
+                        onchange=`toggleTrangThaiApi(this, '/admin/api/khuyen-mai/${km._id}/trang-thai', 'Áp dụng', 'Tạm dừng', 'hoat-dong', 'tam-dung')`
+                      )
+                      span.toggle
+                        span.left off
+                        span.right on
+                    span.switch-status-label(style="color: " + (km.trangThai === 'hoat-dong' ? '#2e7d32' : '#888888'))= km.trangThai === 'hoat-dong' ? 'Áp dụng' : (km.trangThai === 'tam-dung' ? 'Tạm dừng' : 'Hết hạn')
 
                 //- 8. Thao tác CRUD (RESTful)
                 td(style="text-align: center;")

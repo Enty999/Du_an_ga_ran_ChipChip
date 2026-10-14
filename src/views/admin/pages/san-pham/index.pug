@@ -142,16 +142,19 @@ block content
                   else
                     span(style="color: #bbb;") -
 
-                //- 9. Trạng thái: CÔNG TẮC BẬT / TẮT BÁN (CHUẨN BATHBOOM SWITCH TOGGLE - RESTFUL PATCH)
+                //- 9. Trạng thái: CÔNG TẮC 3D BẬT / TẮT BÁN (CHUẨN UIVERSE DRY-RABBIT-69 & RESTFUL PATCH)
                 td(style="text-align: center;")
-                  label.bb-switch(title="Gạt công tắc để Bật/Tắt bán món ăn này")
-                    input(
-                      type="checkbox",
-                      checked=mon.trangThai === 'dang-ban',
-                      onchange=`toggleTrangThaiApi(this, '/admin/api/san-pham/${mon._id}/trang-thai', 'Đang bán', 'Ngừng bán', 'dang-ban', 'ngung-ban')`
-                    )
-                    span.bb-switch-slider
-                    span.bb-switch-label= mon.trangThai === 'dang-ban' ? 'Đang bán' : (mon.trangThai === 'het-hang' ? 'Hết hàng' : 'Ngừng bán')
+                  .switch-status-wrap
+                    label.switch.switch--sm(title="Gạt công tắc để Bật/Tắt bán món ăn này")
+                      input.cb(
+                        type="checkbox",
+                        checked=mon.trangThai === 'dang-ban',
+                        onchange=`toggleTrangThaiApi(this, '/admin/api/san-pham/${mon._id}/trang-thai', 'Đang bán', 'Ngừng bán', 'dang-ban', 'ngung-ban')`
+                      )
+                      span.toggle
+                        span.left off
+                        span.right on
+                    span.switch-status-label(style="color: " + (mon.trangThai === 'dang-ban' ? '#2e7d32' : '#888888'))= mon.trangThai === 'dang-ban' ? 'Đang bán' : (mon.trangThai === 'het-hang' ? 'Hết hàng' : 'Ngừng bán')
 
                 //- 10. Thao tác CRUD (Nút mini chuẩn BATHBOOM RESTFUL)
                 td(style="text-align: center;")
