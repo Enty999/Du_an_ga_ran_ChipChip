@@ -3,7 +3,7 @@
  * Quản lý Header Mobile Drawer & Đánh dấu Active Navigation
  */
 
-// Link cũ /#ve-chipchip (trước kia cuộn xuống section giới thiệu ở trang chủ) nay chuyển sang trang /gioi-thieu
+// Link cũ /#ve-chipchip (trước kia cuộn xuống section giới thiệu ở trang chủ) nay chuyển sang trang /gioi-thieu  
 if (
   (window.location.pathname === "/" || window.location.pathname === "") &&
   window.location.hash === "#ve-chipchip"
@@ -227,10 +227,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Thông báo Toast nhỏ gọn, trượt từ góc phải màn hình
     Swal.fire({
       toast: true,
+      width: "300px",
       position: "top-end",
       icon: "success",
-      title: "Đăng nhập thành công!",
-      text: "Chào mừng bạn quay lại với ChipChip 🍗",
+      title:
+        '<span style="font-size: 12px; font-weight: 600;">Đăng nhập thành công!</span>',
+      html: '<span style="font-size: 10px;">Chào mừng bạn quay lại với ChipChip 🍗</span>',
+      showCloseButton: true,
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
