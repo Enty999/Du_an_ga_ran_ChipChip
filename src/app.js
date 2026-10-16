@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const xacThucRoute = require("./routes/xac-thuc.route");
 const { ganThongTinNguoiDung } = require("./middlewares/kiem-tra-dang-nhap.middleware");
 const taiKhoanRoute = require("./routes/tai-khoan.route");
+const sanPhamRoute = require("./routes/san-pham.route");
 
 const app = express();
 
@@ -18,11 +19,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(ganThongTinNguoiDung);
 
+app.use("/thuc-don", sanPhamRoute);
+
 // Routes
 app.use("/auth", xacThucRoute);
-
-// Dùng route tài khoản (đã có middleware bảo vệ bên trong)
 app.use("/tai-khoan", taiKhoanRoute);
+app.use("/san-pham", sanPhamRoute);
 
 app.get("/", (req, res) => {
   res.render("pages/trang-chu/trang-chu", { title: "Trang chủ - Gà Rán ChipChip" });
