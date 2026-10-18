@@ -28,6 +28,11 @@ block content
             i.fas.fa-user.me-2
             | Thông tin cá nhân & Giao hàng
           a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan/doi-mat-khau"
+          )
+            i.fas.fa-key.me-2
+            | Đổi mật khẩu
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
             href="/tai-khoan/don-hang"
           )
             i.fas.fa-receipt.me-2
@@ -45,6 +50,15 @@ block content
           //- Thông báo thành công nếu có
           if message
             .alert.alert-success.rounded-3.py-2.small= message
+          
+          //- Thông báo lỗi nếu có
+          if errors && errors.length > 0
+            .alert.alert-danger.rounded-3.py-2.small
+              ul.list-unstyled.mb-0
+                each error in errors
+                  li
+                    i.fas.fa-exclamation-circle.me-1
+                    = error
 
           form(action="/tai-khoan/cap-nhat", method="POST")
             .row.g-3
@@ -107,3 +121,4 @@ block content
                 )
                   i.fas.fa-save.me-2
                   | Lưu thông tin giao hàng
+
