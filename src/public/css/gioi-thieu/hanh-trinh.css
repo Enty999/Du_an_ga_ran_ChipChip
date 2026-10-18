@@ -127,15 +127,15 @@
 }
 
 .about-timeline__card--featured {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
   border-color: transparent;
-  box-shadow: 0 12px 28px -4px rgba(147, 71, 0, 0.3);
+  box-shadow: 0 12px 28px -4px rgba(176, 45, 33, 0.35);
 }
 
 .about-timeline__card--featured:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 36px -4px rgba(147, 71, 0, 0.4);
+  box-shadow: 0 16px 36px -4px rgba(176, 45, 33, 0.45);
 }
 
 .about-timeline__card-head {
@@ -165,7 +165,7 @@
 }
 
 .about-timeline__year--featured {
-  color: var(--color-primary-fixed);
+  color: var(--color-secondary-fixed);
 }
 
 .about-timeline__badge {
@@ -192,8 +192,8 @@
 }
 
 .about-timeline__badge--featured {
-  background-color: var(--color-primary-container);
-  color: var(--color-on-primary);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-on-secondary);
 }
 
 .about-timeline__progress {
@@ -206,7 +206,7 @@
 }
 
 .about-timeline__progress--featured {
-  background-color: var(--color-primary-container);
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .about-timeline__progress-bar {
@@ -228,7 +228,7 @@
 }
 
 .about-timeline__progress-bar--featured {
-  background-color: var(--color-primary-fixed);
+  background-color: var(--color-secondary-fixed);
 }
 
 .about-timeline__card-title {
@@ -270,7 +270,7 @@
 }
 
 .about-timeline__card-meta--featured {
-  color: var(--color-primary-fixed);
+  color: var(--color-secondary-fixed);
   border-top-color: rgba(255, 255, 255, 0.2);
 }
 

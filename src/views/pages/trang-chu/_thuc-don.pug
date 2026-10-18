@@ -9,21 +9,24 @@ section.menu#thuc-don(aria-labelledby="menu-section-title")
           .menu__chapter-stamp(aria-hidden="true") 菜
           span.menu__chapter-label GỌI THEO TÊN MÓN
         h2.menu__title#menu-section-title Thực đơn đặc sắc
+
+      //- Thanh phụ: Dòng chữ nhỏ mô tả và 5 nút lọc nằm thẳng hàng nhau
+      .menu__bar
         p.menu__intro
           | Được chế biến thủ công với các loại sốt ngào chảo nóng ngay khi nhận đơn.
 
-      //- Bộ lọc phân loại món ăn (Category Filter Tabs)
-      .menu__filters(role="tablist", aria-label="Phân loại thực đơn")
-        button.menu__filter-btn.menu__filter-btn--active(type="button", role="tab", aria-selected="true")
-          | Tất cả món
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Gà sốt đậm vị
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Gà truyền thống giòn da
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Burger &amp; Món phụ
-        button.menu__filter-btn(type="button", role="tab", aria-selected="false")
-          | Đồ uống mát lạnh
+        //- Bộ lọc phân loại món ăn (Category Filter Tabs)
+        .menu__filters(role="tablist", aria-label="Phân loại thực đơn")
+          button.menu__filter-btn.menu__filter-btn--active(type="button", role="tab", aria-selected="true")
+            | Tất cả món
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Gà sốt đậm vị
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Gà truyền thống giòn da
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Burger &amp; Món phụ
+          button.menu__filter-btn(type="button", role="tab", aria-selected="false")
+            | Đồ uống mát lạnh
 
     //- Lưới 6 thẻ món ăn đặc trưng (Food Menu Grid)
     .menu__grid

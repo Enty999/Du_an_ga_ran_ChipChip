@@ -189,8 +189,9 @@
 .about-hero__highlight {
   color: var(--color-primary);
   font-style: italic;
-  font-family: "Playfair Display", "Merriweather", Georgia, serif;
+  font-family: "Playfair Display", "Times New Roman", serif;
   font-weight: 600;
+  letter-spacing: normal;
 }
 
 .about-hero__desc {
