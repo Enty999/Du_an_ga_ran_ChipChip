@@ -18,7 +18,7 @@ const trangDonHang = (req, res) => {
 // [GET] /tai-khoan/doi-mat-khau -> Hiển thị trang đổi mật khẩu
 const trangDoiMatKhau = (req, res) => {
   res.render("pages/tai-khoan/doi-mat-khau", {
-    title: "Đổi mật khẩu tài khoản",
+    title: "Đổi mật khẩu",
   });
 };
 
@@ -53,7 +53,7 @@ const doiMatKhau = async (req, res) => {
     // Nếu có lỗi nhập liệu -> Dừng lại và báo lỗi
     if (errors.length > 0) {
       return res.render("pages/tai-khoan/doi-mat-khau", {
-        title: "Thông tin tài khoản",
+        title: "Đổi mật khẩu",
         errors,
       });
     }
@@ -68,7 +68,7 @@ const doiMatKhau = async (req, res) => {
     const matKhauChinhXac = await bcrypt.compare(matKhauHienTai, nguoiDung.password);
     if (!matKhauChinhXac) {
       return res.render("pages/tai-khoan/doi-mat-khau", {
-        title: "Thông tin tài khoản",
+        title: "Đổi mật khẩu",
         errors: ["Mật khẩu hiện tại không chính xác!"],
       });
     }
@@ -78,13 +78,13 @@ const doiMatKhau = async (req, res) => {
     nguoiDung.password = matKhauMoi;
     await nguoiDung.save();
 
-    res.render("pages/tai-khoan/thong-tin", {
-      title: "Thông tin tài khoản",
+    res.render("pages/tai-khoan/doi-mat-khau", {
+      title: "Đổi mật khẩu",
       message: "Đổi mật khẩu thành công! Mật khẩu mới đã có hiệu lực.",
     });
   } catch (error) {
-    res.status(500).render("pages/tai-khoan/thong-tin", {
-      title: "Thông tin tài khoản",
+    res.status(500).render("pages/tai-khoan/doi-mat-khau", {
+      title: "Đổi mật khẩu",
       errors: ["Lỗi server: " + error.message],
     });
   }
@@ -120,8 +120,13 @@ const xuLiCapNhat = async (req, res) => {
         diaChi: diaChi ? diaChi.trim() : "",
         ghiChuGiaoHang: ghiChuGiaoHang ? ghiChuGiaoHang.trim() : "",
       },
-      { new: true }
-    );
+      { returnDocument: "after" }
+    ).select("-password"); // Không để mật khẩu đã băm lọt vào res.locals/view
+
+    // Người dùng đã bị xóa trong lúc đang đăng nhập -> Bắt đăng nhập lại
+    if (!nguoiDungCapNhat) {
+      return res.redirect("/auth/dang-nhap");
+    }
 
     res.locals.nguoiDung = nguoiDungCapNhat;
 

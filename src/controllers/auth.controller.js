@@ -14,7 +14,7 @@ const dichVuEmail = require("../services/email.service");
 
 // Hàm trợ giúp: Tạo mã xác thực JWT từ ID người dùng với thời hạn sống là 1 ngày (1d)
 const taoMaXacThuc = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET||"chipchip_secret_key_2026", { expiresIn: "1d" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
 // Hàm trợ giúp: Tạo mã OTP ngẫu nhiên gồm 6 số ngẫu nhiên

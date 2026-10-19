@@ -4,8 +4,12 @@
   "description": "Website ban ga ran ChipChip dung Express.js, MongoDB va Pug SSR",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
-  },  
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "check": "node scripts/check.js",
+    "build": "npm run check",
+    "prepare": "node scripts/setup-hooks.js"
+  },
   "keywords": [
     "express",
     "mongodb",
@@ -15,6 +19,9 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",

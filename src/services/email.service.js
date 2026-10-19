@@ -32,7 +32,37 @@ const guiEmailXacThucOTP = async (emailNguoiNhan, maOTP) => {
       </div>
         `,
   };
+  // Có BREVO_API_KEY (khi deploy) -> Gửi qua API HTTPS, vì Render gói Free chặn cổng SMTP
+  if (process.env.BREVO_API_KEY) {
+    return await guiQuaBrevo(noiDungThu);
+  }
+
+  // Chạy local -> Gửi qua Gmail SMTP như bình thường
   return await phuongTienGuiMail.sendMail(noiDungThu);
+};
+
+// Gửi thư qua API của Brevo (cổng 443). Email người gửi (EMAIL_USER) phải được xác minh trên Brevo
+const guiQuaBrevo = async (noiDungThu) => {
+  const phanHoi = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": process.env.BREVO_API_KEY,
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "GaRanChipChip", email: process.env.EMAIL_USER },
+      to: [{ email: noiDungThu.to }],
+      subject: noiDungThu.subject,
+      htmlContent: noiDungThu.html,
+    }),
+    signal: AbortSignal.timeout(15000), // Tránh treo request đăng ký quá lâu
+  });
+
+  if (!phanHoi.ok) {
+    throw new Error(`Gửi email OTP thất bại (Brevo ${phanHoi.status}): ${await phanHoi.text()}`);
+  }
+  return await phanHoi.json();
 };
 
 module.exports = { guiEmailXacThucOTP };
