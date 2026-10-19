@@ -1,0 +1,99 @@
+extends ../../layouts/main
+
+block content
+  .container.py-5.my-3
+    .row.g-4
+      //- Cột trái: Thẻ thông tin vắn tắt & Menu điều hướng
+      .col-12.col-lg-4
+        .card.border-0.shadow-sm.rounded-4.overflow-hidden.mb-4
+          .card-body.text-center.p-4
+            .d-inline-flex.align-items-center.justify-content-center.rounded-circle.text-white.fw-bold.fs-2.mb-3(
+              style="width: 80px; height: 80px; background-color: #ea580c; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);"
+            )= chuCaiDau
+
+            h5.fw-bold.mb-1= tenHienThi
+            p.text-muted.small.mb-2= nguoiDung.email
+
+            span.badge.rounded-pill.px-3.py-2.text-white(style="background-color: #ea580c;")
+              i.fas.fa-crown.me-1
+              | Thành viên ChipChip VIP
+
+        //- Menu chuyển hướng nhanh (Đang Active ở mục Đổi mật khẩu)
+        .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan"
+          )
+            i.fas.fa-user.me-2
+            | Thông tin cá nhân & Giao hàng
+          a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
+            href="/tai-khoan/doi-mat-khau"
+            style="background-color: #ea580c; border-color: #ea580c;"
+          )
+            i.fas.fa-key.me-2
+            | Đổi mật khẩu
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan/don-hang"
+          )
+            i.fas.fa-receipt.me-2
+            | Đơn hàng của tôi
+
+      //- Cột phải: Form Đổi mật khẩu
+      .col-12.col-lg-8
+        .card.border-0.shadow-sm.rounded-4.p-4.p-md-5
+          .d-flex.justify-content-between.align-items-center.mb-4.pb-3.border-bottom
+            div
+              h4.fw-bold.text-dark.mb-1 Đổi mật khẩu
+              p.text-muted.small.mb-0 Đổi mật khẩu định kỳ để nâng cao tính bảo mật cho tài khoản của bạn.
+            span.material-symbols-outlined.fs-1.text-primary lock_reset
+
+          //- Thông báo thành công nếu có
+          if message
+            .alert.alert-success.rounded-3.py-2.small= message
+          
+          //- Thông báo lỗi nếu có
+          if errors && errors.length > 0
+            .alert.alert-danger.rounded-3.py-2.small
+              ul.list-unstyled.mb-0
+                each error in errors
+                  li
+                    i.fas.fa-exclamation-circle.me-1
+                    = error
+
+          form(action="/tai-khoan/doi-mat-khau", method="POST")
+            .row.g-3
+              .col-12
+                label.form-label.fw-semibold(for="matKhauHienTai") Mật khẩu hiện tại
+                input#matKhauHienTai.form-control(
+                  type="password"
+                  name="matKhauHienTai"
+                  placeholder="Nhập mật khẩu đang sử dụng"
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label.fw-semibold(for="matKhauMoi") Mật khẩu mới
+                input#matKhauMoi.form-control(
+                  type="password"
+                  name="matKhauMoi"
+                  placeholder="Tối thiểu 6 ký tự"
+                  minlength="6"
+                  required
+                )
+
+              .col-12.col-md-6
+                label.form-label.fw-semibold(for="xacNhanMatKhauMoi") Xác nhận mật khẩu mới
+                input#xacNhanMatKhauMoi.form-control(
+                  type="password"
+                  name="xacNhanMatKhauMoi"
+                  placeholder="Nhập lại mật khẩu mới"
+                  minlength="6"
+                  required
+                )
+
+              .col-12.mt-4.text-end
+                button.btn.px-4.py-2.fw-bold.text-white.rounded-3(
+                  type="submit"
+                  style="background-color: #ea580c; border: none;"
+                )
+                  i.fas.fa-key.me-2
+                  | Cập nhật mật khẩu

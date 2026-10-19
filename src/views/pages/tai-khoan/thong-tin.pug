@@ -20,19 +20,24 @@ block content
                 i.fas.fa-crown.me-1
                 | Thành viên ChipChip VIP
 
-          //- Menu chuyển hướng nhanh giữa các trang tài khoản
-          .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
-            a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
-              href="/tai-khoan"
-              style="background-color: #ea580c; border-color: #ea580c;"
-            )
-              i.fas.fa-user.me-2
-              | Thông tin cá nhân & Giao hàng
-            a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
-              href="/tai-khoan/don-hang"
-            )
-              i.fas.fa-receipt.me-2
-              | Đơn hàng của tôi
+        //- Menu chuyển hướng nhanh giữa các trang tài khoản
+        .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
+          a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
+            href="/tai-khoan"
+            style="background-color: #ea580c; border-color: #ea580c;"
+          )
+            i.fas.fa-user.me-2
+            | Thông tin cá nhân & Giao hàng
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan/doi-mat-khau"
+          )
+            i.fas.fa-key.me-2
+            | Đổi mật khẩu
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan/don-hang"
+          )
+            i.fas.fa-receipt.me-2
+            | Đơn hàng của tôi
 
         //- Cột phải: Form cập nhật thông tin nhận đồ ăn
         .col-12.col-lg-8
@@ -43,9 +48,18 @@ block content
                 p.text-muted.small.mb-0 Cập nhật thông tin để shipper giao gà rán nóng hổi đến đúng nơi!
               span.material-symbols-outlined.fs-1.text-warning local_shipping
 
-            //- Thông báo thành công nếu có
-            if message
-              .alert.alert-success.rounded-3.py-2.small= message
+          //- Thông báo thành công nếu có
+          if message
+            .alert.alert-success.rounded-3.py-2.small= message
+          
+          //- Thông báo lỗi nếu có
+          if errors && errors.length > 0
+            .alert.alert-danger.rounded-3.py-2.small
+              ul.list-unstyled.mb-0
+                each error in errors
+                  li
+                    i.fas.fa-exclamation-circle.me-1
+                    = error
 
             form(action="/tai-khoan/cap-nhat", method="POST")
               .row.g-3
@@ -100,11 +114,12 @@ block content
                     placeholder="Ví dụ: Bấm chuông cửa, giao tận phòng, hoặc để ở quầy lễ tân..."
                   )= nguoiDung.ghiChuGiaoHang || ''
 
-                //- Nút lưu thông tin
-                .col-12.mt-4.text-end
-                  button.btn.px-4.py-2.fw-bold.text-white.rounded-3(
-                    type="submit"
-                    style="background-color: #ea580c; border: none;"
-                  )
-                    i.fas.fa-save.me-2
-                    | Lưu thông tin giao hàng
+              //- Nút lưu thông tin
+              .col-12.mt-4.text-end
+                button.btn.px-4.py-2.fw-bold.text-white.rounded-3(
+                  type="submit"
+                  style="background-color: #ea580c; border: none;"
+                )
+                  i.fas.fa-save.me-2
+                  | Lưu thông tin giao hàng
+

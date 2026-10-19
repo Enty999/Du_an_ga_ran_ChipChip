@@ -18,19 +18,24 @@ block content
                 i.fas.fa-crown.me-1
                 | Thành viên ChipChip VIP
 
-          //- Menu điều hướng
-          .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
-            a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
-              href="/tai-khoan"
-            )
-              i.fas.fa-user.me-2
-              | Thông tin cá nhân & Giao hàng
-            a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
-              href="/tai-khoan/don-hang"
-              style="background-color: #ea580c; border-color: #ea580c;"
-            )
-              i.fas.fa-receipt.me-2
-              | Đơn hàng của tôi
+        //- Menu điều hướng
+        .list-group.shadow-sm.rounded-4.border-0.overflow-hidden
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan"
+          )
+            i.fas.fa-user.me-2
+            | Thông tin cá nhân & Giao hàng
+          a.list-group-item.list-group-item-action.border-0.py-3.fw-semibold.text-secondary(
+            href="/tai-khoan/doi-mat-khau"
+          )
+            i.fas.fa-key.me-2
+            | Đổi mật khẩu
+          a.list-group-item.list-group-item-action.active.border-0.py-3.fw-semibold(
+            href="/tai-khoan/don-hang"
+            style="background-color: #ea580c; border-color: #ea580c;"
+          )
+            i.fas.fa-receipt.me-2
+            | Đơn hàng của tôi
 
         //- Cột phải: Danh sách đơn hàng
         .col-12.col-lg-8
