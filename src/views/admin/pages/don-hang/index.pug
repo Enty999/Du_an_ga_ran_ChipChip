@@ -89,9 +89,10 @@ block content
                 td(style="text-align: left;")
                   .fw-bold(style="color: #4A3E3D;")= don.thongTinNguoiNhan.hoTen
                   .small.text-muted= don.thongTinNguoiNhan.soDienThoai
-                  if don.thongTinNguoiNhan.diaChiGiaoHang
+                  - const diaChiNhan = don.thongTinNguoiNhan.diaChi || don.thongTinNguoiNhan.diaChiGiaoHang;
+                  if diaChiNhan
                     .small.text-truncate(style="max-width: 200px; color: #888; font-size: 11px;")
-                      = don.thongTinNguoiNhan.diaChiGiaoHang
+                      = diaChiNhan
 
                 //- 3. Món đã đặt
                 td(style="text-align: left;")
@@ -147,12 +148,12 @@ block content
                       data-madon=don.maDonHang,
                       data-hoten=don.thongTinNguoiNhan.hoTen,
                       data-sdt=don.thongTinNguoiNhan.soDienThoai,
-                      data-diachi=don.thongTinNguoiNhan.diaChiGiaoHang,
+                      data-diachi=don.thongTinNguoiNhan.diaChi || don.thongTinNguoiNhan.diaChiGiaoHang || 'Nhận tại quán',
                       data-tongtien=dinhDangTien(don.tongThanhToan),
                       data-phuongthuc=don.phuongThucThanhToan ? don.phuongThucThanhToan.toUpperCase() : 'COD',
                       data-trangthaitt=don.trangThaiThanhToan,
                       data-trangthaidh=don.trangThaiDonHang,
-                      data-ghichu=don.ghiChu || '',
+                      data-ghichu=don.thongTinNguoiNhan.ghiChu || don.ghiChu || don.lyDoHuy || '',
                       data-ngay=dinhDangNgay(don.createdAt),
                       onclick="moModalXemDonHang(this)"
                     )
@@ -164,6 +165,15 @@ block content
                       title="Mở toàn bộ hóa đơn chi tiết"
                     )
                       i.fa-solid.fa-file-lines
+
+                    //- Nút Xóa Mini (RESTful DELETE không tải lại trang)
+                    form.form-xac-nhan-xoa.m-0(
+                      action=`/admin/api/don-hang/${don._id}`,
+                      method="POST",
+                      data-ten-muc=`Đơn hàng #${don.maDonHang}`
+                    )
+                      button.btn-mini-action.btn-mini-delete(type="submit", title="Xóa đơn hàng")
+                        i.fa-solid.fa-trash-can
           else
             tr
               td(colspan="8", style="text-align: center; padding: 45px 20px; color: #888;")

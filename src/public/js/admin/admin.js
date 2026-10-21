@@ -172,6 +172,12 @@ function initDeleteConfirm() {
               countBadge.innerHTML = `<i class="fa-solid fa-filter" style="font-size: 10px; color: #8E9F8E;"></i> Hiển thị <b>${rows.length}</b>`;
             }
           }, 350);
+        } else {
+          // Nếu xóa từ trang chi tiết hoặc chỉnh sửa, chuyển hướng về trang danh sách
+          const redirectUrl = form.getAttribute("data-redirect-url") || window.location.pathname.split("/").slice(0, 3).join("/");
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1200);
         }
       } catch (err) {
         console.error("Lỗi xóa RESTful:", err);

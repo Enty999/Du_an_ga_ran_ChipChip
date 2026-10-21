@@ -83,13 +83,21 @@ block content
                   placeholder="Để trống nếu không đổi mật khẩu"
                 )
 
-              .col-12
+              .col-12.col-md-6
                 label.form-label-custom Địa chỉ nhận hàng mặc định
                 textarea.form-control-custom(
                   name="diaChi",
                   rows="3",
                   placeholder="Địa chỉ nhà, số đường, phường, quận..."
                 )= user.diaChi
+
+              .col-12.col-md-6
+                label.form-label-custom Ghi chú giao hàng (Nếu có)
+                textarea.form-control-custom(
+                  name="ghiChuGiaoHang",
+                  rows="3",
+                  placeholder="Giao giờ hành chính, gọi trước khi đến..."
+                )= user.ghiChuGiaoHang
 
             .form-actions-custom(style="margin-top: 18px; padding-top: 14px;")
               button.btn-submit-custom(type="submit")

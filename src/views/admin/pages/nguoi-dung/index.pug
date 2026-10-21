@@ -152,6 +152,7 @@ block content
                       data-vaitro=u.vaiTro,
                       data-trangthai=u.trangThai,
                       data-diachi=u.diaChi || '',
+                      data-ghichugiaohang=u.ghiChuGiaoHang || '',
                       onclick="moModalSuaNguoiDung(this)"
                     )
                       i.fa-solid.fa-pen-to-square
@@ -263,7 +264,15 @@ block content
                 span.label-icon-badge.badge-pink
                   i.fa-solid.fa-location-dot
                 | Địa chỉ nhận hàng mặc định
-              textarea.form-control-custom(name="diaChi", rows="3", placeholder="Địa chỉ giao nhận, số nhà, phường xã, quận huyện...")
+              textarea.form-control-custom(name="diaChi", rows="2", placeholder="Địa chỉ giao nhận, số nhà, phường xã, quận huyện...")
+
+            //- Ghi chú giao hàng
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-note-sticky
+                | Ghi chú giao hàng (Nếu có)
+              input.form-control-custom(type="text", name="ghiChuGiaoHang", placeholder="Giao giờ hành chính, gọi trước...")
 
         .modal-footer
           button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalThemNguoiDung')") Hủy bỏ
@@ -353,7 +362,15 @@ block content
                 span.label-icon-badge.badge-pink
                   i.fa-solid.fa-location-dot
                 | Địa chỉ nhận hàng mặc định
-              textarea#edit_u_diaChi.form-control-custom(name="diaChi", rows="3")
+              textarea#edit_u_diaChi.form-control-custom(name="diaChi", rows="2")
+
+            //- Ghi chú giao hàng
+            .col-full
+              label.form-label-with-icon
+                span.label-icon-badge.badge-yellow
+                  i.fa-solid.fa-note-sticky
+                | Ghi chú giao hàng
+              input#edit_u_ghiChuGiaoHang.form-control-custom(type="text", name="ghiChuGiaoHang", placeholder="Giao giờ hành chính, gọi trước...")
 
         .modal-footer
           button.btn-modal-cancel(type="button", onclick="closeAdminModal('modalSuaNguoiDung')") Hủy bỏ
@@ -391,6 +408,7 @@ block content
       document.getElementById("edit_u_vaiTro").value = d.vaitro || "khach-hang";
       document.getElementById("edit_u_trangThai").value = d.trangthai || "hoat-dong";
       document.getElementById("edit_u_diaChi").value = d.diachi || "";
+      document.getElementById("edit_u_ghiChuGiaoHang").value = d.ghichugiaohang || "";
 
       window.openAdminModal("modalSuaNguoiDung");
     }

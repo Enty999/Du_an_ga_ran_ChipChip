@@ -145,6 +145,12 @@ const soDoDonHang = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    // Ghi chú nội bộ của quản trị viên / nhân viên
+    ghiChu: {
+      type: String,
+      default: "",
+      trim: true,
+    },
   },
   {
     timestamps: true,

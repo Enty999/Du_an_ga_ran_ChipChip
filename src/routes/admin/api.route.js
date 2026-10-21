@@ -8,6 +8,7 @@ const {
   khuyenMaiApi,
   nguoiDungApi,
   donHangApi,
+  tongQuanApi,
 } = require("../../controllers/admin/api.controller");
 
 // Import Middleware Validation
@@ -87,6 +88,15 @@ router.post("/nguoi-dung/xoa/:id", nguoiDungValidate.idHopLe, nguoiDungApi.xoa);
 router.get("/don-hang", donHangApi.layDanhSach);
 router.get("/don-hang/:id", donHangValidate.idHopLe, donHangApi.layChiTiet);
 router.patch("/don-hang/:id/trang-thai", donHangValidate.capNhatTrangThai, donHangApi.capNhatTrangThai);
+router.delete("/don-hang/:id", donHangValidate.idHopLe, donHangApi.xoa);
+
+// Alias
 router.post("/don-hang/cap-nhat-trang-thai/:id", donHangValidate.capNhatTrangThai, donHangApi.capNhatTrangThai);
+router.post("/don-hang/xoa/:id", donHangValidate.idHopLe, donHangApi.xoa);
+
+// ==========================================
+// 6. TỔNG QUAN & BÁO CÁO THỐNG KÊ RESTFUL API
+// ==========================================
+router.get("/tong-quan", tongQuanApi.layThongKe);
 
 module.exports = router;

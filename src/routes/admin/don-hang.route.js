@@ -13,4 +13,8 @@ router.get("/chi-tiet/:id", donHangValidate.idHopLe, donHangController.chiTiet);
 router.post("/cap-nhat-trang-thai/:id", donHangValidate.capNhatTrangThai, donHangController.xuLiCapNhatTrangThai);
 router.patch("/:id/trang-thai", donHangValidate.capNhatTrangThai, donHangController.xuLiCapNhatTrangThai);
 
+// [POST | DELETE] /admin/don-hang/xoa/:id - Xóa đơn hàng
+router.post("/xoa/:id", donHangValidate.idHopLe, donHangController.xuLiXoa);
+router.delete("/:id", donHangValidate.idHopLe, donHangController.xuLiXoa);
+
 module.exports = router;

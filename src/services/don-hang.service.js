@@ -74,11 +74,12 @@ class DonHangService {
   /**
    * Cập nhật trạng thái đơn hàng và thanh toán
    */
-  async capNhatTrangThai(id, { trangThaiDonHang, trangThaiThanhToan, lyDoHuy }) {
+  async capNhatTrangThai(id, { trangThaiDonHang, trangThaiThanhToan, lyDoHuy, ghiChu }) {
     const capNhat = {};
     if (trangThaiDonHang) capNhat.trangThaiDonHang = trangThaiDonHang;
     if (trangThaiThanhToan) capNhat.trangThaiThanhToan = trangThaiThanhToan;
     if (lyDoHuy !== undefined) capNhat.lyDoHuy = lyDoHuy.trim();
+    if (ghiChu !== undefined) capNhat.ghiChu = ghiChu.trim();
 
     // Nếu trạng thái là "da-giao" và phương thức là tiền mặt, tự động đánh dấu đã thanh toán
     if (trangThaiDonHang === "da-giao") {

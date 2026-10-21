@@ -39,6 +39,15 @@ block content
       button.btn-export-excel(onclick="window.print()", type="button")
         i.fa-solid.fa-print
         span In hóa đơn
+      form.form-xac-nhan-xoa.m-0(
+        action=`/admin/api/don-hang/${donHang._id}`,
+        method="POST",
+        data-ten-muc=`Đơn hàng #${donHang.maDonHang}`,
+        data-redirect-url="/admin/don-hang"
+      )
+        button.btn-mini-action.btn-mini-delete(type="submit", style="width: auto; height: 38px; padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;", title="Xóa đơn hàng này")
+          i.fa-solid.fa-trash-can
+          span Xóa đơn
       a.btn-filter-reset(href="/admin/don-hang")
         i.fa-solid.fa-arrow-left
         span Quay lại danh sách
@@ -153,9 +162,15 @@ block content
               span= donHang.thongTinNguoiNhan.email
           div
             strong Địa chỉ: 
-            span= donHang.thongTinNguoiNhan.diaChiGiaoHang
-          if donHang.thongTinNguoiNhan.ghiChuGiaoHang
+            span= donHang.thongTinNguoiNhan.diaChi || donHang.thongTinNguoiNhan.diaChiGiaoHang || 'Nhận tại quán'
+          - const ghiChuKhach = donHang.thongTinNguoiNhan.ghiChu || donHang.thongTinNguoiNhan.ghiChuGiaoHang;
+          if ghiChuKhach
             div.mt-2.p-2(style="background: #FFF9E6; border: 1px solid #FFE082; border-radius: 8px; color: #8C6D00; font-size: 12px;")
               i.fa-solid.fa-note-sticky.me-1
               strong Khách dặn: 
-              span= donHang.thongTinNguoiNhan.ghiChuGiaoHang
+              span= ghiChuKhach
+          if donHang.lyDoHuy
+            div.mt-2.p-2(style="background: #FFEBEE; border: 1px solid #FFCDD2; border-radius: 8px; color: #C62828; font-size: 12px;")
+              i.fa-solid.fa-triangle-exclamation.me-1
+              strong Lý do hủy: 
+              span= donHang.lyDoHuy

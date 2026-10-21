@@ -40,6 +40,7 @@ class KhuyenMaiService {
       giamToiDa,
       donHangToiThieu,
       soLuong,
+      ngayBatDau,
       ngayKetThuc,
       trangThai,
     } = duLieu;
@@ -59,6 +60,7 @@ class KhuyenMaiService {
       giamToiDa: Number(giamToiDa) || 0,
       donHangToiThieu: Number(donHangToiThieu) || 0,
       soLuong: Number(soLuong) || 100,
+      ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : new Date(),
       ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null,
       trangThai: trangThai || "hoat-dong",
     });
@@ -76,6 +78,7 @@ class KhuyenMaiService {
       giamToiDa,
       donHangToiThieu,
       soLuong,
+      ngayBatDau,
       ngayKetThuc,
       trangThai,
     } = duLieu;
@@ -90,6 +93,7 @@ class KhuyenMaiService {
         ...(giamToiDa !== undefined && { giamToiDa: Number(giamToiDa) }),
         ...(donHangToiThieu !== undefined && { donHangToiThieu: Number(donHangToiThieu) }),
         ...(soLuong !== undefined && { soLuong: Number(soLuong) }),
+        ...(ngayBatDau !== undefined && { ngayBatDau: ngayBatDau ? new Date(ngayBatDau) : new Date() }),
         ...(ngayKetThuc !== undefined && { ngayKetThuc: ngayKetThuc ? new Date(ngayKetThuc) : null }),
         ...(trangThai && { trangThai }),
       },

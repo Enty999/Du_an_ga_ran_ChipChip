@@ -5,6 +5,7 @@ const nguoiDungValidate = require("../../validations/nguoi-dung.validate");
 
 // [GET] /admin/nguoi-dung - Danh sách người dùng
 router.get("/", nguoiDungController.index);
+router.get("/them-moi", (req, res) => res.redirect("/admin/nguoi-dung?openModal=them"));
 
 // [POST] /admin/nguoi-dung/them-moi - Thêm người dùng mới
 router.post("/them-moi", nguoiDungValidate.taoMoi, nguoiDungController.xuLiThemMoi);

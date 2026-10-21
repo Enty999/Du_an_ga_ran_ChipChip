@@ -4,6 +4,7 @@ const danhMucService = require("../../services/danh-muc.service");
 const khuyenMaiService = require("../../services/khuyen-mai.service");
 const nguoiDungService = require("../../services/nguoi-dung.service");
 const donHangService = require("../../services/don-hang.service");
+const thongKeService = require("../../services/thong-ke.service");
 const { dinhDangTien, dinhDangNgay } = require("../../utils/dinh-dang.util");
 
 // Import Helper phản hồi chuẩn RESTful (JSend / JSON:API)
@@ -402,15 +403,42 @@ const donHangApi = {
   capNhatTrangThai: async (req, res) => {
     try {
       const { id } = req.params;
-      const { trangThaiDonHang, trangThaiThanhToan, lyDoHuy } = req.body;
+      const { trangThaiDonHang, trangThaiThanhToan, lyDoHuy, ghiChu } = req.body;
       const don = await donHangService.capNhatTrangThai(id, {
         trangThaiDonHang,
         trangThaiThanhToan,
         lyDoHuy,
+        ghiChu,
       });
       return guiPhanHoiThanhCong(res, 200, "Đã cập nhật trạng thái đơn hàng thành công!", don);
     } catch (error) {
       return guiPhanHoiLoi(res, 400, error.message || "Lỗi cập nhật trạng thái đơn hàng", error.message);
+    }
+  },
+
+  // [DELETE] /admin/api/don-hang/:id
+  xoa: async (req, res) => {
+    try {
+      const { id } = req.params;
+      await donHangService.xoa(id);
+      return guiPhanHoiThanhCong(res, 200, "Đã xóa đơn hàng thành công!");
+    } catch (error) {
+      return guiPhanHoiLoi(res, 500, "Lỗi khi xóa đơn hàng", error.message);
+    }
+  },
+};
+
+// ============================================================================
+// 6. RESTFUL API TỔNG QUAN & BÁO CÁO THỐNG KÊ
+// ============================================================================
+const tongQuanApi = {
+  // [GET] /admin/api/tong-quan
+  layThongKe: async (req, res) => {
+    try {
+      const duLieu = await thongKeService.layTongQuan();
+      return guiPhanHoiThanhCong(res, 200, "Lấy dữ liệu thống kê tổng quan thành công!", duLieu);
+    } catch (error) {
+      return guiPhanHoiLoi(res, 500, "Lỗi máy chủ khi lấy dữ liệu thống kê", error.message);
     }
   },
 };
@@ -421,4 +449,5 @@ module.exports = {
   khuyenMaiApi,
   nguoiDungApi,
   donHangApi,
+  tongQuanApi,
 };

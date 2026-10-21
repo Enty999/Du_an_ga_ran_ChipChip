@@ -1,12 +1,22 @@
 const jwt = require("jsonwebtoken");
 const NguoiDung = require("../models/nguoi-dung.model");
 
-// Middleware 1: Lấy thông tin người dùng từ cookie gắn vào giao diện (chạy ở mọi trang)
+// Middleware 1: Lấy thông tin người dùng từ cookie hoặc Authorization header (chạy ở mọi trang)
 const ganThongTinNguoiDung = async (req, res, next) => {
-  const token = req.cookies ? req.cookies.maXacThuc : null;
+  let token = req.cookies ? req.cookies.maXacThuc : null;
+
+  // Hỗ trợ chuẩn RESTful API: Authorization: Bearer <token>
+  if (!token && req.headers && req.headers.authorization) {
+    const authHeader = req.headers.authorization;
+    if (authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7).trim();
+    }
+  }
 
   // Nếu không có token -> chưa đăng nhập, gán null cho view và cho đi tiếp
   if (!token) {
+    req.user = null;
+    req.nguoiDung = null;
     res.locals.nguoiDung = null;
     return next();
   }
@@ -18,12 +28,18 @@ const ganThongTinNguoiDung = async (req, res, next) => {
     // Tìm người dùng trong DB (lấy tất cả trừ mật khẩu)
     const nguoiDung = await NguoiDung.findById(giaiMa.id).select("-password");
 
-    // Gán vào res.locals để header.pug có thể đọc được
+    // Gán vào req và res.locals theo chuẩn MVC & RESTful
+    req.user = nguoiDung || null;
+    req.nguoiDung = nguoiDung || null;
     res.locals.nguoiDung = nguoiDung || null;
     next();
   } catch (error) {
     // Token không hợp lệ hoặc hết hạn -> Xóa cookie và coi như chưa đăng nhập
-    res.clearCookie("maXacThuc");
+    if (req.cookies && req.cookies.maXacThuc) {
+      res.clearCookie("maXacThuc");
+    }
+    req.user = null;
+    req.nguoiDung = null;
     res.locals.nguoiDung = null;
     next();
   }

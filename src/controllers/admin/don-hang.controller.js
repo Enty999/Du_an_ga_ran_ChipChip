@@ -76,12 +76,13 @@ const chiTiet = async (req, res) => {
 const xuLiCapNhatTrangThai = async (req, res) => {
   try {
     const { id } = req.params;
-    const { trangThaiDonHang, trangThaiThanhToan, lyDoHuy } = req.body;
+    const { trangThaiDonHang, trangThaiThanhToan, lyDoHuy, ghiChu } = req.body;
 
     const don = await donHangService.capNhatTrangThai(id, {
       trangThaiDonHang,
       trangThaiThanhToan,
       lyDoHuy,
+      ghiChu,
     });
 
     if (req.xhr || req.headers.accept?.includes("application/json") || req.body.isAjax) {
@@ -102,8 +103,30 @@ const xuLiCapNhatTrangThai = async (req, res) => {
   }
 };
 
+/**
+ * [POST | DELETE] /admin/don-hang/xoa/:id
+ * Xóa đơn hàng (dành cho đơn hủy hoặc đơn thử nghiệm)
+ */
+const xuLiXoa = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await donHangService.xoa(id);
+    if (req.xhr || req.headers.accept?.includes("application/json") || req.body.isAjax) {
+      return res.json({ success: true, message: "Đã xóa đơn hàng thành công!" });
+    }
+    res.redirect("/admin/don-hang?thongBao=" + encodeURIComponent("Đã xóa đơn hàng thành công!"));
+  } catch (error) {
+    console.error("Lỗi xóa đơn hàng:", error);
+    if (req.xhr || req.headers.accept?.includes("application/json") || req.body.isAjax) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+    res.redirect("/admin/don-hang?loi=" + encodeURIComponent(error.message));
+  }
+};
+
 module.exports = {
   index,
   chiTiet,
   xuLiCapNhatTrangThai,
+  xuLiXoa,
 };

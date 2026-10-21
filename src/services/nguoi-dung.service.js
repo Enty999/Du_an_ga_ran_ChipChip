@@ -1,5 +1,6 @@
 // Service Người Dùng: Xử lý quản lý tài khoản và phân quyền khách hàng / admin
 const NguoiDung = require("../models/nguoi-dung.model");
+const bcrypt = require("bcryptjs");
 
 class NguoiDungService {
   /**
@@ -60,7 +61,7 @@ class NguoiDungService {
    * Cập nhật thông tin người dùng từ Admin hoặc trang cá nhân
    */
   async capNhat(id, duLieu) {
-    const { hoTen, SDT, diaChi, ghiChuGiaoHang, vaiTro, trangThai } = duLieu;
+    const { hoTen, SDT, diaChi, ghiChuGiaoHang, vaiTro, trangThai, matKhauMoi, password, anhDaiDien } = duLieu;
     const capNhat = {};
 
     if (hoTen) capNhat.hoTen = hoTen.trim();
@@ -69,6 +70,14 @@ class NguoiDungService {
     if (ghiChuGiaoHang !== undefined) capNhat.ghiChuGiaoHang = ghiChuGiaoHang.trim();
     if (vaiTro) capNhat.vaiTro = vaiTro;
     if (trangThai) capNhat.trangThai = trangThai;
+    if (anhDaiDien !== undefined) capNhat.anhDaiDien = anhDaiDien.trim();
+
+    // Hỗ trợ cập nhật/đổi mật khẩu an toàn
+    const passMoi = matKhauMoi || password;
+    if (passMoi && typeof passMoi === "string" && passMoi.trim() !== "") {
+      const salt = await bcrypt.genSalt(10);
+      capNhat.password = await bcrypt.hash(passMoi.trim(), salt);
+    }
 
     return await NguoiDung.findByIdAndUpdate(id, capNhat, {
       returnDocument: "after",
@@ -102,7 +111,7 @@ class NguoiDungService {
    * Tạo tài khoản người dùng mới từ trang Admin
    */
   async taoMoi(duLieu) {
-    const { hoTen, email, password, SDT, diaChi, vaiTro, trangThai } = duLieu;
+    const { hoTen, email, password, SDT, diaChi, ghiChuGiaoHang, vaiTro, trangThai, anhDaiDien } = duLieu;
     const tonTai = await NguoiDung.findOne({ email: email.toLowerCase().trim() });
     if (tonTai) {
       throw new Error("Email đã được sử dụng bởi tài khoản khác!");
@@ -113,8 +122,10 @@ class NguoiDungService {
       password: password || "123456",
       SDT: SDT ? SDT.trim() : "",
       diaChi: diaChi ? diaChi.trim() : "",
+      ghiChuGiaoHang: ghiChuGiaoHang ? ghiChuGiaoHang.trim() : "",
       vaiTro: vaiTro || "khach-hang",
       trangThai: trangThai || "hoat-dong",
+      anhDaiDien: anhDaiDien ? anhDaiDien.trim() : "",
     });
     return await nguoiDungMoi.save();
   }
