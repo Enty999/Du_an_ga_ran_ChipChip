@@ -1,5 +1,6 @@
 // Model SanPham (Món ăn / Gà rán ChipChip)
 const mongoose = require("mongoose");
+const { taoSlug } = require("../utils/dinh-dang.util");
 
 // Cấu trúc Schema cho Món ăn / Sản phẩm
 const soDoSanPham = new mongoose.Schema(
@@ -104,8 +105,6 @@ const soDoSanPham = new mongoose.Schema(
   }
 );
 
-const { taoSlug } = require("../utils/dinh-dang.util");
-
 // Virtual field: giá bán thực tế sau khi tính khuyến mãi
 soDoSanPham.virtual("giaHienTai").get(function () {
   if (this.giaKhuyenMai && this.giaKhuyenMai > 0 && this.giaKhuyenMai < this.giaGoc) {
@@ -125,4 +124,5 @@ soDoSanPham.pre("validate", function () {
 soDoSanPham.set("toJSON", { virtuals: true });
 soDoSanPham.set("toObject", { virtuals: true });
 
-module.exports = mongoose.model("SanPham", soDoSanPham);
+// Tham số thứ 3 là "sanphams" đảm bảo Mongoose trỏ CHÍNH XÁC vào collection có sẵn trên Atlas
+module.exports = mongoose.model("SanPham", soDoSanPham, "sanphams");

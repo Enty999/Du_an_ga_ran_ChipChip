@@ -1,5 +1,6 @@
 // Model DanhMuc (Danh mục món ăn / gà rán)
 const mongoose = require("mongoose");
+const { taoSlug } = require("../utils/dinh-dang.util");
 
 // Cấu trúc Schema cho Danh Mục món ăn
 const soDoDanhMuc = new mongoose.Schema(
@@ -51,8 +52,6 @@ const soDoDanhMuc = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-const { taoSlug } = require("../utils/dinh-dang.util");
 
 // Tự động sinh slug chuẩn SEO trước khi validate dữ liệu
 soDoDanhMuc.pre("validate", function () {

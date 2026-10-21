@@ -11,7 +11,24 @@ Dự án này render giao diện trực tiếp từ server bằng **Pug**, nên 
 - **MongoDB**: cơ sở dữ liệu NoSQL
 - **Mongoose**: thư viện làm việc với MongoDB dễ hơn
 - **Pug**: template engine để render HTML từ server
-- **Nodemon**: tự động restart server khi code thay đổi
+- **bcryptjs**: mã hóa mật khẩu người dùng
+- **jsonwebtoken (JWT)** + **cookie-parser**: đăng nhập, lưu token trong cookie
+- **Nodemailer**: gửi email mã OTP khi đăng ký
+- **dotenv**: đọc biến môi trường từ file `.env`
+- **Nodemon**: tự động restart server khi code thay đổi (chỉ dùng khi dev)
+
+## Yêu cầu môi trường
+
+- **Node.js >= 20.19** (Mongoose 9 yêu cầu tối thiểu bản này). Khuyên dùng **Node 22** — file `.nvmrc` đã ghi sẵn `22`, nếu dùng `nvm` thì chỉ cần chạy `nvm use`.
+- **npm** đi kèm Node.js
+- Một database MongoDB (local hoặc Atlas, xem phần [Cấu hình MongoDB](#cấu-hình-mongodb))
+- Một tài khoản Gmail có **App Password** nếu muốn gửi được email OTP khi đăng ký
+
+Kiểm tra phiên bản Node đang dùng:
+
+```bash
+node -v
+```
 
 ## Cách chạy dự án
 
@@ -35,22 +52,50 @@ express
 mongoose
 pug
 dotenv
-nodemon
+bcryptjs
+cookie-parser
+jsonwebtoken
+nodemailer
+nodemon (devDependencies)
 ```
 
 Nếu tạo project từ đầu và muốn cài thủ công thì dùng:
 
 ```bash
-npm install express mongoose pug dotenv
+npm install express mongoose pug dotenv bcryptjs cookie-parser jsonwebtoken nodemailer
 npm install --save-dev nodemon
 ```
 
-Tạo file `.env` dựa theo mẫu `.env.example`, ví dụ:
+Tạo file `.env` bằng cách copy từ mẫu `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+Sau đó mở `.env` và điền giá trị thật, ví dụ:
 
 ```env
-PORT=3000
+PORT=3007
 MONGODB_URI=mongodb://127.0.0.1:27017/ga_ran_chipchip
+JWT_SECRET=mot-chuoi-bi-mat-dai-va-kho-doan
+EMAIL_USER=tai-khoan-cua-ban@gmail.com
+EMAIL_PASS=app-password-16-ky-tu
+NODE_ENV=development
 ```
+
+Ý nghĩa các biến môi trường:
+
+| Biến | Bắt buộc | Ý nghĩa |
+| --- | --- | --- |
+| `PORT` | Không | Cổng chạy website, mặc định `3007` |
+| `MONGODB_URI` | **Có** | Link kết nối MongoDB (local hoặc Atlas) |
+| `JWT_SECRET` | **Có** | Chuỗi bí mật dùng để ký token đăng nhập (JWT) |
+| `EMAIL_USER` | Khi cần gửi OTP | Địa chỉ Gmail dùng để gửi email OTP khi đăng ký |
+| `EMAIL_PASS` | Khi cần gửi OTP | **App Password** của Gmail (không phải mật khẩu đăng nhập Gmail) |
+| `BREVO_API_KEY` | Chỉ khi deploy | Có biến này thì OTP gửi qua API Brevo thay cho Gmail SMTP (xem mục Deploy). Chạy local để trống |
+| `NODE_ENV` | Không | Đặt `production` khi deploy để cookie đăng nhập được bật `secure` (chỉ gửi qua HTTPS) |
+
+Lưu ý: nếu thiếu `MONGODB_URI` hoặc `JWT_SECRET` thì server sẽ **từ chối khởi động** và báo lỗi, nên nhớ điền đủ 2 biến này trước khi chạy.
 
 ## Cấu hình MongoDB
 
@@ -115,49 +160,169 @@ MongoDB local hoặc Atlas = database thật
 
 Nếu không có MongoDB local hoặc Atlas, server sẽ không kết nối database được.
 
-Chạy server ở môi trường dev:
+## Các lệnh npm
+
+Chạy server ở môi trường dev (dùng `nodemon`, tự restart khi sửa code):
 
 ```bash
 npm run dev
 ```
 
-Chạy server bình thường:
+Chạy server bình thường (dùng `node server.js`, dùng khi deploy/production):
 
 ```bash
 npm start
 ```
 
+Build/kiểm tra code trước khi push (không cần database hay file `.env`):
+
+```bash
+npm run build
+```
+
+`npm run build` chạy `npm run check`. Dự án là Express + Pug SSR nên không có bước biên dịch, "build" ở đây là kiểm tra toàn bộ code không lỗi.
+
+Sau khi chạy server, mở trình duyệt tại:
+
+```txt
+http://localhost:3007
+```
+
+Cổng mặc định là `3007` (khai báo trong `server.js`), có thể đổi bằng biến `PORT` trong `.env`.
+
+## Kiểm tra build / CI
+
+Lệnh `npm run check` sẽ chạy file `scripts/check.js` để:
+
+- Kiểm tra cú pháp (syntax) của các file JavaScript
+- Thử load `src/app.js` để chắc chắn các `require` không bị lỗi
+- Compile toàn bộ view Pug để phát hiện lỗi template
+
+Lệnh này **không cần kết nối MongoDB và không cần file `.env`**, nên ai clone về cũng chạy được ngay sau `npm install`.
+
+Dự án có cấu hình **GitHub Actions** tại `.github/workflows/ci.yml`:
+
+- Tự chạy khi push lên nhánh `main` và khi mở/cập nhật **mọi Pull Request**
+- Chạy trên 2 phiên bản Node: `20.19.x` và `22.x`
+- Các bước: `npm ci` rồi `npm run build` (giống hệt lệnh chạy ở máy)
+
+### Tự kiểm tra trước khi push (git hook)
+
+Dự án có git hook `.githooks/pre-push`: **mỗi lần `git push`, hook tự chạy `npm run build`, nếu lỗi thì chặn push** và in ra file bị lỗi.
+
+- Hook được bật tự động khi chạy `npm install` hoặc `npm ci` (script `prepare` → `scripts/setup-hooks.js` đặt `git config core.hooksPath .githooks`).
+- Ai đã clone từ trước chỉ cần chạy lại `npm install` một lần để bật hook.
+- Trường hợp khẩn cấp có thể bỏ qua: `git push --no-verify` (CI trên GitHub vẫn sẽ kiểm tra).
+
+Quy ước làm việc:
+
+- Chạy `npm run build` ở máy trước khi push (hook cũng tự chạy khi push)
+- Làm tính năng trên nhánh riêng (ví dụ `feature/ten-tinh-nang`) rồi mở Pull Request
+- **Chỉ merge Pull Request khi CI báo xanh** (tất cả check đều pass)
+
+## Deploy lên Render (link web chạy thật)
+
+GitHub Pages chỉ phát file tĩnh nên **không chạy được** dự án Node/Express này (nó chỉ hiện README). Web được deploy lên **Render** (gói Free) theo file cấu hình `render.yaml`, database dùng **MongoDB Atlas**.
+
+Render gói Free **chặn cổng SMTP** (25/465/587) nên không gửi được mail qua Gmail. Vì vậy khi deploy, email OTP được gửi qua **API của Brevo** (HTTPS, miễn phí 300 mail/ngày). Code tự chọn: có `BREVO_API_KEY` thì dùng Brevo, không có thì dùng Gmail.
+
+### Bước 1: MongoDB Atlas cho phép Render kết nối
+
+Atlas → **Network Access** → **Add IP Address** → `0.0.0.0/0` (Allow access from anywhere). Render Free không có IP cố định nên phải mở như vậy; bảo mật vẫn nhờ username/password trong `MONGODB_URI`.
+
+### Bước 2: Lấy API key của Brevo
+
+1. Đăng ký tài khoản tại [brevo.com](https://www.brevo.com) (miễn phí).
+2. **Senders, Domains & Dedicated IPs** → **Senders** → thêm email dùng làm `EMAIL_USER` và bấm link xác minh gửi về hộp thư.
+3. **SMTP & API** → tab **API Keys** → **Generate a new API key** → copy lại (chỉ hiện 1 lần).
+
+### Bước 3: Tạo web trên Render
+
+1. Đăng nhập [render.com](https://render.com) bằng GitHub. Tài khoản GitHub phải có quyền admin repo (chủ repo hoặc được chủ repo cấp quyền) để Render đọc được repo.
+2. **New** → **Blueprint** → chọn repo `Du_an_ga_ran_ChipChip` → Render đọc `render.yaml`.
+3. Điền các biến Render hỏi: `MONGODB_URI` (link Atlas), `EMAIL_USER` (email đã xác minh ở Brevo), `BREVO_API_KEY`. `JWT_SECRET` được Render tự sinh.
+4. Bấm **Apply** và đợi build xong. Link web có dạng `https://ga-ran-chipchip.onrender.com` (tên có thể khác nếu bị trùng).
+
+Sau đó mỗi lần merge vào `main`, Render **chờ CI trên GitHub báo xanh rồi mới deploy** (`autoDeployTrigger: checksPass` trong `render.yaml`). CI đỏ thì Render không deploy, web vẫn chạy bản cũ.
+
+### Lưu ý gói Free
+
+- Không có người truy cập khoảng 15 phút thì server "ngủ", lần mở đầu tiên phải chờ khoảng 30–60 giây. Trước khi thầy chấm nên mở link trước 1 lần.
+- Email OTP gửi từ Gmail qua Brevo có thể rơi vào mục **Spam**, nhớ kiểm tra.
+
 ## Cấu trúc thư mục
 
 ```txt
 Du_an_ga_ran_ChipChip/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                    # GitHub Actions: npm ci + npm run build
+├── render.yaml                       # Cấu hình deploy lên Render
+├── .githooks/
+│   └── pre-push                      # Tự chạy npm run build trước khi push, lỗi thì chặn
+├── scripts/
+│   ├── check.js                      # Kiểm tra syntax, load app, compile Pug (npm run check/build)
+│   └── setup-hooks.js                # Bật git hook khi npm install (script prepare)
 ├── src/
 │   ├── config/
+│   │   └── database.js
 │   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   └── tai-khoan.controller.js
 │   ├── middlewares/
+│   │   ├── kiem-tra-dang-ky.middleware.js
+│   │   └── kiem-tra-dang-nhap.middleware.js
 │   ├── models/
+│   │   ├── danh-muc.model.js
+│   │   ├── nguoi-dung.model.js
+│   │   ├── OTP.model.js
+│   │   └── san-pham.model.js
 │   ├── public/
 │   │   ├── css/
+│   │   │   ├── gioi-thieu/
+│   │   │   ├── trang-chu/
+│   │   │   ├── layout.css
+│   │   │   ├── style.css
+│   │   │   └── tokens.css
 │   │   ├── images/
 │   │   │   ├── banner/
-│   │   │   └── products/
+│   │   │   ├── gioi-thieu/
+│   │   │   ├── products/
+│   │   │   └── trang-chu/
 │   │   └── js/
+│   │       ├── layout.js
+│   │       └── trang-chu.js
 │   ├── routes/
+│   │   ├── san-pham.route.js
+│   │   ├── tai-khoan.route.js
+│   │   └── xac-thuc.route.js
 │   ├── services/
+│   │   └── email.service.js
 │   ├── utils/
 │   ├── views/
 │   │   ├── admin/
 │   │   ├── layouts/
+│   │   │   └── main.pug
 │   │   ├── pages/
+│   │   │   ├── auth/                 # dang-nhap, dang-ky, xac-nhan-otp
+│   │   │   ├── gioi-thieu/
+│   │   │   ├── san-pham/             # thuc-don, chi-tiet
+│   │   │   ├── tai-khoan/            # thong-tin, doi-mat-khau, don-hang
+│   │   │   └── trang-chu/
 │   │   └── partials/
+│   │       ├── footer.pug
+│   │       └── header.pug
 │   └── app.js
 ├── .env.example
 ├── .gitignore
+├── .nvmrc
 ├── package.json
 ├── package-lock.json
 ├── README.md
 └── server.js
 ```
+
+Các file `_huong-dan.txt` trong từng thư mục là ghi chú hướng dẫn, không ảnh hưởng tới code.
 
 ## Ý nghĩa từng thư mục
 
@@ -168,7 +333,8 @@ Chứa các file cấu hình của dự án.
 Ví dụ:
 
 - `database.js`: kết nối MongoDB
-- `env.js`: đọc biến môi trường nếu cần
+
+Biến môi trường được đọc bằng `dotenv` ngay trong `server.js`, không có file cấu hình env riêng.
 
 ### `src/models`
 
@@ -176,14 +342,16 @@ Chứa schema MongoDB bằng Mongoose.
 
 Mỗi collection nên có một file model riêng.
 
-Ví dụ:
+Hiện có:
 
 ```txt
 nguoi-dung.model.js
 san-pham.model.js
 danh-muc.model.js
-don-hang.model.js
+OTP.model.js
 ```
+
+Dự kiến thêm: `don-hang.model.js`.
 
 ### `src/routes`
 
@@ -191,33 +359,36 @@ Chứa các đường dẫn của website.
 
 Route chỉ nên khai báo URL và gọi controller, không nên viết logic dài trong route.
 
-Ví dụ:
+Hiện có:
 
 ```txt
-trang-chu.route.js
-san-pham.route.js
-gio-hang.route.js
-don-hang.route.js
-dang-nhap.route.js
-admin.route.js
+xac-thuc.route.js    -> /auth (đăng nhập, đăng ký, xác nhận OTP, đăng xuất)
+tai-khoan.route.js   -> /tai-khoan (thông tin, đổi mật khẩu, đơn hàng)
+san-pham.route.js    -> /thuc-don và /san-pham/:slug
 ```
+
+Trang chủ `/` và trang giới thiệu `/gioi-thieu` đang khai báo trực tiếp trong `src/app.js`.
+
+Dự kiến thêm: `gio-hang.route.js`, `don-hang.route.js`, `admin.route.js`.
 
 ### `src/controllers`
 
 Controller nhận request từ route, gọi service nếu cần, sau đó render view Pug.
 
-Ví dụ:
+Hiện có:
 
 ```txt
-san-pham.controller.js
+auth.controller.js
+tai-khoan.controller.js
 ```
 
-Có thể render trang danh sách món ăn:
+Ví dụ render trang danh sách món ăn (view nằm trong thư mục theo module):
 
 ```js
-res.render("pages/products", {
-  title: "Thực đơn",
-  products
+res.render("pages/san-pham/thuc-don", {
+  title: "Thực đơn - Gà Rán ChipChip",
+  sanPhams,
+  danhMucs
 });
 ```
 
@@ -225,8 +396,11 @@ res.render("pages/products", {
 
 Chứa logic xử lý nghiệp vụ.
 
-Ví dụ:
+Hiện có `email.service.js` dùng Nodemailer để gửi email mã OTP.
 
+Ví dụ các việc nên đưa vào service:
+
+- Gửi email OTP
 - Lấy danh sách sản phẩm
 - Tính tổng tiền giỏ hàng
 - Tạo đơn hàng
@@ -267,18 +441,25 @@ Chứa các phần giao diện dùng lại nhiều nơi, ví dụ:
 - `footer.pug`
 
 ```txt
-views/pages/
+views/pages/<module>/
 ```
 
-Chứa các trang cho khách hàng, ví dụ:
+Chứa các trang cho khách hàng, mỗi module một thư mục con. File bắt đầu bằng dấu `_` (ví dụ `_hero.pug`) là các section được `include` vào trang chính của module đó.
 
-- Trang chủ
-- Thực đơn
-- Chi tiết món ăn
-- Giỏ hàng
-- Thanh toán
-- Đăng nhập
-- Đăng ký
+```txt
+pages/trang-chu/trang-chu.pug       -> Trang chủ
+pages/gioi-thieu/gioi-thieu.pug     -> Giới thiệu
+pages/san-pham/thuc-don.pug         -> Thực đơn
+pages/san-pham/chi-tiet.pug         -> Chi tiết món ăn
+pages/auth/dang-nhap.pug            -> Đăng nhập
+pages/auth/dang-ky.pug              -> Đăng ký
+pages/auth/xac-nhan-otp.pug         -> Xác nhận OTP
+pages/tai-khoan/thong-tin.pug       -> Thông tin tài khoản
+pages/tai-khoan/doi-mat-khau.pug    -> Đổi mật khẩu
+pages/tai-khoan/don-hang.pug        -> Đơn hàng của tôi
+```
+
+Dự kiến thêm: Giỏ hàng, Thanh toán.
 
 ```txt
 views/admin/
@@ -300,10 +481,10 @@ Chứa file tĩnh được trình duyệt tải trực tiếp.
 
 Ví dụ:
 
-- `css/style.css`
-- `js/main.js`
-- `images/products/`
-- `images/banner/`
+- `css/tokens.css`, `css/layout.css`, `css/style.css`: style dùng chung
+- `css/<module>/`: style riêng cho từng trang (ví dụ `css/trang-chu/hero.css`)
+- `js/layout.js`, `js/trang-chu.js`: JavaScript phía trình duyệt
+- `images/<module>/`: hình ảnh theo từng trang (`trang-chu/`, `gioi-thieu/`, `products/`, `banner/`)
 
 ### `src/utils`
 
@@ -347,20 +528,33 @@ Pug View
 Browser
 ```
 
-Ví dụ với trang thực đơn:
+Ví dụ với chức năng đăng ký (đã đi đủ các lớp):
+
+```txt
+POST /auth/dang-ky
+  ↓
+routes/xac-thuc.route.js
+  ↓
+middlewares/kiem-tra-dang-ky.middleware.js
+  ↓
+controllers/auth.controller.js
+  ↓
+models/nguoi-dung.model.js + models/OTP.model.js
+services/email.service.js (gửi email OTP)
+  ↓
+redirect sang /auth/xac-nhan-otp -> views/pages/auth/xac-nhan-otp.pug
+```
+
+Ví dụ với trang thực đơn (hiện route đang gọi model trực tiếp, sau này nên tách ra controller/service):
 
 ```txt
 GET /thuc-don
   ↓
 routes/san-pham.route.js
   ↓
-controllers/san-pham.controller.js
+models/san-pham.model.js + models/danh-muc.model.js
   ↓
-services/san-pham.service.js
-  ↓
-models/san-pham.model.js
-  ↓
-views/pages/products.pug
+views/pages/san-pham/thuc-don.pug
 ```
 
 ## Quy ước đặt tên
@@ -469,15 +663,31 @@ Phía admin:
 
 Mọi người nên code theo đúng cấu trúc trên để dự án không bị rối.
 
-Khi làm chức năng mới, hãy tạo đủ file theo nhóm MVC. Ví dụ làm chức năng sản phẩm:
+Khi làm chức năng mới, hãy tạo đủ file theo nhóm MVC. Ví dụ làm chức năng giỏ hàng:
 
 ```txt
-src/models/san-pham.model.js
-src/routes/san-pham.route.js
-src/controllers/san-pham.controller.js
-src/services/san-pham.service.js
-src/views/pages/products.pug
+src/models/gio-hang.model.js
+src/routes/gio-hang.route.js
+src/controllers/gio-hang.controller.js
+src/services/gio-hang.service.js
+src/views/pages/gio-hang/gio-hang.pug
+src/public/css/gio-hang/...
 ```
 
 Làm như vậy thì người khác nhìn vào sẽ biết file nào làm nhiệm vụ gì, dễ review và sửa lỗi hơn.
+
+Quy trình đưa code lên GitHub:
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/ten-tinh-nang
+# ... code ...
+npm run check
+git add .
+git commit -m "noi dung commit"
+git push -u origin feature/ten-tinh-nang
+```
+
+Sau đó lên GitHub mở **Pull Request** vào `main`, đợi CI chạy xanh rồi mới merge. Không push thẳng lên `main`.
 

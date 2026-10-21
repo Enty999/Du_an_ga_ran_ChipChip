@@ -3,16 +3,14 @@ const router = express.Router();
 const { yeuCauDangNhap } = require("../middlewares/kiem-tra-dang-nhap.middleware");
 const taiKhoanController = require("../controllers/tai-khoan.controller");
 
-// Bật bảo vệ cho TẤT CẢ các đường dẫn trong file này:
+// Trạm gác cổng bảo vệ
 router.use(yeuCauDangNhap);
 
-// GET /tai-khoan
-router.get("/", taiKhoanController.renderThongTin);
-
-// POST /tai-khoan/cap-nhat
-router.post("/cap-nhat", taiKhoanController.xuLiCapNhatThongTin);
-
-// GET /tai-khoan/don-hang
-router.get("/don-hang", taiKhoanController.renderDonHang);
+// Định tuyến đường đi
+router.get("/", taiKhoanController.trangThongTin);
+router.post("/cap-nhat", taiKhoanController.xuLiCapNhat);
+router.get("/don-hang", taiKhoanController.trangDonHang);
+router.get("/doi-mat-khau", taiKhoanController.trangDoiMatKhau);
+router.post("/doi-mat-khau", taiKhoanController.doiMatKhau);
 
 module.exports = router;

@@ -37,21 +37,23 @@ section.menu#thuc-don(aria-labelledby="menu-section-title")
     .menu__grid
       if sanPhamList && sanPhamList.length > 0
         each mon in sanPhamList
-          article.menu__card(data-category=mon.maDanhMuc ? mon.maDanhMuc.slug : '')
+          article.menu__card(data-category=mon.maDanhMuc ? (mon.maDanhMuc.slug || mon.maDanhMuc) : '')
             .menu__card-content
               .menu__card-media
-                img.menu__card-img(
-                  src=mon.hinhAnh,
-                  alt=mon.tenSanPham,
-                  onerror="this.src='/images/trang-chu/thuc-don-01.jpg'"
-                )
+                a(href=`/san-pham/${mon.slug}`)
+                  img.menu__card-img(
+                    src=mon.hinhAnh,
+                    alt=mon.tenSanPham,
+                    onerror="this.src='/images/trang-chu/thuc-don-01.jpg'"
+                  )
                 if mon.huyHieu
                   span.menu__badge-tag(class=`menu__badge-tag--${mon.loaiHuyHieu || 'secondary'}`)= mon.huyHieu
                 if mon.khauPhan
                   span.menu__badge-portion= mon.khauPhan
 
               .menu__card-header
-                h3.menu__card-title= mon.tenSanPham
+                h3.menu__card-title
+                  a.text-decoration-none.text-dark(href=`/san-pham/${mon.slug}`)= mon.tenSanPham
               if mon.tenTiengAnh
                 p.menu__card-subtitle= mon.tenTiengAnh
               p.menu__card-desc= mon.moTa || 'Lớp vỏ giòn tan quyện đều sốt độc quyền, thịt gà tươi ngọt đậm đà.'
@@ -66,10 +68,11 @@ section.menu#thuc-don(aria-labelledby="menu-section-title")
         article.menu__card
           .menu__card-content
             .menu__card-media
-              img.menu__card-img(
-                src="/images/trang-chu/thuc-don-01.jpg",
-                alt="Gà Cay Sốt Cay Ngọt Seoul phủ sốt đỏ óng và đậu phộng"
-              )
+              a(href="/san-pham/ga-cay-sot-cay-ngot-seoul")
+                img.menu__card-img(
+                  src="/images/trang-chu/thuc-don-01.jpg",
+                  alt="Gà Cay Sốt Cay Ngọt Seoul phủ sốt đỏ óng và đậu phộng"
+                )
               span.menu__badge-tag.menu__badge-tag--secondary Bán chạy nhất
               span.menu__badge-portion 2 miếng
 
@@ -85,115 +88,120 @@ section.menu#thuc-don(aria-labelledby="menu-section-title")
               span.material-symbols-outlined add
               span Thêm vào đơn
 
-      //- Món 2: Đùi Gà Rán Giòn Rụm Da Vàng
-      article.menu__card
-        .menu__card-content
-          .menu__card-media
-            img.menu__card-img(
-              src="/images/trang-chu/thuc-don-02.jpg",
-              alt="Đùi Gà Rán Giòn Rụm Da Vàng kèm củ cải muối trắng"
-            )
-            span.menu__badge-tag.menu__badge-tag--amber Siêu giòn
-            span.menu__badge-portion 1 Đùi lớn
+        //- Món 2: Đùi Gà Rán Giòn Rụm Da Vàng
+        article.menu__card
+          .menu__card-content
+            .menu__card-media
+              a(href="/san-pham/dui-ga-ran-gion-rum-da-vang")
+                img.menu__card-img(
+                  src="/images/trang-chu/thuc-don-02.jpg",
+                  alt="Đùi Gà Rán Giòn Rụm Da Vàng kèm củ cải muối trắng"
+                )
+              span.menu__badge-tag.menu__badge-tag--amber Siêu giòn
+              span.menu__badge-portion 1 Đùi lớn
 
-          .menu__card-header
-            h3.menu__card-title Đùi Gà Rán Giòn Rụm Da Vàng
-          p.menu__card-subtitle Golden Crispy Drumstick
-          p.menu__card-desc
-            | Đùi góc tư ướp muối tiêu và thảo mộc, lớp da nổ giòn tan không ngấy dầu, thịt bên trong ngọt đậm đà.
+            .menu__card-header
+              h3.menu__card-title Đùi Gà Rán Giòn Rụm Da Vàng
+            p.menu__card-subtitle Golden Crispy Drumstick
+            p.menu__card-desc
+              | Đùi góc tư ướp muối tiêu và thảo mộc, lớp da nổ giòn tan không ngấy dầu, thịt bên trong ngọt đậm đà.
 
-        .menu__card-footer
-          span.menu__price 38.000đ
-          button.menu__btn-add(type="button")
-            span.material-symbols-outlined add
-            span Thêm vào đơn
+          .menu__card-footer
+            span.menu__price 38.000đ
+            button.menu__btn-add(type="button")
+              span.material-symbols-outlined add
+              span Thêm vào đơn
 
-      //- Món 3: Cánh Gà Lắc Phô Mai Béo Ngậy
-      article.menu__card
-        .menu__card-content
-          .menu__card-media
-            img.menu__card-img(
-              src="/images/trang-chu/thuc-don-03.jpg",
-              alt="Cánh Gà Lắc Phô Mai Béo Ngậy phủ bột phô mai tuyết"
-            )
-            span.menu__badge-tag.menu__badge-tag--primary-container Trẻ em yêu thích
-            span.menu__badge-portion 4 Cánh
+        //- Món 3: Cánh Gà Lắc Phô Mai Béo Ngậy
+        article.menu__card
+          .menu__card-content
+            .menu__card-media
+              a(href="/san-pham/canh-ga-lac-pho-mai-beo-ngay")
+                img.menu__card-img(
+                  src="/images/trang-chu/thuc-don-03.jpg",
+                  alt="Cánh Gà Lắc Phô Mai Béo Ngậy phủ bột phô mai tuyết"
+                )
+              span.menu__badge-tag.menu__badge-tag--primary-container Trẻ em yêu thích
+              span.menu__badge-portion 4 Cánh
 
-          .menu__card-header
-            h3.menu__card-title Cánh Gà Lắc Phô Mai Béo Ngậy
-          p.menu__card-subtitle Snowy Cheddar Wings
-          p.menu__card-desc
-            | Cánh gà chiên giòn tan lắc đều lớp bột phô mai Cheddar béo bùi, vị mặn ngọt hài hòa cuốn hút.
+            .menu__card-header
+              h3.menu__card-title Cánh Gà Lắc Phô Mai Béo Ngậy
+            p.menu__card-subtitle Snowy Cheddar Wings
+            p.menu__card-desc
+              | Cánh gà chiên giòn tan lắc đều lớp bột phô mai Cheddar béo bùi, vị mặn ngọt hài hòa cuốn hút.
 
-        .menu__card-footer
-          span.menu__price 52.000đ
-          button.menu__btn-add(type="button")
-            span.material-symbols-outlined add
-            span Thêm vào đơn
+          .menu__card-footer
+            span.menu__price 52.000đ
+            button.menu__btn-add(type="button")
+              span.material-symbols-outlined add
+              span Thêm vào đơn
 
-      //- Món 4: Combo ChipChip Thỏa Thích
-      article.menu__card
-        .menu__card-content
-          .menu__card-media
-            img.menu__card-img(
-              src="/images/trang-chu/thuc-don-04.jpg",
-              alt="Combo ChipChip Thỏa Thích gồm gà rán, khoai chiên và trà đào"
-            )
-            span.menu__badge-tag.menu__badge-tag--crimson Combo Tiết Kiệm
-            span.menu__badge-portion Tiết kiệm 25k
+        //- Món 4: Combo ChipChip Thỏa Thích
+        article.menu__card
+          .menu__card-content
+            .menu__card-media
+              a(href="/san-pham/combo-chipchip-thoa-thich")
+                img.menu__card-img(
+                  src="/images/trang-chu/thuc-don-04.jpg",
+                  alt="Combo ChipChip Thỏa Thích gồm gà rán, khoai chiên và trà đào"
+                )
+              span.menu__badge-tag.menu__badge-tag--crimson Combo Tiết Kiệm
+              span.menu__badge-portion Tiết kiệm 25k
 
-          .menu__card-header
-            h3.menu__card-title Combo ChipChip Thỏa Thích
-          p.menu__card-subtitle ChipChip Feast Combo
-          p.menu__card-desc
-            | Gồm 2 miếng gà rán giòn sốt tự chọn + 1 phần khoai tây lắc rong biển + 1 ly trà đào hạt chia thanh mát.
+            .menu__card-header
+              h3.menu__card-title Combo ChipChip Thỏa Thích
+            p.menu__card-subtitle ChipChip Feast Combo
+            p.menu__card-desc
+              | Gồm 2 miếng gà rán giòn sốt tự chọn + 1 phần khoai tây lắc rong biển + 1 ly trà đào hạt chia thanh mát.
 
-        .menu__card-footer
-          span.menu__price 79.000đ
-          button.menu__btn-add(type="button")
-            span.material-symbols-outlined add
-            span Thêm vào đơn
+          .menu__card-footer
+            span.menu__price 79.000đ
+            button.menu__btn-add(type="button")
+              span.material-symbols-outlined add
+              span Thêm vào đơn
 
-      //- Món 5: Khoai Tây Lắc Rong Biển
-      article.menu__card
-        .menu__card-content
-          .menu__card-media
-            img.menu__card-img(
-              src="/images/trang-chu/thuc-don-05.jpg",
-              alt="Khoai Tây Lắc Rong Biển phủ lá rong biển khô thơm giòn"
-            )
-            span.menu__badge-tag.menu__badge-tag--amber Món ăn kèm
+        //- Món 5: Khoai Tây Lắc Rong Biển
+        article.menu__card
+          .menu__card-content
+            .menu__card-media
+              a(href="/san-pham/khoai-tay-lac-rong-bien")
+                img.menu__card-img(
+                  src="/images/trang-chu/thuc-don-05.jpg",
+                  alt="Khoai Tây Lắc Rong Biển phủ lá rong biển khô thơm giòn"
+                )
+              span.menu__badge-tag.menu__badge-tag--amber Món ăn kèm
 
-          .menu__card-header
-            h3.menu__card-title Khoai Tây Lắc Rong Biển
-          p.menu__card-subtitle Seaweed Shaker Fries
-          p.menu__card-desc
-            | Khoai tây nhập khẩu cắn giòn xốp, kết hợp gia vị rong biển rang muối ớt Nhật Bản thơm nồng.
+            .menu__card-header
+              h3.menu__card-title Khoai Tây Lắc Rong Biển
+            p.menu__card-subtitle Seaweed Shaker Fries
+            p.menu__card-desc
+              | Khoai tây nhập khẩu cắn giòn xốp, kết hợp gia vị rong biển rang muối ớt Nhật Bản thơm nồng.
 
-        .menu__card-footer
-          span.menu__price 25.000đ
-          button.menu__btn-add(type="button")
-            span.material-symbols-outlined add
-            span Thêm vào đơn
+          .menu__card-footer
+            span.menu__price 25.000đ
+            button.menu__btn-add(type="button")
+              span.material-symbols-outlined add
+              span Thêm vào đơn
 
-      //- Món 6: Burger Gà Giòn Sốt Mayo Cay
-      article.menu__card
-        .menu__card-content
-          .menu__card-media
-            img.menu__card-img(
-              src="/images/trang-chu/thuc-don-06.jpg",
-              alt="Burger Gà Giòn Sốt Mayo Cay với vỏ bánh brioche kẹp bắp cải tím"
-            )
-            span.menu__badge-tag.menu__badge-tag--primary Món no bụng
+        //- Món 6: Burger Gà Giòn Sốt Mayo Cay
+        article.menu__card
+          .menu__card-content
+            .menu__card-media
+              a(href="/san-pham/burger-ga-gion-sot-mayo-cay")
+                img.menu__card-img(
+                  src="/images/trang-chu/thuc-don-06.jpg",
+                  alt="Burger Gà Giòn Sốt Mayo Cay với vỏ bánh brioche kẹp bắp cải tím"
+                )
+              span.menu__badge-tag.menu__badge-tag--primary Món no bụng
 
-          .menu__card-header
-            h3.menu__card-title Burger Gà Giòn Sốt Mayo Cay
-          p.menu__card-subtitle Crispy Chicky Brioche Burger
-          p.menu__card-desc
-            | Vỏ bánh Brioche bơ thơm lừng kẹp thịt ức gà đùi chiên giòn, bắp cải tím muối giòn cùng sốt mayonnaise cay độc quyền.
+            .menu__card-header
+              h3.menu__card-title Burger Gà Giòn Sốt Mayo Cay
+            p.menu__card-subtitle Crispy Chicky Brioche Burger
+            p.menu__card-desc
+              | Vỏ bánh Brioche bơ thơm lừng kẹp thịt ức gà đùi chiên giòn, bắp cải tím muối giòn cùng sốt mayonnaise cay độc quyền.
 
-        .menu__card-footer
-          span.menu__price 39.000đ
-          button.menu__btn-add(type="button")
-            span.material-symbols-outlined add
-            span Thêm vào đơn
+          .menu__card-footer
+            span.menu__price 39.000đ
+            button.menu__btn-add(type="button")
+              span.material-symbols-outlined add
+              span Thêm vào đơn

@@ -1,0 +1,14 @@
+#!/bin/sh
+# Chạy kiểm tra build trước khi push, có lỗi thì chặn push.
+# Hook được bật tự động khi chạy npm install / npm ci (xem scripts/setup-hooks.js).
+
+echo "=>>> Đang kiểm tra build trước khi push (npm run build)..."
+
+if ! npm run build --silent; then
+  echo ""
+  echo "✘ Build lỗi, đã CHẶN push. Sửa lỗi ở trên rồi push lại."
+  echo "  Trường hợp khẩn cấp có thể bỏ qua bằng: git push --no-verify"
+  exit 1
+fi
+
+echo "✔ Build OK, tiếp tục push."

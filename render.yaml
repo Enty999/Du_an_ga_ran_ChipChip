@@ -1,0 +1,29 @@
+# Cấu hình deploy lên Render (Blueprint): Render đọc file này để tự tạo web service.
+# Mỗi lần merge/push lên main, Render tự build và deploy lại.
+services:
+  - type: web
+    name: ga-ran-chipchip
+    runtime: node
+    plan: free
+    branch: main
+    # Chỉ deploy khi CI trên GitHub (.github/workflows/ci.yml) báo xanh, CI đỏ thì giữ bản cũ
+    autoDeployTrigger: checksPass
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    # Trang chủ không truy vấn DB nên dùng để Render kiểm tra server còn sống
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      # Render tự sinh chuỗi ngẫu nhiên, không cần tự nghĩ
+      - key: JWT_SECRET
+        generateValue: true
+      # sync: false -> Render sẽ hỏi nhập giá trị khi tạo service (không lưu trong git)
+      - key: MONGODB_URI
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false

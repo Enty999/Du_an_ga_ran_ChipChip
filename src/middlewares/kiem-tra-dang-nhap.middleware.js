@@ -23,7 +23,7 @@ const ganThongTinNguoiDung = async (req, res, next) => {
 
   try {
     // Giải mã token lấy ID người dùng
-    const giaiMa = jwt.verify(token, process.env.JWT_SECRET || "chipchip_secret_key_2026");
+    const giaiMa = jwt.verify(token, process.env.JWT_SECRET);
     
     // Tìm người dùng trong DB (lấy tất cả trừ mật khẩu)
     const nguoiDung = await NguoiDung.findById(giaiMa.id).select("-password");
