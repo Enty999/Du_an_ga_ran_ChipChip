@@ -50,6 +50,7 @@ block content
               .d-flex.flex-column.gap-3
                 each don in donHangList
                   .border.rounded-3.p-3.bg-white.shadow-sm
+                    //- 1. Tiêu đề đơn hàng & Trạng thái
                     .d-flex.flex-wrap.justify-content-between.align-items-center.border-bottom.pb-2.mb-3.gap-2
                       div
                         span.fw-bold.text-dark Đơn hàng: 
@@ -69,12 +70,27 @@ block content
                         else if don.trangThaiDonHang === 'da-huy'
                           span.badge.bg-danger.text-white Đã hủy
 
+                    //- 2. Danh sách từng món ăn đã đặt (Chiếm trọn 100% chiều rộng)
                     .mb-3
                       each item in don.danhSachMon
                         .d-flex.justify-content-between.align-items-center.py-1
                           span.text-dark #{item.tenSanPham} x #{item.soLuong}
-                          span.fw-semibold= dinhDangTien ? dinhDangTien(item.thanhTien) : item.thanhTien + 'đ'
+                          span.fw-bold= dinhDangTien ? dinhDangTien(item.thanhTien) : item.thanhTien + 'đ'
 
+                    //- 3. Bóc tách chi tiết: Tiền món + Phí ship + Giảm giá
+                    .py-2.border-top.small.text-secondary
+                      .d-flex.justify-content-between.py-1
+                        span Tiền món:
+                        span.text-dark= dinhDangTien ? dinhDangTien(don.tongTienMon || (don.tongThanhToan - (don.phiVanChuyen || 15000))) : (don.tongTienMon || 0) + 'đ'
+                      .d-flex.justify-content-between.py-1
+                        span Phí giao hàng:
+                        span.text-dark= dinhDangTien ? dinhDangTien(don.phiVanChuyen || 15000) : '15.000đ'
+                      if don.tienGiamGia && don.tienGiamGia > 0
+                        .d-flex.justify-content-between.py-1.text-success
+                          span Mã giảm giá (#{don.maGiamGia}):
+                          span -#{dinhDangTien ? dinhDangTien(don.tienGiamGia) : don.tienGiamGia + 'đ'}
+
+                    //- 4. Địa chỉ giao & Tổng thanh toán cuối cùng
                     .d-flex.justify-content-between.align-items-center.pt-2.border-top
                       span.text-muted.small Địa chỉ: #{don.thongTinNguoiNhan ? don.thongTinNguoiNhan.diaChi : ''}
                       .text-end

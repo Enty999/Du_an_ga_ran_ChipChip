@@ -1,0 +1,33 @@
+extends ../../layouts/main
+
+block content
+  .container.py-5.text-center
+    .row.justify-content-center
+      .col-12.col-md-8.col-lg-6
+        .card.border-0.shadow-sm.rounded-4.p-4.p-md-5(style="background-color: #fff;")
+          //- Icon thành công
+          .mb-4.d-inline-flex.align-items-center.justify-content-center.rounded-circle.mx-auto(
+            style="width: 80px; height: 80px; background-color: #e8f5e9;"
+          )
+            i.fas.fa-check-circle.text-success.fa-3x
+
+          h2.fw-bold.text-dark.mb-2 Đặt Hàng Thành Công!
+          p.text-muted.mb-4 Cảm ơn bạn đã lựa chọn Gà Rán Giòn Rụm ChipChip. Đơn hàng của bạn đã được chuyển đến nhà bếp để chế biến nóng hổi.
+
+          //- Khung thông tin mã đơn
+          .p-3.rounded-3.mb-4(style="background-color: #fcf9f7; border: 1px dashed #b02d21;")
+            span.text-muted.small.d-block.mb-1 Mã đơn hàng của bạn:
+            span.fw-bold.text-danger.fs-4#order-code= maDonHang
+
+          .alert.alert-warning.border-0.rounded-3.small.text-start.mb-4
+            i.fas.fa-clock.me-2
+            | Thời gian giao dự kiến từ **30 - 45 phút**. Tài xế ChipChip sẽ liên hệ với bạn trước khi giao hàng.
+
+          //- Nút bấm điều hướng
+          .d-flex.flex-column.flex-sm-row.gap-3.justify-content-center
+            a.btn.btn-outline-dark.rounded-pill.px-4.fw-semibold(href="/")
+              i.fas.fa-home.me-2
+              | Về trang chủ
+            a.btn.btn-danger.rounded-pill.px-4.fw-semibold(href="/tai-khoan/don-hang")
+              i.fas.fa-receipt.me-2
+              | Xem đơn hàng của tôi

@@ -1,0 +1,367 @@
+extends ../../layouts/main
+
+block styles
+  style.
+    .checkout-box {
+      border: 1px solid #f0eae1;
+      border-radius: 20px;
+      background: #fff;
+      padding: 28px;
+    }
+    .payment-option {
+      border: 2px solid #ede5dc;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .payment-option:hover {
+      border-color: #b02d21;
+    }
+    .payment-option.active {
+      border-color: #b02d21;
+      background-color: #fff9f8;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #b02d21;
+      box-shadow: 0 0 0 0.25rem rgba(176, 45, 33, 0.15);
+    }
+
+block content
+  .container.py-5
+    //- Breadcrumb
+    nav.mb-4(aria-label="breadcrumb")
+      ol.breadcrumb.small
+        li.breadcrumb-item
+          a.text-decoration-none.text-secondary(href="/") Trang chủ
+        li.breadcrumb-item
+          a.text-decoration-none.text-secondary(href="/thuc-don") Thực đơn
+        li.breadcrumb-item.active.fw-semibold.text-dark(aria-current="page") Thanh toán đơn hàng
+
+    h2.fw-bold.text-dark.mb-4
+      i.fas.fa-shield-alt.text-danger.me-2
+      | Thông Tin Thanh Toán & Giao Hàng
+
+    form#checkout-form
+      .row.g-4
+        //- CỘT TRÁI: THÔNG TIN GIAO HÀNG & PHƯƠNG THỨC THANH TOÁN
+        .col-12.col-lg-7
+          //- 1. Thông tin người nhận
+          .checkout-box.shadow-sm.mb-4
+            h5.fw-bold.text-dark.mb-3
+              span.badge.bg-danger.rounded-circle.me-2 1
+              | Địa chỉ nhận hàng
+            
+            .row.g-3
+              .col-12.col-md-6
+                label.form-label.small.fw-bold Họ và tên người nhận *
+                input.form-control.rounded-pill(
+                  type="text",
+                  name="hoTen",
+                  required,
+                  placeholder="Ví dụ: Nguyễn Văn A",
+                  value=nguoiDung ? nguoiDung.hoTen : ''
+                )
+              .col-12.col-md-6
+                label.form-label.small.fw-bold Số điện thoại nhận hàng *
+                input.form-control.rounded-pill(
+                  type="tel",
+                  name="soDienThoai",
+                  required,
+                  placeholder="Ví dụ: 0912345678",
+                  value=nguoiDung ? (nguoiDung.SDT || nguoiDung.soDienThoai || '') : ''
+                )
+              .col-12
+                label.form-label.small.fw-bold Email nhận thông báo đơn (không bắt buộc)
+                input.form-control.rounded-pill(
+                  type="email",
+                  name="email",
+                  placeholder="email@example.com",
+                  value=nguoiDung ? nguoiDung.email : ''
+                )
+              .col-12
+                label.form-label.small.fw-bold Địa chỉ giao hàng chi tiết *
+                input.form-control.rounded-3(
+                  type="text",
+                  name="diaChi",
+                  required,
+                  placeholder="Số nhà, tên đường, Phường/Xã, Quận/Huyện...",
+                  value=nguoiDung ? (nguoiDung.diaChi || '') : ''
+                )
+              .col-12
+                label.form-label.small.fw-bold Ghi chú cho tài xế / nhà bếp
+                textarea.form-control.rounded-3(
+                  name="ghiChu",
+                  rows="2",
+                  placeholder="Ví dụ: Giao lên lầu 2, gọi trước khi đến 10 phút, xin thêm tương ớt..."
+                )
+
+          //- 2. Phương thức thanh toán
+          .checkout-box.shadow-sm
+            h5.fw-bold.text-dark.mb-3
+              span.badge.bg-danger.rounded-circle.me-2 2
+              | Phương thức thanh toán
+
+            .d-flex.flex-column.gap-3
+              //- Lựa chọn 1: Tiền mặt COD
+              label.payment-option.active.d-flex.align-items-start.gap-3
+                input.form-check-input.mt-1(
+                  type="radio",
+                  name="phuongThucThanhToan",
+                  value="tien-mat",
+                  checked
+                )
+                .flex-grow-1
+                  .d-flex.align-items-center.gap-2
+                    i.fas.fa-money-bill-wave.text-success.fs-5
+                    strong.text-dark Thanh toán tiền mặt khi nhận hàng (COD)
+                  p.text-muted.small.mb-0.mt-1 Trả tiền trực tiếp cho tài xế khi nhận được gà rán nóng giòn.
+
+              //- Lựa chọn 2: Quét mã VietQR (PayOS)
+              label.payment-option.d-flex.align-items-start.gap-3
+                input.form-check-input.mt-1(
+                  type="radio",
+                  name="phuongThucThanhToan",
+                  value="payos"
+                )
+                .flex-grow-1
+                  .d-flex.align-items-center.gap-2
+                    i.fas.fa-qrcode.text-primary.fs-5
+                    strong.text-dark Chuyển khoản VietQR tự động (PayOS)
+                    span.badge.bg-danger-subtle.text-danger.small.border Tiện lợi & Nhanh chóng
+                  p.text-muted.small.mb-0.mt-1 Quét mã QR bằng mọi App Ngân hàng (VCB, MB, Techcombank, MoMo...). Đơn xác nhận tức thì.
+
+        //- CỘT PHẢI: TÓM TẮT ĐƠN HÀNG TỪ LOCALSTORAGE
+        .col-12.col-lg-5
+          .checkout-box.shadow-sm.position-sticky(style="top: 100px;")
+            h5.fw-bold.text-dark.mb-3 Đơn hàng của bạn
+
+            //- Danh sách món ăn được vẽ động bởi JavaScript
+            #checkout-items-list.d-flex.flex-column.gap-3.mb-3.pe-1(style="max-height: 320px; overflow-y: auto;")
+              //- JS sẽ nhét các món vào đây
+
+            //- Ô nhập mã giảm giá
+            .border-top.pt-3.mb-3
+              label.form-label.small.fw-bold
+                i.fas.fa-ticket-alt.text-warning.me-1
+                | Mã giảm giá / Voucher
+              .input-group
+                input#input-coupon.form-control.rounded-start-pill(
+                  type="text",
+                  placeholder="Nhập mã ưu đãi...",
+                  style="text-transform: uppercase;"
+                )
+                button#btn-apply-coupon.btn.btn-warning.rounded-end-pill.fw-bold.px-3(type="button")
+                  | Áp dụng
+              small#coupon-msg.d-block.mt-1(style="display: none;")
+
+            //- Khung tính tiền
+            .border-top.pt-3.d-flex.flex-column.gap-2.small
+              .d-flex.justify-content-between.text-secondary
+                span Tiền món:
+                strong.text-dark#checkout-subtotal 0đ
+              .d-flex.justify-content-between.text-secondary
+                span Phí vận chuyển:
+                strong.text-dark 15.000đ
+              .d-flex.justify-content-between.text-success#discount-row(style="display: none !important;")
+                span Giảm giá:
+                strong#checkout-discount -0đ
+              .d-flex.justify-content-between.align-items-center.border-top.pt-3.mt-1
+                span.fw-bold.text-dark.fs-6 Tổng thanh toán:
+                span.fw-bold.text-danger.fs-4#checkout-total 0đ
+
+            //- Input ẩn chứa mảng giỏ hàng JSON để gửi lên Server
+            input#maGiamGiaHidden(type="hidden", name="maGiamGia", value="")
+            input#danhSachMonJson(type="hidden", name="danhSachMonJson", value="")
+
+            //- Nút bấm Đặt hàng
+            .d-grid.mt-4
+              button#btn-submit-order.btn.btn-danger.btn-lg.rounded-pill.fw-bold.shadow-sm(type="submit")
+                | Xác nhận đặt hàng
+                i.fas.fa-arrow-right.ms-2
+
+            p.text-center.text-muted.small.mt-3.mb-0
+              i.fas.fa-shield-alt.text-success.me-1
+              | Cam kết hoàn tiền nếu gà không nóng giòn
+
+block scripts
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      const cart = JSON.parse(localStorage.getItem("chipchip_cart")) || [];
+      const itemsList = document.getElementById("checkout-items-list");
+      const subtotalEl = document.getElementById("checkout-subtotal");
+      const totalEl = document.getElementById("checkout-total");
+      const hiddenInput = document.getElementById("danhSachMonJson");
+      const checkoutForm = document.getElementById("checkout-form");
+      const btnSubmit = document.getElementById("btn-submit-order");
+
+      // 1. Kiểm tra nếu giỏ hàng rỗng
+      if (cart.length === 0) {
+        itemsList.innerHTML = `
+          <div class="text-center py-4 text-muted">
+            <i class="fas fa-drumstick-bite fa-3x mb-3 opacity-50"></i>
+            <p class="mb-3">Giỏ hàng của bạn đang trống!</p>
+            <a href="/thuc-don" class="btn btn-outline-danger btn-sm rounded-pill">Quay lại chọn món</a>
+          </div>
+        `;
+        if (btnSubmit) {
+          btnSubmit.disabled = true;
+          btnSubmit.textContent = "Chưa có món trong giỏ";
+        }
+        return;
+      }
+
+      // 2. Render danh sách món sang cột tóm tắt
+      let subtotal = 0;
+      itemsList.innerHTML = "";
+
+      cart.forEach((item) => {
+        const gia = Number(item.gia) || 0;
+        const soLuong = Number(item.soLuong) || 1;
+        const thanhTien = gia * soLuong;
+        subtotal += thanhTien;
+
+        const row = document.createElement("div");
+        row.className = "d-flex gap-3 align-items-center p-2 rounded-3 bg-light";
+        row.innerHTML = `
+          <img src="${item.hinhAnh}" alt="${item.tenSanPham}" class="rounded-3 object-fit-cover flex-shrink-0" style="width: 54px; height: 54px;">
+          <div class="flex-grow-1 min-w-0">
+            <h6 class="fw-bold text-dark mb-0 text-truncate small">${item.tenSanPham}</h6>
+            <div class="text-muted small">${item.khauPhan || 'Tiêu chuẩn'} | x${soLuong}</div>
+            ${item.ghiChu ? `<div class="text-muted fst-italic small text-truncate">Ghi chú: ${item.ghiChu}</div>` : ''}
+          </div>
+          <span class="fw-bold text-danger small">${thanhTien.toLocaleString("vi-VN")}đ</span>
+        `;
+        itemsList.appendChild(row);
+      });
+
+      const shippingFee = 15000;
+      const total = subtotal + shippingFee;
+
+      subtotalEl.textContent = subtotal.toLocaleString("vi-VN") + "đ";
+      totalEl.textContent = total.toLocaleString("vi-VN") + "đ";
+
+      // Đóng gói mảng giỏ hàng vào ô input ẩn
+      hiddenInput.value = JSON.stringify(cart);
+
+      // 3. Hiệu ứng đổi border khi click chọn phương thức thanh toán
+      document.querySelectorAll(".payment-option").forEach((option) => {
+        option.addEventListener("click", () => {
+          document.querySelectorAll(".payment-option").forEach((o) => o.classList.remove("active"));
+          option.classList.add("active");
+          const radio = option.querySelector("input[type='radio']");
+          if (radio) radio.checked = true;
+        });
+      });
+
+      // 👉 THÊM ĐOẠN NÀY VÀO ĐÂY: Xử lý Áp dụng mã giảm giá
+      let tienGiamGiaHienTai = 0;
+      const btnApplyCoupon = document.getElementById("btn-apply-coupon");
+      const inputCoupon = document.getElementById("input-coupon");
+      const couponMsg = document.getElementById("coupon-msg");
+      const discountRow = document.getElementById("discount-row");
+      const discountEl = document.getElementById("checkout-discount");
+      const maGiamGiaHidden = document.getElementById("maGiamGiaHidden");
+
+      if (btnApplyCoupon) {
+        btnApplyCoupon.addEventListener("click", async () => {
+          const code = (inputCoupon.value || "").trim();
+          if (!code) {
+            alert("Vui lòng nhập mã giảm giá!");
+            return;
+          }
+
+          btnApplyCoupon.disabled = true;
+          btnApplyCoupon.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+
+          try {
+            const res = await fetch("/thanh-toan/ap-dung-ma", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                maCode: code,
+                tongTienMon: subtotal,
+              }),
+            });
+
+            const data = await res.json();
+            btnApplyCoupon.disabled = false;
+            btnApplyCoupon.innerHTML = "Áp dụng";
+
+            if (data.hopLe) {
+              tienGiamGiaHienTai = data.tienGiam;
+              maGiamGiaHidden.value = data.maCode;
+
+              // Hiển thị dòng giảm giá & cập nhật tổng tiền
+              discountRow.style.setProperty("display", "flex", "important");
+              discountEl.textContent = `-${tienGiamGiaHienTai.toLocaleString("vi-VN")}đ`;
+              
+              const totalMoi = Math.max(0, subtotal + 15000 - tienGiamGiaHienTai);
+              totalEl.textContent = totalMoi.toLocaleString("vi-VN") + "đ";
+
+              couponMsg.style.display = "block";
+              couponMsg.className = "small text-success mt-1";
+              couponMsg.innerHTML = `<i class="fas fa-check-circle me-1"></i>${data.thongBao}`;
+            } else {
+              couponMsg.style.display = "block";
+              couponMsg.className = "small text-danger mt-1";
+              couponMsg.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i>${data.thongBao}`;
+            }
+          } catch (err) {
+            console.error(err);
+            btnApplyCoupon.disabled = false;
+            btnApplyCoupon.innerHTML = "Áp dụng";
+          }
+        });
+      }
+
+      // 4. Xử lý Submit Form bằng Fetch AJAX
+      checkoutForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý đơn...`;
+
+        const formData = new FormData(checkoutForm);
+        const dataObj = Object.fromEntries(formData.entries());
+
+        try {
+          const res = await fetch("/thanh-toan", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dataObj),
+          });
+
+          const result = await res.json();
+
+          if (!result.thanhCong) {
+            Swal.fire({
+              icon: "error",
+              title: "Đặt hàng thất bại",
+              text: result.thongBao || "Vui lòng kiểm tra lại thông tin!",
+              confirmButtonColor: "#b02d21",
+            });
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = `Xác nhận đặt hàng <i class="fas fa-arrow-right ms-2"></i>`;
+            return;
+          }
+
+          // Xóa giỏ hàng trên máy sau khi đặt thành công
+          localStorage.removeItem("chipchip_cart");
+          if (window.capNhatBadgeGioHang) window.capNhatBadgeGioHang();
+
+          // Chuyển hướng theo URL server trả về (Tiền mặt -> thanh-cong, VietQR -> vietqr)
+          window.location.href = result.redirectUrl || `/thanh-toan/thanh-cong?maDonHang=${result.maDonHang}`;
+        } catch (err) {
+          console.error("Lỗi gửi đơn hàng:", err);
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi kết nối",
+            text: "Không thể kết nối đến máy chủ. Vui lòng thử lại!",
+            confirmButtonColor: "#b02d21",
+          });
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = `Xác nhận đặt hàng <i class="fas fa-arrow-right ms-2"></i>`;
+        }
+      });
+    });

@@ -139,69 +139,61 @@ block content
             span.badge.bg-danger.rounded-pill Tiết kiệm 12%
 
         //- 1. Chọn khẩu phần
-        .mb-4
-          .d-flex.justify-content-between.align-items-center.mb-2
-            span.fw-bold.small 1. Chọn khẩu phần:
-            span.text-muted.small Tiêu chuẩn 2 miếng (1 người dùng)
-          .row.g-2
-            .col-3
-              .portion-card.active.text-center.p-2.rounded-3(data-price=sanPham.giaGoc)
-                .fw-bold.small 2 Miếng
-                .small.text-muted= (sanPham.giaKhuyenMai || sanPham.giaGoc).toLocaleString('vi-VN') + 'đ'
-            .col-3
-              .portion-card.text-center.p-2.rounded-3(data-price="88000")
-                .fw-bold.small 4 Miếng
-                .small.text-muted 88.000đ
-            .col-3
-              .portion-card.text-center.p-2.rounded-3(data-price="125000")
-                .fw-bold.small Nửa Con
-                .small.text-muted 125.000đ
-            .col-3
-              .portion-card.text-center.p-2.rounded-3(data-price="239000")
-                .fw-bold.small Nguyên Con
-                .small.text-muted 239.000đ
+        - const danhMucSlug = sanPham.maDanhMuc ? sanPham.maDanhMuc.slug : ''
+        - const laMonGa = danhMucSlug.includes('ga')
 
-        //- 2. Cấp độ cay sốt
-        .mb-4
-          span.fw-bold.small.d-block.mb-2 2. Cấp độ cay sốt:
-          .row.g-2
-            .col-6
-              .spicy-card.p-2.rounded-3
-                .fw-semibold.small Không cay
-                .text-muted(style="font-size: 11px;") Trẻ em & người không ăn cay
-            .col-6
-              .spicy-card.active.p-2.rounded-3
-                .fw-semibold.small Cay ngọt dịu nhẹ
-                .text-muted(style="font-size: 11px;") Chuẩn vị Hàn Quốc
-            .col-6
-              .spicy-card.p-2.rounded-3
-                .fw-semibold.small Cay nồng bùng nổ
-                .text-muted(style="font-size: 11px;") Vị tương ớt đỏ Hàn Quốc
-            .col-6
-              .spicy-card.p-2.rounded-3
-                .fw-semibold.small Cay xé lưỡi cấp 3
-                .text-muted(style="font-size: 11px;") Thách thức tín đồ mê cay
+        //- 1. Chọn khẩu phần / Kích cỡ (Chỉ hiện options khi là món gà)
+        if laMonGa
+          .mb-4
+            .d-flex.justify-content-between.align-items-center.mb-2
+              span.fw-bold.small 1. Chọn khẩu phần:
+              span.text-muted.small#selected-portion-text Tiêu chuẩn (2 miếng)
+            .row.g-2#portion-group
+              .col-4
+                .portion-card.active.text-center.p-2.rounded-3(data-price=sanPham.giaGoc, data-name="Tiêu chuẩn (2 miếng)")
+                  .fw-bold.small 2 Miếng
+                  .small.text-muted= (sanPham.giaKhuyenMai || sanPham.giaGoc).toLocaleString('vi-VN') + 'đ'
+              .col-4
+                .portion-card.text-center.p-2.rounded-3(data-price=(sanPham.giaGoc * 1.8), data-name="Phần lớn (4 miếng)")
+                  .fw-bold.small 4 Miếng
+                  .small.text-muted= (sanPham.giaGoc * 1.8).toLocaleString('vi-VN') + 'đ'
+              .col-4
+                .portion-card.text-center.p-2.rounded-3(data-price=(sanPham.giaGoc * 2.5), data-name="Nửa con")
+                  .fw-bold.small Nửa con
+                  .small.text-muted= (sanPham.giaGoc * 2.5).toLocaleString('vi-VN') + 'đ'
 
-        //- 3. Món ăn kèm lý tưởng
-        .mb-4
-          span.fw-bold.small.d-block.mb-2 3. Món ăn kèm lý tưởng &amp; Tiết kiệm:
-          .d-flex.flex-column.gap-2
-            label.addon-item.d-flex.justify-content-between.align-items-center
-              .d-flex.align-items-center.gap-2
-                input.form-check-input.addon-checkbox(type="checkbox", value="10000")
-                span.small Củ cải muối chua ngọt giòn sần sật
-              span.badge.bg-light.text-danger +10.000đ
-            label.addon-item.d-flex.justify-content-between.align-items-center
-              .d-flex.align-items-center.gap-2
-                input.form-check-input.addon-checkbox(type="checkbox", value="15000")
-                span.small Bánh gạo tokbokki chiên lắc phô mai
-              span.badge.bg-light.text-danger +15.000đ
-            label.addon-item.d-flex.justify-content-between.align-items-center
-              .d-flex.align-items-center.gap-2
-                input.form-check-input.addon-checkbox(type="checkbox", value="25000")
-                span.small Khoai tây chiên sốt phô mai
-              span.badge.bg-light.text-danger +25.000đ
+        //- 2. Cấp độ cay sốt (Chỉ hiện khi là món gà)
+        if laMonGa
+          .mb-4
+            span.fw-bold.small.d-block.mb-2 2. Cấp độ cay sốt:
+            .row.g-2#spicy-group
+              .col-6
+                .spicy-card.p-2.rounded-3(data-spicy="Không cay")
+                  .fw-semibold.small Không cay
+                  .text-muted(style="font-size: 11px;") Trẻ em & người không ăn cay
+              .col-6
+                .spicy-card.active.p-2.rounded-3(data-spicy="Cay ngọt vừa")
+                  .fw-semibold.small Cay ngọt dịu nhẹ
+                  .text-muted(style="font-size: 11px;") Chuẩn vị Hàn Quốc
+              .col-6
+                .spicy-card.p-2.rounded-3(data-spicy="Cay nồng")
+                  .fw-semibold.small Cay nồng bùng nổ
+                  .text-muted(style="font-size: 11px;") Vị tương ớt đỏ
+              .col-6
+                .spicy-card.p-2.rounded-3(data-spicy="Siêu cay")
+                  .fw-semibold.small Cay xé lưỡi cấp 3
+                  .text-muted(style="font-size: 11px;") Thách thức mê cay
 
+        //- 3. Ô Ghi chú cho nhà bếp (Thay thế hoàn toàn cho checkbox món ăn kèm)
+        .mb-4
+          label.form-label.fw-bold.small(for="item-note")
+            i.fas.fa-pen.me-1.text-secondary
+            | Ghi chú cho nhà bếp (tuỳ chọn):
+          input#item-note.form-control.rounded-3(
+            type="text"
+            placeholder="Ví dụ: Ít đá, nhiều tương ớt, xin thêm tương cà, chiên giòn..."
+            maxlength="150"
+          )
         //- Nút đặt hàng & Tăng giảm số lượng
         .p-3.bg-light.rounded-4.mb-3
           .d-flex.align-items-center.gap-3
@@ -209,7 +201,7 @@ block content
               button.btn.btn-outline-secondary.btn-sm#btn-minus(type="button") -
               input.form-control.form-control-sm.text-center.fw-bold#qty-input(type="text", value="1", readonly)
               button.btn.btn-outline-secondary.btn-sm#btn-plus(type="button") +
-            button.btn.btn-chipchip-red.btn-lg.fw-bold.rounded-pill.flex-grow-1(type="button")
+            button.btn.btn-chipchip-red.btn-lg.fw-bold.rounded-pill.flex-grow-1#btn-add-to-cart(type="button")
               i.fas.fa-shopping-bag.me-2
               span#btn-cart-text  
                 | Thêm vào giỏ hàng - #{ (sanPham.giaKhuyenMai || sanPham.giaGoc).toLocaleString('vi-VN') }đ
@@ -262,27 +254,25 @@ block scripts
       const qtyInput = document.getElementById("qty-input");
 
       function updateTotalPrice() {
-        let addonTotal = 0;
-        document.querySelectorAll(".addon-checkbox:checked").forEach(cb => {
-          addonTotal += parseInt(cb.value);
-        });
-        const total = (currentPortionPrice + addonTotal) * quantity;
+        const total = currentPortionPrice * quantity;
         const formatted = total.toLocaleString("vi-VN") + "đ";
         priceDisplay.textContent = formatted;
         btnCartText.textContent = `Thêm vào giỏ hàng - ${formatted}`;
       }
 
-      // Chọn khẩu phần
+      // Chọn khẩu phần (nếu có)
       document.querySelectorAll(".portion-card").forEach(card => {
         card.addEventListener("click", () => {
           document.querySelectorAll(".portion-card").forEach(c => c.classList.remove("active"));
           card.classList.add("active");
           currentPortionPrice = parseInt(card.dataset.price);
+          const portionText = document.getElementById("selected-portion-text");
+          if (portionText) portionText.textContent = card.dataset.name;
           updateTotalPrice();
         });
       });
 
-      // Chọn cấp độ cay
+      // Chọn cấp độ cay (nếu có)
       document.querySelectorAll(".spicy-card").forEach(card => {
         card.addEventListener("click", () => {
           document.querySelectorAll(".spicy-card").forEach(c => c.classList.remove("active"));
@@ -295,16 +285,10 @@ block scripts
       const thumbs = document.querySelectorAll(".thumb-img");
       thumbs.forEach(thumb => {
         thumb.addEventListener("click", () => {
-          mainImg.src = thumb.src; // Đổi ảnh lớn thành ảnh vừa bấm
+          mainImg.src = thumb.src;
           thumbs.forEach(t => t.classList.remove("border-danger", "border-2"));
-          thumb.classList.add("border-danger", "border-2"); // Đổi viền đỏ sang thumbnail đang chọn
+          thumb.classList.add("border-danger", "border-2");
         });
-      });
-
-
-      // Chọn món kèm
-      document.querySelectorAll(".addon-checkbox").forEach(cb => {
-        cb.addEventListener("change", updateTotalPrice);
       });
 
       // Tăng giảm số lượng
@@ -320,4 +304,69 @@ block scripts
           updateTotalPrice();
         }
       });
+            // 1. Hàm đọc số lượng món từ localStorage để hiện lên Header
+      function capNhatBadgeHeader() {
+        const cart = JSON.parse(localStorage.getItem("chipchip_cart")) || [];
+        const tongSoLuong = cart.reduce((tong, item) => tong + item.soLuong, 0);
+        const badge = document.getElementById("cart-badge");
+        if (badge) badge.textContent = tongSoLuong;
+      }
+      capNhatBadgeHeader(); // Chạy ngay khi vừa mở trang
+
+      // 2. Gắn sự kiện khi bấm nút "Thêm vào giỏ hàng"
+      const btnAddCart = document.getElementById("btn-add-to-cart");
+      if (btnAddCart) {
+        btnAddCart.addEventListener("click", () => {
+          // Lấy khẩu phần, độ cay và ghi chú đang chọn
+          const activePortion = document.querySelector(".portion-card.active");
+          const activeSpicy = document.querySelector(".spicy-card.active");
+          const noteInput = document.getElementById("item-note");
+
+          // Tạo gói thông tin món ăn
+          const monMoi = {
+            id: "#{sanPham._id}",
+            tenSanPham: "#{sanPham.tenSanPham}",
+            slug: "#{sanPham.slug}",
+            hinhAnh: "#{sanPham.hinhAnh}",
+            gia: currentPortionPrice,
+            khauPhan: activePortion ? activePortion.dataset.name : "Tiêu chuẩn",
+            doCay: activeSpicy ? activeSpicy.dataset.spicy : "Tiêu chuẩn",
+            ghiChu: noteInput ? noteInput.value.trim() : "",
+            soLuong: quantity,
+          };
+
+          // Lấy giỏ hàng hiện tại trong máy ra (nếu chưa có thì là mảng rỗng [])
+          let cart = JSON.parse(localStorage.getItem("chipchip_cart")) || [];
+
+          // Kiểm tra xem món này đã có trong giỏ chưa (cùng ID, cùng khẩu phần, cùng độ cay)
+          const viTriTrung = cart.findIndex(item => 
+            item.id === monMoi.id && 
+            item.khauPhan === monMoi.khauPhan && 
+            item.doCay === monMoi.doCay
+          );
+
+          if (viTriTrung > -1) {
+            cart[viTriTrung].soLuong += quantity; // Có rồi thì cộng thêm số lượng
+          } else {
+            cart.push(monMoi); // Chưa có thì thêm món mới vào mảng
+          }
+
+          // Cất giỏ hàng vào lại localStorage
+          localStorage.setItem("chipchip_cart", JSON.stringify(cart));
+
+          // Cập nhật lại số trên Header
+          capNhatBadgeHeader();
+
+          // Báo thành công
+          // Bật Toast thông báo xịn thay cho alert xấu
+          const toastMsg = document.getElementById("toast-message");
+          if (toastMsg) toastMsg.textContent = `${quantity}x ${monMoi.tenSanPham} (${monMoi.khauPhan})`;
+
+          const toastEl = document.getElementById("cart-toast");
+          if (toastEl && window.bootstrap) {
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+          }
+        });
+      }
     });

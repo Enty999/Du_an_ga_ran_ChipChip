@@ -1,0 +1,192 @@
+extends ../../layouts/main
+
+block styles
+  style.
+    .vietqr-card {
+      border: 1px solid #f0eae1;
+      border-radius: 24px;
+      background: #fff;
+    }
+    .copy-btn {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      color: #b02d21 !important;
+    }
+
+block content
+  .container.py-5
+    .row.justify-content-center
+      .col-12.col-lg-10.col-xl-9
+        .vietqr-card.shadow-sm.overflow-hidden
+          //- Header Cổng thanh toán
+          .p-4.border-bottom.d-flex.flex-wrap.justify-content-between.align-items-center.gap-3(style="background-color: #fff9f8;")
+            .d-flex.align-items-center.gap-2
+              span.material-symbols-outlined.text-danger.fs-2 qr_code_scanner
+              div
+                h5.fw-bold.text-dark.mb-0 Cổng Thanh Toán VietQR
+                small.text-muted Chuẩn thanh toán quốc gia NAPAS 247
+            .text-end
+              span.badge.bg-danger.rounded-pill.px-3.py-2.small
+                i.fas.fa-clock.me-1
+                span#countdown-timer 15:00
+
+          .p-4.p-md-5
+            .row.g-4.align-items-center
+              //- Cột trái: Mã QR to rõ
+              .col-12.col-md-5.text-center
+                .p-3.border.rounded-4.shadow-sm.bg-white.d-inline-block
+                  img.img-fluid.rounded-3(
+                    src=qrUrl,
+                    alt="Mã QR thanh toán OCB",
+                    style="max-width: 280px; width: 100%; height: auto;"
+                  )
+                p.text-muted.small.mt-3.mb-0
+                  i.fas.fa-camera.me-1
+                  | Mở App Ngân hàng bất kỳ hoặc MoMo để quét mã
+
+              //- Cột phải: Thông tin chuyển khoản chi tiết kèm nút Copy
+              .col-12.col-md-7
+                h6.fw-bold.text-dark.mb-3 Thông tin chuyển khoản thủ công:
+                
+                .d-flex.flex-column.gap-3.bg-light.p-3.p-md-4.rounded-4
+                  //- Ngân hàng
+                  .d-flex.justify-content-between.align-items-center.border-bottom.pb-2
+                    span.text-muted.small Ngân hàng:
+                    strong.text-dark= bankId + ' (Ngân hàng Phương Đông)'
+
+                  //- Chủ tài khoản
+                  .d-flex.justify-content-between.align-items-center.border-bottom.pb-2
+                    span.text-muted.small Chủ tài khoản:
+                    strong.text-dark= accountName
+
+                  //- Số tài khoản
+                  .d-flex.justify-content-between.align-items-center.border-bottom.pb-2
+                    span.text-muted.small Số tài khoản:
+                    .d-flex.align-items-center.gap-2
+                      strong.text-dark.fs-6#stk-text= accountNo
+                      button.btn.btn-sm.btn-link.p-0.text-secondary.copy-btn(
+                        type="button",
+                        onclick=`navigator.clipboard.writeText('${accountNo}'); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã chép số tài khoản!', showConfirmButton:false, timer:1500})`
+                        title="Sao chép"
+                      )
+                        i.fas.fa-copy
+
+                  //- Số tiền
+                  .d-flex.justify-content-between.align-items-center.border-bottom.pb-2
+                    span.text-muted.small Số tiền:
+                    .d-flex.align-items-center.gap-2
+                      strong.text-danger.fs-5= donHang.tongThanhToan.toLocaleString('vi-VN') + 'đ'
+                      button.btn.btn-sm.btn-link.p-0.text-secondary.copy-btn(
+                        type="button",
+                        onclick=`navigator.clipboard.writeText('${donHang.tongThanhToan}'); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã chép số tiền!', showConfirmButton:false, timer:1500})`
+                        title="Sao chép"
+                      )
+                        i.fas.fa-copy
+
+                  //- Nội dung chuyển khoản
+                  .d-flex.justify-content-between.align-items-center
+                    span.text-muted.small Nội dung CK:
+                    .d-flex.align-items-center.gap-2
+                      strong.text-primary.fw-bold#noidung-text= noiDung
+                      button.btn.btn-sm.btn-link.p-0.text-secondary.copy-btn(
+                        type="button",
+                        onclick=`navigator.clipboard.writeText('${noiDung}'); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã chép nội dung!', showConfirmButton:false, timer:1500})`
+                        title="Sao chép"
+                      )
+                        i.fas.fa-copy
+
+                //- Nút bấm xác nhận hoàn tất
+                .d-grid.gap-2.mt-4
+                  button#btn-confirm-paid.btn.btn-danger.btn-lg.rounded-pill.fw-bold.shadow-sm(type="button")
+                    i.fas.fa-check-circle.me-2
+                    | Tôi đã chuyển khoản thành công
+                  a.btn.btn-outline-secondary.rounded-pill.btn-sm(href="/")
+                    | Để sau / Quay về trang chủ
+
+block scripts
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Đồng hồ đếm ngược 15 phút
+      let timeLeft = 15 * 60;
+      const timerEl = document.getElementById("countdown-timer");
+      const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          timerEl.textContent = "Hết hạn";
+          Swal.fire({
+            icon: "warning",
+            title: "Hết thời gian thanh toán",
+            text: "Phiên giao dịch đã hết hạn. Vui lòng đặt lại đơn!",
+            confirmButtonColor: "#b02d21",
+          }).then(() => {
+            window.location.href = "/";
+          });
+          return;
+        }
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        timerEl.textContent = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+      }, 1000);
+
+      // 2. Tự động kiểm tra thanh toán qua SePay mỗi 2.5 giây (Model A Tự động)
+      let daChuyenTrang = false;
+
+      async function kiemTraTienVe() {
+        if (daChuyenTrang) return false;
+        try {
+          const res = await fetch("/thanh-toan/kiem-tra/#{donHang.maDonHang}");
+          const data = await res.json();
+
+          if (data.daThanhToan) {
+            daChuyenTrang = true;
+            clearInterval(pollingTimer);
+            clearInterval(interval); // dừng đếm ngược
+
+            Swal.fire({
+              icon: "success",
+              title: "Thanh toán thành công!",
+              text: "ChipChip đã nhận được thanh toán từ ngân hàng của bạn.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            // Chuyển hướng chắc chắn 100% sau 1,5 giây
+            setTimeout(() => {
+              window.location.href = `/thanh-toan/thanh-cong?maDonHang=#{donHang.maDonHang}`;
+            }, 1500);
+            return true;
+          }
+          return false;
+        } catch (err) {
+          console.error("Lỗi kiểm tra thanh toán:", err);
+          return false;
+        }
+      }
+
+      // Tự động kiểm tra định kỳ mỗi 2.5 giây
+      const pollingTimer = setInterval(kiemTraTienVe, 2500);
+
+      // 3. Nếu khách sốt ruột bấm nút "Tôi đã chuyển khoản"
+      const btnPaid = document.getElementById("btn-confirm-paid");
+      if (btnPaid) {
+        btnPaid.addEventListener("click", async () => {
+          btnPaid.disabled = true;
+          btnPaid.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Đang kiểm tra với ngân hàng...`;
+
+          const thanhCong = await kiemTraTienVe();
+          if (!thanhCong) {
+            Swal.fire({
+              icon: "info",
+              title: "Chưa nhận được tiền",
+              text: "Hệ thống chưa thấy tiền vào tài khoản. Nếu bạn đã chuyển, vui lòng đợi 5-10 giây để ngân hàng xử lý nhé!",
+              confirmButtonColor: "#b02d21",
+            });
+            btnPaid.disabled = false;
+            btnPaid.innerHTML = `<i class="fas fa-check-circle me-2"></i>Tôi đã chuyển khoản thành công`;   
+          }
+        });
+      }
+    });

@@ -5,7 +5,8 @@ const xacThucRoute = require("./routes/xac-thuc.route");
 const { ganThongTinNguoiDung } = require("./middlewares/kiem-tra-dang-nhap.middleware");
 const taiKhoanRoute = require("./routes/tai-khoan.route");
 const sanPhamRoute = require("./routes/san-pham.route");
-
+const thanhToanRoute = require("./routes/thanh-toan.route");
+const khuyenMaiRoute = require("./routes/khuyen-mai.route");
 const adminRoute = require("./routes/admin/index.route");
 
 const app = express();
@@ -27,6 +28,8 @@ app.use("/thuc-don", sanPhamRoute);
 app.use("/auth", xacThucRoute);
 app.use("/tai-khoan", taiKhoanRoute);
 app.use("/san-pham", sanPhamRoute);
+app.use("/thanh-toan", thanhToanRoute);
+app.use("/khuyen-mai", khuyenMaiRoute);
 
 // Phân hệ Quản trị Admin ChipChip
 app.use("/admin", adminRoute);

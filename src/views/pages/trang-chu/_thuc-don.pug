@@ -60,7 +60,15 @@ section.menu#thuc-don(aria-labelledby="menu-section-title")
 
             .menu__card-footer
               span.menu__price= dinhDangTien ? dinhDangTien(mon.giaKhuyenMai > 0 ? mon.giaKhuyenMai : mon.giaGoc) : mon.giaGoc + 'đ'
-              button.menu__btn-add(type="button", data-id=mon._id)
+              button.menu__btn-add(
+                type="button",
+                data-id=mon._id,
+                data-name=mon.tenSanPham,
+                data-slug=mon.slug,
+                data-image=mon.hinhAnh,
+                data-price=(mon.giaKhuyenMai > 0 ? mon.giaKhuyenMai : mon.giaGoc),
+                data-portion=(mon.khauPhan || 'Tiêu chuẩn')
+              )
                 span.material-symbols-outlined add
                 span Thêm vào đơn
       else

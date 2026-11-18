@@ -21,4 +21,11 @@ router.post("/xac-nhan-otp", authController.xuLiXacNhanOTP);
 // Đăng xuất
 router.post("/dang-xuat", authController.xuLiDangXuat);
 
+// Quên mật khẩu
+router.get("/quen-mat-khau", authController.renderQuenMatKhau);
+router.post("/quen-mat-khau", authController.xuLiQuenMatKhau);
+
+// Đặt lại mật khẩu
+router.get("/dat-lai-mat-khau", authController.renderDatLaiMatKhau);
+router.post("/dat-lai-mat-khau", authController.xuLiDatLaiMatKhau);
 module.exports = router;

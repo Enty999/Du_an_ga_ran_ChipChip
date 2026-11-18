@@ -111,7 +111,7 @@ const soDoDonHang = new mongoose.Schema(
     // Phương thức thanh toán
     phuongThucThanhToan: {
       type: String,
-      enum: ["tien-mat", "chuyen-khoan", "momo", "vnpay"],
+      enum: ["tien-mat", "chuyen-khoan", "payos", "momo", "vnpay"],
       default: "tien-mat",
     },
     // Trạng thái thanh toán

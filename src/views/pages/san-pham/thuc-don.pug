@@ -76,15 +76,46 @@ block content
         | Từng miếng gà tươi được tẩm ướp 12 loại gia vị đặc trưng và chiên ngập dầu giòn tan theo từng lượt order.
 
   .container.pb-5
-    //- Thanh Bộ Lọc (Tabs tự động in từ MongoDB)
+    //- Thanh Tìm Kiếm Món Ăn Trên Toàn Bộ DB
+    form.row.justify-content-center.mb-4(method="GET", action="/thuc-don")
+      if danhMucHienTai && danhMucHienTai !== 'all'
+        input(type="hidden", name="danhMuc", value=danhMucHienTai)
+      .col-12.col-md-8.col-lg-6
+        .input-group.shadow-sm.rounded-pill.overflow-hidden.border
+          span.input-group-text.bg-white.border-0.ps-4
+            i.fas.fa-search.text-muted
+          input#search-dish-input.form-control.border-0.py-2(
+            type="text",
+            name="q",
+            value=tuKhoaHienTai,
+            placeholder="Tìm kiếm gà giòn, burger, sốt cay, nước ngọt...",
+            autocomplete="off"
+          )
+          if tuKhoaHienTai
+            a.btn.bg-white.border-0.pe-3.text-muted.d-flex.align-items-center(
+              href=`/thuc-don?danhMuc=${danhMucHienTai || 'all'}`,
+              title="Xóa tìm kiếm"
+            )
+              i.fas.fa-times-circle
+    //- Thanh Bộ Lọc Danh Mục (Lọc trên toàn bộ Database)
     .d-flex.flex-wrap.gap-2.justify-content-center.mb-5#menu-filters
-      button.filter-btn-pill.active(type="button", data-filter="all") Tất cả món
+      a.filter-btn-pill.text-decoration-none(
+        href=`/thuc-don?danhMuc=all${tuKhoaHienTai ? '&q=' + encodeURIComponent(tuKhoaHienTai) : ''}`,
+        class=(!danhMucHienTai || danhMucHienTai === 'all' ? 'active' : '')
+      ) Tất cả món
       if danhMucs && danhMucs.length > 0
         each dm in danhMucs
-          button.filter-btn-pill(type="button", data-filter=dm.slug)= dm.tenDanhMuc
-
+          a.filter-btn-pill.text-decoration-none(
+            href=`/thuc-don?danhMuc=${dm.slug}${tuKhoaHienTai ? '&q=' + encodeURIComponent(tuKhoaHienTai) : ''}`,
+            class=(danhMucHienTai === dm.slug ? 'active' : '')
+          )= dm.tenDanhMuc
 
     //- Lưới Món Ăn (Render tự động từ MongoDB)
+    //- Khối hiển thị khi không tìm thấy kết quả nào
+    .col-12.text-center.py-5#no-results-msg(style="display: none;")
+      span.material-symbols-outlined.fs-1.text-muted.mb-2 fastfood
+      h5.fw-bold.text-muted Không tìm thấy món ăn nào phù hợp
+      p.small.text-muted Vui lòng thử tìm với từ khóa hoặc danh mục khác!    
     .row.g-4#dishes-grid
       if sanPhams && sanPhams.length > 0
         each item in sanPhams
@@ -115,33 +146,208 @@ block content
                 .d-flex.gap-2.mt-3
                   a.btn.btn-outline-dark.rounded-pill.flex-grow-1.fw-semibold.btn-sm(href=`/san-pham/${item.slug}`)
                     | Xem chi tiết
-                  a.btn.btn-danger.rounded-pill.px-3.btn-sm(href=`/san-pham/${item.slug}`)
+                  button.btn.btn-danger.rounded-pill.px-3.btn-sm.btn-quick-add(
+                    type="button",
+                    title="Thêm nhanh vào giỏ",
+                    data-id=item._id,
+                    data-name=item.tenSanPham,
+                    data-slug=item.slug,
+                    data-image=item.hinhAnh,
+                    data-price=(item.giaKhuyenMai || item.giaGoc),
+                    data-portion="Tiêu chuẩn"
+                  )
                     i.fas.fa-shopping-bag
       else
         .col-12.text-center.py-5
           p.text-muted Hiện chưa có món ăn nào trong thực đơn.
+    //- Thanh Phân Trang (Pagination)
+    #pagination-wrap
+      if phanTrang && phanTrang.tongSoTrang > 1
+        - const filterQuery = `&danhMuc=${danhMucHienTai || 'all'}${tuKhoaHienTai ? '&q=' + encodeURIComponent(tuKhoaHienTai) : ''}`
+        nav.d-flex.justify-content-center.mt-5(aria-label="Phân trang thực đơn")
+          ul.pagination.gap-1.align-items-center
+            //- Nút Lùi lại trang trước
+            li.page-item(class=(phanTrang.trangHienTai === 1 ? 'disabled' : ''))
+              a.page-link.rounded-pill.px-3(
+                href=`/thuc-don?page=${phanTrang.trangHienTai - 1}${filterQuery}`,
+                style="color: #b02d21; border-color: #f0eae1;"
+              )
+                i.fas.fa-chevron-left.me-1
+                | Trước
+
+            //- Vòng lặp in các số trang: 1, 2, 3...
+            - for (let p = 1; p <= phanTrang.tongSoTrang; p++)
+              li.page-item(class=(p === phanTrang.trangHienTai ? 'active' : ''))
+                a.page-link.rounded-circle.d-flex.align-items-center.justify-content-center(
+                  href=`/thuc-don?page=${p}${filterQuery}`,
+                  style=`width: 38px; height: 38px; font-weight: bold; margin: 0 3px; ${p === phanTrang.trangHienTai ? 'background-color: #b02d21; border-color: #b02d21; color: #fff;' : 'color: #333; border-color: #f0eae1;'}`
+                )= p
+
+            //- Nút Sang trang sau
+            li.page-item(class=(phanTrang.trangHienTai === phanTrang.tongSoTrang ? 'disabled' : ''))
+              a.page-link.rounded-pill.px-3(
+                href=`/thuc-don?page=${phanTrang.trangHienTai + 1}${filterQuery}`,
+                style="color: #b02d21; border-color: #f0eae1;"
+              )
+                | Sau
+                i.fas.fa-chevron-right.ms-1
 
 block scripts
   script.
     document.addEventListener("DOMContentLoaded", () => {
-      const filterButtons = document.querySelectorAll(".filter-btn-pill");
-      const dishItems = document.querySelectorAll(".dish-item");
-      filterButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          // 1. Tắt active ở tất cả các nút, chỉ bật active cho nút vừa bấm
-          filterButtons.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          // 2. Lấy mã danh mục cần lọc từ dataset (ví dụ: "ga-sot-dam-vi" hoặc "all")
-          const selectedFilter = btn.dataset.filter;
-          // 3. Duyệt qua từng món ăn để ẩn hoặc hiện
-          dishItems.forEach(item => {
-            const dishCategory = item.dataset.category;
-            if (selectedFilter === "all" || dishCategory === selectedFilter) {
-              item.style.display = "block"; // Hiển thị món
-            } else {
-              item.style.display = "none";  // Ẩn món đi
-            }
-          });
+      const searchInput = document.getElementById("search-dish-input");
+      const btnClear = document.getElementById("btn-clear-search");
+      const dishesGrid = document.getElementById("dishes-grid");
+      const noResultsMsg = document.getElementById("no-results-msg");
+      const paginationWrap = document.getElementById("pagination-wrap");
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const currentCategory = urlParams.get("danhMuc") || "all";
+
+      let debounceTimer = null;
+
+      // Hàm vẽ lại danh sách món ăn từ MongoDB
+      function renderDishes(dishes) {
+        if (!dishes || dishes.length === 0) {
+          dishesGrid.innerHTML = "";
+          if (noResultsMsg) noResultsMsg.style.display = "block";
+          return;
+        }
+
+        if (noResultsMsg) noResultsMsg.style.display = "none";
+
+        dishesGrid.innerHTML = dishes.map(item => {
+          const badgeText = item.huyHieu || "Món mới";
+          const descText = item.moTa || "Gà rán giòn rụm chấm kèm sốt hảo hạng, phục vụ nóng hổi.";
+          const categorySlug = item.maDanhMuc && item.maDanhMuc.slug ? item.maDanhMuc.slug : "";
+          const priceDisplay = item.giaKhuyenMai
+            ? `<span class="text-muted text-decoration-line-through small d-block">${Number(item.giaGoc).toLocaleString('vi-VN')}đ</span>
+               <span class="fw-bold text-danger fs-5">${Number(item.giaKhuyenMai).toLocaleString('vi-VN')}đ</span>`
+            : `<span class="fw-bold text-danger fs-5">${Number(item.giaGoc).toLocaleString('vi-VN')}đ</span>`;
+          const finalPrice = item.giaKhuyenMai || item.giaGoc;
+
+          return `
+            <div class="col-12 col-md-6 col-lg-4 dish-item" data-category="${categorySlug}">
+              <div class="dish-card h-100">
+                <div class="dish-img-wrap">
+                  <a href="/san-pham/${item.slug}">
+                    <img src="${item.hinhAnh}" alt="${item.tenSanPham}">
+                  </a>
+                  <span class="dish-badge">${badgeText}</span>
+                </div>
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <a class="text-decoration-none text-dark" href="/san-pham/${item.slug}">
+                      <h5 class="fw-bold mb-0">${item.tenSanPham}</h5>
+                    </a>
+                    <div class="text-end">${priceDisplay}</div>
+                  </div>
+                  <p class="text-muted small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${descText}
+                  </p>
+                  <div class="d-flex gap-2 mt-3">
+                    <a class="btn btn-outline-dark rounded-pill flex-grow-1 fw-semibold btn-sm" href="/san-pham/${item.slug}">Xem chi tiết</a>
+                    <button class="btn btn-danger rounded-pill px-3 btn-sm btn-quick-add" type="button" title="Thêm nhanh vào giỏ"
+                      data-id="${item._id}"
+                      data-name="${item.tenSanPham}"
+                      data-slug="${item.slug}"
+                      data-image="${item.hinhAnh}"
+                      data-price="${finalPrice}"
+                      data-portion="Tiêu chuẩn">
+                      <i class="fas fa-shopping-bag"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // Hàm vẽ lại thanh phân trang
+      function renderPagination(phanTrang, keyword) {
+        if (!paginationWrap) return;
+        if (!phanTrang || phanTrang.tongSoTrang <= 1) {
+          paginationWrap.innerHTML = "";
+          return;
+        }
+
+        const queryParams = `&danhMuc=${currentCategory}${keyword ? '&q=' + encodeURIComponent(keyword) : ''}`;
+        let html = `
+          <nav class="d-flex justify-content-center mt-5" aria-label="Phân trang thực đơn">
+            <ul class="pagination gap-1 align-items-center">
+              <li class="page-item ${phanTrang.trangHienTai === 1 ? 'disabled' : ''}">
+                <a class="page-link rounded-pill px-3" href="/thuc-don?page=${phanTrang.trangHienTai - 1}${queryParams}" style="color: #b02d21; border-color: #f0eae1;">
+                  <i class="fas fa-chevron-left me-1"></i>Trước
+                </a>
+              </li>
+        `;
+
+        for (let p = 1; p <= phanTrang.tongSoTrang; p++) {
+          const isActive = p === phanTrang.trangHienTai;
+          html += `
+            <li class="page-item ${isActive ? 'active' : ''}">
+              <a class="page-link rounded-circle d-flex align-items-center justify-content-center" href="/thuc-don?page=${p}${queryParams}"
+                style="width: 38px; height: 38px; font-weight: bold; margin: 0 3px; ${isActive ? 'background-color: #b02d21; border-color: #b02d21; color: #fff;' : 'color: #333; border-color: #f0eae1;'}">
+                ${p}
+              </a>
+            </li>
+          `;
+        }
+
+        html += `
+              <li class="page-item ${phanTrang.trangHienTai === phanTrang.tongSoTrang ? 'disabled' : ''}">
+                <a class="page-link rounded-pill px-3" href="/thuc-don?page=${phanTrang.trangHienTai + 1}${queryParams}" style="color: #b02d21; border-color: #f0eae1;">
+                  Sau<i class="fas fa-chevron-right ms-1"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        `;
+
+        paginationWrap.innerHTML = html;
+      }
+
+      // Hàm gọi AJAX tìm kiếm toàn bộ MongoDB
+      async function liveSearch(keyword) {
+        try {
+          const url = `/thuc-don?ajax=1&danhMuc=${currentCategory}&q=${encodeURIComponent(keyword)}&page=1`;
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.success) {
+            renderDishes(data.sanPhams);
+            renderPagination(data.phanTrang, keyword);
+
+            // Cập nhật lại thanh địa chỉ URL mà không load lại trang
+            const newUrl = `/thuc-don?danhMuc=${currentCategory}${keyword ? '&q=' + encodeURIComponent(keyword) : ''}`;
+            window.history.replaceState({}, '', newUrl);
+          }
+        } catch (err) {
+          console.error("Lỗi tìm kiếm AJAX:", err);
+        }
+      }
+
+      // 1. Sự kiện gõ tìm kiếm thời gian thực (Debounce 300ms)
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          const keyword = e.target.value.trim();
+          if (btnClear) btnClear.style.display = keyword ? "block" : "none";
+
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+            liveSearch(keyword);
+          }, 300);
         });
-      });
+      }
+
+      // 2. Nút xóa nhanh tìm kiếm (x)
+      if (btnClear) {
+        btnClear.addEventListener("click", () => {
+          searchInput.value = "";
+          btnClear.style.display = "none";
+          searchInput.focus();
+          liveSearch("");
+        });
+      }
     });

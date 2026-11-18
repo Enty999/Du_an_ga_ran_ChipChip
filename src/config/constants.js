@@ -11,9 +11,10 @@ module.exports = {
   // 2. Trạng thái đơn hàng (Order Statuses)
   TRANG_THAI_DON_HANG: {
     CHO_XAC_NHAN: "cho-xac-nhan",
+    DA_XAC_NHAN: "da-xac-nhan",
     DANG_CHE_BIEN: "dang-che-bien",
     DANG_GIAO: "dang-giao",
-    HOAN_THANH: "hoan-thanh",
+    DA_GIAO: "da-giao",
     DA_HUY: "da-huy",
   },
 
@@ -28,6 +29,7 @@ module.exports = {
   PHUONG_THUC_THANH_TOAN: {
     TIEN_MAT: "tien-mat",
     CHUYEN_KHOAN: "chuyen-khoan",
+    PAYOS: "payos",
     MOMO: "momo",
     VNPAY: "vnpay",
   },

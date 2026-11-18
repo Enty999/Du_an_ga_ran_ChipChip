@@ -56,6 +56,15 @@ const soDoNguoiDung = new mongoose.Schema(
       type: String,
       default: "",
     },
+    // Dành cho tính năng Quên mật khẩu (Chuẩn bảo mật băm OTP)
+    resetPasswordOTP: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
   },
   { 
     // Tự động thêm hai trường createdAt (thời gian tạo) và updatedAt (thời gian cập nhật gần nhất)

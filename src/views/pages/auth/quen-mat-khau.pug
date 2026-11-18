@@ -1,0 +1,45 @@
+extends ../../layouts/main
+
+block content
+  .container.py-5
+    .row.justify-content-center
+      .col-12.col-md-6.col-lg-5
+        .card.border-0.shadow-sm.rounded-4.p-4.p-md-5(style="background: #ffffff;")
+          .text-center.mb-4
+            .d-inline-flex.align-items-center.justify-content-center.rounded-circle.mb-3(
+              style="width: 64px; height: 64px; background-color: #fffbeb;"
+            )
+              span.material-symbols-outlined.fs-1(style="color: #d97706;") lock_reset
+            h3.fw-bold.text-dark Quên Mật Khẩu
+            p.text-muted.small Nhập email tài khoản ChipChip của bạn. Chúng tôi sẽ gửi mã OTP xác nhận về hòm thư.
+
+          if error
+            .alert.alert-danger.py-2.small.rounded-3.mb-4(role="alert")
+              i.fas.fa-exclamation-circle.me-2
+              = error
+
+          form(action="/auth/quen-mat-khau", method="POST")
+            .mb-4
+              label.form-label.fw-semibold(for="email") Địa chỉ Email
+              .input-group
+                span.input-group-text.bg-light.border-end-0
+                  i.fas.fa-envelope.text-muted
+                input#email.form-control.border-start-0(
+                  type="email",
+                  name="email",
+                  placeholder="name@example.com",
+                  required,
+                  value=email || ""
+                )
+
+            button.btn.w-100.py-2.fw-bold.text-white.rounded-pill(
+              type="submit",
+              style="background-color: #d97706; border-color: #d97706;"
+            )
+              i.fas.fa-paper-plane.me-2
+              | Gửi mã OTP
+
+          .text-center.mt-4
+            a.small.text-decoration-none(href="/auth/dang-nhap", style="color: #d97706;")
+              i.fas.fa-arrow-left.me-1
+              | Quay lại Đăng nhập

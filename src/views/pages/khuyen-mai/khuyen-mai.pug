@@ -1,0 +1,117 @@
+extends ../../layouts/main
+
+block styles
+  style.
+    .promo-header {
+      background: linear-gradient(135deg, #2b1310 0%, #d97706 100%);
+      padding: 60px 0 45px;
+      color: #fff;
+      margin-bottom: 40px;
+    }
+    .voucher-card {
+      border: 2px dashed #f59e0b;
+      border-radius: 20px;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .voucher-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(217, 119, 6, 0.15);
+      border-color: #d97706;
+    }
+    .voucher-badge {
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 50rem;
+    }
+    .voucher-code-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px 14px;
+    }
+
+block content
+  //- Banner đầu trang
+  .promo-header.text-center
+    .container
+      span.badge.rounded-pill.bg-warning.text-dark.px-3.py-2.fw-bold.mb-3 ƯU ĐÃI NÓNG HỔI
+      h1.fw-bold.display-5.text-white Săn Deal Giòn Rụm
+      p.text-white-50.mx-auto.mb-0(style="max-width: 600px;")
+        | Thu thập mã giảm giá và áp dụng ngay khi đặt hàng để thưởng thức gà rán giòn tan với mức giá ưu đãi nhất!
+
+  .container.pb-5
+    .row.g-4
+      if danhSachKhuyenMai && danhSachKhuyenMai.length > 0
+        each km in danhSachKhuyenMai
+          .col-12.col-md-6.col-lg-4
+            .voucher-card.h-100.p-4.d-flex.flex-column.shadow-sm
+              //- Header của Voucher
+              .d-flex.justify-content-between.align-items-start.mb-3
+                .d-flex.align-items-center.gap-2
+                  span.material-symbols-outlined.text-warning.fs-1 local_activity
+                  div
+                    span.voucher-badge= km.loaiGiamGia === 'phan-tram' ? `Giảm ${km.giaTriGiam}%` : `Giảm ${km.giaTriGiam.toLocaleString('vi-VN')}đ`
+                if km.donHangToiThieu > 0
+                  small.text-muted= `Đơn từ ${km.donHangToiThieu.toLocaleString('vi-VN')}đ`
+
+              //- Tiêu đề & mô tả
+              h5.fw-bold.text-dark.mb-2= km.tieuDe
+              p.text-muted.small.flex-grow-1= km.moTa || 'Áp dụng cho tất cả các món gà rán trong thực đơn của ChipChip.'
+
+              //- Hạn sử dụng
+              .mb-3.small.text-muted
+                i.far.fa-calendar-alt.me-1
+                if km.ngayKetThuc
+                  | HSD: #{new Date(km.ngayKetThuc).toLocaleDateString('vi-VN')}
+                else
+                  | Hạn sử dụng: Không giới hạn
+
+              //- Hộp chứa mã & Nút sao chép
+              .voucher-code-box.d-flex.justify-content-between.align-items-center.mt-auto
+                span.fw-bold.text-danger.fs-5(style="letter-spacing: 1px;")= km.maCode
+                button.btn.btn-sm.btn-warning.rounded-pill.fw-bold.px-3.btn-copy-code(
+                  type="button",
+                  data-code=km.maCode
+                )
+                  i.fas.fa-copy.me-1
+                  | Sao chép
+
+              //- Nút Dùng ngay dẫn sang Thực đơn
+              a.btn.btn-outline-danger.rounded-pill.w-100.fw-bold.btn-sm.mt-3(href="/thuc-don")
+                | Dùng mã ngay
+      else
+        .col-12.text-center.py-5
+          span.material-symbols-outlined.fs-1.text-muted.mb-3 sentiment_satisfied
+          h4.fw-bold.text-muted Hiện chưa có chương trình khuyến mãi nào
+          p.text-muted Các ưu đãi đặc biệt sẽ sớm quay trở lại. Bạn theo dõi thường xuyên nhé!
+          a.btn.btn-danger.rounded-pill.px-4.mt-2(href="/thuc-don") Xem Thực Đơn Ngay
+
+block scripts
+  script.
+    document.addEventListener("DOMContentLoaded", () => {
+      const copyButtons = document.querySelectorAll(".btn-copy-code");
+      copyButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const code = btn.dataset.code;
+          navigator.clipboard.writeText(code).then(() => {
+            Swal.fire({
+              toast: true,
+              position: "top-end",
+              icon: "success",
+              title: `Đã chép mã: ${code}`,
+              text: "Dán mã vào ô thanh toán để được giảm giá nhé!",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          }).catch(err => {
+            console.error("Lỗi sao chép:", err);
+          });
+        });
+      });
+    });
